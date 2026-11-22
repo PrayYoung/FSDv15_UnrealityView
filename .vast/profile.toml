@@ -1,0 +1,5 @@
+[run]
+# Price/reliability/cost ceilings are inherited from the global vast-run config.
+# Do not put credentials here. No debug campaign: runner destroys on termination.
+num_gpus = 1
+sync_paths = ["outputs"]

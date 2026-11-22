@@ -1,0 +1,14 @@
+{
+  "dit": {"hidden_dim":512,"depth":12,"num_heads":8},
+  "steps":3000,
+  "batch_size":8,
+  "grad_accum":2,
+  "learning_rate":0.0003,
+  "warmup_steps":100,
+  "ema_decay":0.995,
+  "eval_every":500,
+  "eval_items":8,
+  "seed":42,
+  "jvp_method":"auto",
+  "policy_weight":1.0
+}

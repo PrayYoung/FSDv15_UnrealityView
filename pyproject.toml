@@ -1,0 +1,27 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "mini-reality-view"
+version = "0.1.0"
+description = "Experimental six-camera conditional Mean-Flow video generation and decoupled planning"
+requires-python = ">=3.11,<3.12"
+dependencies = [
+  "torch==2.5.1", "torchvision==0.20.1", "timm==1.0.15",
+  "diffusers==0.32.2", "safetensors>=0.5,<1", "numpy==1.26.4",
+  "pillow>=11,<13", "fastapi>=0.115,<1", "uvicorn>=0.34,<1",
+  "pydantic>=2.10,<3", "huggingface-hub>=0.27,<1",
+]
+
+[project.optional-dependencies]
+simulator = ["metadrive-simulator>=0.4.3,<0.5"]
+dev = ["pytest>=8,<10", "httpx>=0.28,<1"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/fsd_reality", "app"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = ["pretrained: requires downloaded pretrained model weights", "simulator: requires MetaDrive and graphics"]
+

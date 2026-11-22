@@ -1,0 +1,54 @@
+import torch
+from torch import nn
+import torch.nn.functional as F
+from fsd_reality.geometry import plucker_rays
+
+
+class MiniUVE(nn.Module):
+    """Frozen DINOv2-S/14 + fixed geometry embedding, 6×32 tokens of width 384.
+
+    Geometry projection is deterministic and frozen so cached tokens do not
+    silently become stale during downstream DiT/policy training.
+    """
+    def __init__(self, pretrained=True, backbone=None):
+        super().__init__()
+        if backbone is None:
+            import timm
+            backbone = timm.create_model("vit_small_patch14_dinov2.lvd142m",
+                                         pretrained=pretrained, img_size=(140, 224),
+                                         num_classes=0)
+        self.backbone = backbone.eval().requires_grad_(False)
+        gen = torch.Generator().manual_seed(17)
+        self.register_buffer("ray_projection", torch.randn(6, 384, generator=gen) / 6**.5)
+        self.register_buffer("mean", torch.tensor([.485,.456,.406]).view(1,3,1,1))
+        self.register_buffer("std", torch.tensor([.229,.224,.225]).view(1,3,1,1))
+
+    def train(self, mode=True):
+        super().train(mode)
+        self.backbone.eval()
+        return self
+
+    @torch.no_grad()
+    def forward(self, cameras, intrinsics=None, camera_to_ego=None):
+        if cameras.ndim != 5 or tuple(cameras.shape[1:]) != (6,3,140,224):
+            raise ValueError("cameras must be (B,6,3,140,224), RGB in [0,1]")
+        b = len(cameras)
+        x = (cameras.flatten(0,1)-self.mean)/self.std
+        feats = self.backbone.forward_features(x)
+        if isinstance(feats, dict):
+            feats = feats["x_norm_patchtokens"]
+        else:
+            prefix = getattr(self.backbone, "num_prefix_tokens", 1)
+            feats = feats[:, prefix:]
+        spatial = feats.reshape(b*6,10,16,384).permute(0,3,1,2)
+        # Exact adaptive 10x16 -> 4x8 pooling, expressed using ordinary means.
+        # MPS does not implement nondivisible adaptive pooling (10 -> 4).
+        columns = spatial.reshape(b*6,384,10,8,2).mean(-1)
+        pooled = torch.stack([columns[:,:,i*10//4:((i+1)*10+3)//4].mean(2) for i in range(4)],2)
+        tokens = pooled.flatten(2).transpose(1,2).reshape(b,6,32,384)
+        if (intrinsics is None) != (camera_to_ego is None):
+            raise ValueError("Provide intrinsics and camera_to_ego together")
+        if intrinsics is not None:
+            rays = plucker_rays(intrinsics.float(), camera_to_ego.float()).to(tokens)
+            tokens = tokens + rays @ self.ray_projection.to(tokens)
+        return tokens.reshape(b,192,384)
