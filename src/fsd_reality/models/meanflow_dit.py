@@ -42,7 +42,9 @@ class ConditionalMeanFlowDiT(nn.Module):
         self.cross = nn.ModuleList([Attention(c.hidden_dim,c.num_heads,c.context_dim) for _ in range(c.stages)])
         self.cross_norm = nn.ModuleList([nn.LayerNorm(c.hidden_dim) for _ in range(c.stages)])
         self.final_norm = nn.LayerNorm(c.hidden_dim,elementwise_affine=False)
-        self.output = nn.ConvTranspose3d(c.hidden_dim,c.latent_channels,c.patch_size,c.patch_size)
+        # Non-overlapping ConvTranspose3d is exactly a per-token linear
+        # projection + unpatchify. This form also supports Apple MPS.
+        self.output = nn.Linear(c.hidden_dim,c.latent_channels*c.patch_size[0]*c.patch_size[1]*c.patch_size[2])
         nn.init.zeros_(self.output.weight)
         nn.init.zeros_(self.output.bias)
 
@@ -64,8 +66,11 @@ class ConditionalMeanFlowDiT(nn.Module):
             stage_cond = cond + self.age(age)
             for block in self.blocks[stage*(c.depth//4):(stage+1)*(c.depth//4)]:
                 x = block(x,stage_cond)
-        x = self.final_norm(x).transpose(1,2).reshape(len(z),c.hidden_dim,*self.grid)
-        return self.output(x)
+        x = self.output(self.final_norm(x))
+        gt,gh,gw = self.grid
+        pt,ph,pw = c.patch_size
+        x = x.reshape(len(z),gt,gh,gw,c.latent_channels,pt,ph,pw)
+        return x.permute(0,4,1,5,2,6,3,7).reshape(len(z),c.latent_channels,*c.latent_shape)
 
     @torch.no_grad()
     def sample_chunk(self, z_prev, uve_tokens, num_steps=1, stage_ages=None,

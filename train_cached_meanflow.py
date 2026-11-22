@@ -31,6 +31,8 @@ def train(args):
     atomic_json(output/"run_config.json",{**config,"device":str(device),"precision":str(precision_for(device))})
     train_data=CachedEpisodeChunkDataset(args.data,"train")
     validation=CachedEpisodeChunkDataset(args.data,"val",jitter=False)
+    manifest=Path(args.data)/"manifest.json"
+    data_source=json.loads(manifest.read_text()).get("source","unknown") if manifest.is_file() else "unknown"
     loader=DataLoader(train_data,batch_size=config["batch_size"],shuffle=True,num_workers=0)
     model=ConditionalMeanFlowDiT(DiTConfig(**config["dit"])).to(device)
     policy=DrivingPolicyHead().to(device)
@@ -79,7 +81,7 @@ def train(args):
         if step==1 or step%25==0: print(json.dumps(row),flush=True)
         if step%config["eval_every"]==0 or step==config["steps"]:
             save_checkpoint(output/"checkpoint",ema_model,ema_policy,step,
-                            {"training_config":config,"weights":"EMA","data_source":"MetaDrive"})
+                            {"training_config":config,"weights":"EMA","data_source":data_source})
             report=evaluate_models(ema_model,ema_policy,decoder,validation,device,
                                    output/f"eval_{step:06d}",config["eval_items"])
             print("EVALUATION",json.dumps(report["nfe"]),flush=True)

@@ -10,7 +10,7 @@ class PretrainedTAESD(nn.Module):
         super().__init__()
         if autoencoder is None:
             from diffusers import AutoencoderTiny
-            autoencoder = (AutoencoderTiny.from_pretrained("madebyollin/taesd", use_safetensors=True)
+            autoencoder = (AutoencoderTiny.from_pretrained("madebyollin/taesd", use_safetensors=True,low_cpu_mem_usage=False)
                            if pretrained else AutoencoderTiny())
         self.vae = autoencoder.eval().requires_grad_(False)
 

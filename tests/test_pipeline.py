@@ -193,7 +193,7 @@ def test_api_health_render_validation_and_local_guards(monkeypatch,tmp_path):
     data=response.json()
     assert len(data["frames"])==8 and len(data["cameras"])==6
     assert data["trained"] is False and data["telemetry"]["dit_ms"] is None
-    for bad in ({"nfe":3},{"chunk":-1},{"chunk":"1"},{"tiled":"true"},{"goal":{"u":999.,"v":100.}},{"unknown":1}):
+    for bad in ({"nfe":3},{"nfe":True},{"nfe":1.0},{"chunk":-1},{"chunk":"1"},{"tiled":"true"},{"goal":{"u":999.,"v":100.}},{"unknown":1}):
         assert client.post("/api/render",json={**base,**bad}).status_code==422
     assert client.post("/api/render",json={**base,"episode":"../secret"}).status_code==400
     assert client.post("/api/render",json=base,headers={"Origin":"https://evil.example"}).status_code==403

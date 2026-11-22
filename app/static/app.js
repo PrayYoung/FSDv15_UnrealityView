@@ -2,7 +2,7 @@
 const $ = id => document.getElementById(id);
 const canvas = $("reality"), ctx = canvas.getContext("2d");
 const state = {chunk:1,nfe:1,playing:false,busy:false,pending:false,frame:0,images:[],data:null,
-  goal:null,session:crypto.randomUUID(),episodes:[],lastTick:0,revision:0};
+  goal:null,session:crypto.randomUUID(),episodes:[],lastTick:0,revision:0,cameraFrames:[]};
 const cameraNames=["FRONT LEFT","FRONT","FRONT RIGHT","REAR LEFT","REAR","REAR RIGHT"];
 const cameraImages=cameraNames.map((name,index)=>{
   const card=document.createElement("div");card.className="camera-card";
@@ -34,6 +34,7 @@ function draw(){
   const image=state.images[state.frame];
   if(!image)return;
   const w=canvas.width,h=canvas.height;ctx.clearRect(0,0,w,h);ctx.drawImage(image,0,0,w,h);
+  if(state.cameraFrames[state.frame])state.cameraFrames[state.frame].forEach((img,i)=>{if(cameraImages[i].src!==img.src)cameraImages[i].src=img.src;});
   const shade=ctx.createLinearGradient(0,0,0,h);shade.addColorStop(0,"#08131e66");shade.addColorStop(.25,"#08131e00");shade.addColorStop(.7,"#08131e00");shade.addColorStop(1,"#08131e88");ctx.fillStyle=shade;ctx.fillRect(0,0,w,h);
   const points=state.data?.projected_waypoints??[];
   ctx.save();ctx.scale(w/320,h/192);ctx.lineWidth=1.3;ctx.strokeStyle="#8acbff";ctx.fillStyle="#8acbff";ctx.shadowColor="#5b9be6";ctx.shadowBlur=6;
@@ -63,10 +64,11 @@ async function renderChunk(){
     })});
     const data=await response.json();if(!response.ok)throw new Error(typeof data.detail==="string"?data.detail:"The render request was rejected.");
     const images=await Promise.all(data.frames.map(loadImage));
+    const cameraFrames=await Promise.all((data.camera_frames??[data.cameras]).map(row=>Promise.all(row.map(loadImage))));
     if(revision!==state.revision)return;
-    state.images=images;state.data=data;state.frame=0;state.lastTick=0;
+    state.images=images;state.cameraFrames=cameraFrames;state.data=data;state.frame=0;state.lastTick=0;
     data.cameras.forEach((src,i)=>cameraImages[i].src=src);updateTelemetry(data);draw();
-    notice(data.trained?"Trained Mean-Flow inference. Cached camera arrivals emulate streaming; tap goals condition the independent planner.":source==="demo"?"Procedural preview — illustrative scenery and route, no learned inference. Select a cached episode for ground truth or trained predictions.":"Ground-truth simulator replay. Waypoints come from recorded ego poses; tap goals affect only model predictions.");
+    notice(data.trained?`Mean-Flow checkpoint step ${data.checkpoint_step} · training data: ${data.training_data_source}. Cached arrivals emulate streaming; tap goals condition the independent planner.`:source==="demo"?"Procedural preview — illustrative scenery and route, no learned inference. Select a cached episode for ground truth or trained predictions.":`Ground-truth cache: ${data.dataset_source}. Waypoints come from recorded ego poses; tap goals affect only model predictions.`);
   }catch(error){if(revision===state.revision){setPlaying(false);notice(error.message,true);}}
   finally{state.busy=false;canvas.setAttribute("aria-busy","false");if(state.pending){state.pending=false;renderChunk();}}
 }

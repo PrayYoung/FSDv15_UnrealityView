@@ -4,6 +4,7 @@ uv run --extra simulator collect_metadrive.py --output outputs/dataset
 """
 import argparse
 import math
+import platform
 from pathlib import Path
 import numpy as np
 from PIL import Image,ImageDraw
@@ -37,7 +38,8 @@ def camera_calibration(sensor, parent, width=224, height=140):
 @torch.no_grad()
 def collect(args):
     from panda3d.core import loadPrcFileData
-    loadPrcFileData("","load-display p3headlessgl\naudio-library-name null\nsync-video false")
+    display = "pandagl" if platform.system()=="Darwin" else "p3headlessgl"
+    loadPrcFileData("",f"load-display {display}\naudio-library-name null\nsync-video false")
     from metadrive.envs.metadrive_env import MetaDriveEnv
     from metadrive.component.sensors.rgb_camera import RGBCamera
     from metadrive.policy.idm_policy import IDMPolicy

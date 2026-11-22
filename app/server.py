@@ -15,7 +15,7 @@ import torch
 from fastapi import FastAPI,HTTPException,Request
 from fastapi.responses import FileResponse,JSONResponse
 from fastapi.staticfiles import StaticFiles
-from pydantic import BaseModel,ConfigDict,Field
+from pydantic import BaseModel,ConfigDict,Field,field_validator
 from starlette.middleware.trustedhost import TrustedHostMiddleware
 from fsd_reality.checkpoint import load_checkpoint
 from fsd_reality.data.cache import resolve_safe_subpath,load_episode
@@ -55,6 +55,13 @@ class RenderRequest(BaseModel):
     goal:TapGoal|None=None
     session_id:str=Field(pattern=r"^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$")
     seed:int=Field(default=42,ge=0,le=2**31-1)
+
+    @field_validator("nfe",mode="before")
+    @classmethod
+    def integer_nfe(cls,value):
+        if type(value) is not int:
+            raise ValueError("nfe must be an integer, not a boolean or float")
+        return value
 
 
 @app.middleware("http")
@@ -146,8 +153,9 @@ def render(req:RenderRequest):
     cameras=("front_left","front","front_right","rear_left","rear","rear_right")
     if req.source=="demo":
         waypoints=demo_waypoints(goal)
+        camera_frames=[[image_url(demo_frame(start+i,c)) for c in range(6)] for i in range(8)]
         return {"frames":[image_url(demo_frame(start+i)) for i in range(8)],
-                "cameras":[image_url(demo_frame(start,c)) for c in range(6)],
+                "cameras":camera_frames[0],"camera_frames":camera_frames,
                 "waypoints":waypoints,"projected_waypoints":project_waypoints(waypoints),"goal_xy":goal,
                 "source":"procedural preview","trained":False,"frame_start":start,"fps":36,
                 "telemetry":{"dit_ms":None,"decode_ms":None,"policy_ms":None,"effective_fps":None,
@@ -158,14 +166,18 @@ def render(req:RenderRequest):
     # hidden state is trusted for model tensors or paths.
     with _lock:
         episode=get_episode(directory)
+        metadata_path=directory/"metadata.json"
+        metadata=json.loads(metadata_path.read_text()) if metadata_path.is_file() else {}
+        dataset_source=metadata.get("source","unknown cache")
         if start+8>len(episode["chase_latents"]): raise HTTPException(422,"Chunk exceeds episode length")
         relative=str(directory.relative_to(DATA_ROOT))
         camera_urls=[f"/api/assets/{relative}/raw/{c}/{start:05d}.jpg" for c in cameras]
+        camera_frames=[[f"/api/assets/{relative}/raw/{c}/{start+i:05d}.jpg" for c in cameras] for i in range(8)]
         if req.source=="ground_truth":
             waypoints=ego_waypoints(episode["ego_states"].float(),start).tolist()
             return {"frames":[f"/api/assets/{relative}/raw/chase/{start+i:05d}.jpg" for i in range(8)],
-                    "cameras":camera_urls,"waypoints":waypoints,"projected_waypoints":project_waypoints(waypoints),
-                    "goal_xy":goal,"source":"ground truth","trained":False,"frame_start":start,"fps":36,
+                    "cameras":camera_urls,"camera_frames":camera_frames,"waypoints":waypoints,"projected_waypoints":project_waypoints(waypoints),
+                    "goal_xy":goal,"source":"ground truth","dataset_source":dataset_source,"trained":False,"frame_start":start,"fps":36,
                     "telemetry":{"dit_ms":None,"decode_ms":None,"policy_ms":None,"effective_fps":None,
                                  "psnr_db":None,"sram_mib":None,"uve_stage_frames":[],"stream_mode":"cached ground truth"}}
         model,policy,decoder,device,config=get_models()
@@ -182,10 +194,13 @@ def render(req:RenderRequest):
         ring.publish(episode["uve_tokens"][first][None].float().to(device),ts=first/36,frame_id=first)
         engine=RealityViewStreamingEngine(model,ring)
         stage_current=[start/36]
+        newest_frame=[first]
         def stage_hook(stage):
-            frame=min(start+stage*2-1,len(episode["uve_tokens"])-1)
-            stage_current[0]=(start+stage*2)/36
-            ring.publish(episode["uve_tokens"][frame][None].float().to(device),ts=frame/36,frame_id=frame)
+            frame=max(newest_frame[0],min(start+stage*2-1,len(episode["uve_tokens"])-1))
+            newest_frame[0]=frame
+            stage_current[0]=max(stage_current[0],(start+stage*2)/36)
+            if req.interleaving:
+                ring.publish(episode["uve_tokens"][frame][None].float().to(device),ts=frame/36,frame_id=frame)
         generator=torch.Generator(device=device).manual_seed(req.seed+req.chunk)
         noise=torch.randn(previous.shape,device=device,generator=generator)
         initial_tokens=episode["uve_tokens"][first][None].float().to(device)
@@ -196,7 +211,7 @@ def render(req:RenderRequest):
         begin=time.perf_counter()
         with autocast_for(device):
             latent=engine.sample_chunk(previous,req.nfe,req.interleaving,noise=noise,
-                         clock=lambda:stage_current[0],stage_hook=stage_hook if req.interleaving else None)
+                         clock=lambda:stage_current[0],stage_hook=stage_hook)
         synchronize(device);dit_ms=(time.perf_counter()-begin)*1000
         begin=time.perf_counter()
         pixels=(decoder.decode_tiled(latent.float()) if req.tiled else decoder.decode(latent.float()))
@@ -208,9 +223,10 @@ def render(req:RenderRequest):
         from evaluate import pixel_metrics
         measured=pixel_metrics(pixels,truth)
         waypoints=points[0].float().cpu().tolist()
-        return {"frames":video_urls(pixels),"cameras":camera_urls,"waypoints":waypoints,
+        return {"frames":video_urls(pixels),"cameras":camera_urls,"camera_frames":camera_frames,"waypoints":waypoints,
                 "projected_waypoints":project_waypoints(waypoints),"goal_xy":goal,"source":"Mean-Flow",
-                "trained":True,"checkpoint_step":config["step"],"frame_start":start,"fps":36,
+                "trained":True,"checkpoint_step":config["step"],"dataset_source":dataset_source,
+                "training_data_source":config.get("data_source","unknown"),"frame_start":start,"fps":36,
                 "telemetry":{"dit_ms":dit_ms,"decode_ms":decode_ms,"policy_ms":policy_ms,
                              "effective_fps":8000/(dit_ms+decode_ms+policy_ms),"psnr_db":measured["psnr_db"],
                              "sram_mib":decoder.sram_budget_report()["total_mib"],

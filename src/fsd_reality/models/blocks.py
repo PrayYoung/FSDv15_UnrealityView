@@ -29,9 +29,16 @@ class Attention(nn.Module):
         q = self.q(x).reshape(b,n,self.heads,d//self.heads).transpose(1,2)
         k,v = self.kv(context).reshape(b,-1,2,self.heads,d//self.heads).permute(2,0,3,1,4)
         # RMS rather than L2 norm preserves the standard 1/sqrt(head_dim) scale.
-        q = q * (q.float().square().mean(-1,keepdim=True)+1e-6).rsqrt().to(q.dtype)
-        k = k * (k.float().square().mean(-1,keepdim=True)+1e-6).rsqrt().to(k.dtype)
-        y = F.scaled_dot_product_attention(q,k,v)
+        q = (q.float() * (q.float().square().mean(-1,keepdim=True)+1e-6).rsqrt()).to(q.dtype)
+        k = (k.float() * (k.float().square().mean(-1,keepdim=True)+1e-6).rsqrt()).to(k.dtype)
+        if q.device.type == "mps":
+            # PyTorch 2.5 MPS FP16 SDPA SafeSoftmaxBackward can produce NaNs.
+            # Keep this backend's attention reduction and softmax in FP32.
+            with torch.autocast("mps",enabled=False):
+                logits = (q.float() @ k.float().transpose(-1,-2)) / (q.shape[-1]**.5)
+                y = (logits.softmax(-1) @ v.float()).to(q.dtype)
+        else:
+            y = F.scaled_dot_product_attention(q,k,v)
         return self.out(y.transpose(1,2).reshape(b,n,d))
 
 

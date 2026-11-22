@@ -1,0 +1,16 @@
+{
+  "status": "completed",
+  "steps": 10,
+  "seconds": 24.451114292256534,
+  "last_training_metrics": {
+    "step": 10,
+    "loss": 1.7465229034423828,
+    "flow_loss": 1.237641453742981,
+    "policy_loss": 0.5088814496994019,
+    "grad_norm": 1.316360354423523,
+    "lr": 0.0,
+    "elapsed_sec": 17.443859500810504
+  },
+  "parameters_dit": 622304,
+  "parameters_policy": 3280036
+}

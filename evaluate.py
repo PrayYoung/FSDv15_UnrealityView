@@ -57,7 +57,9 @@ def evaluate_models(model, policy, decoder, dataset, device, output, max_items=8
                            ("4-NFE",predictions[4][0])],output/"reconstruction.png")
     means={n:{key:float(np.mean([r[key] for r in rows])) for key in
                ("psnr_db","pixel_l1","latent_l1","waypoint_l1_m")} for n,rows in results.items()}
-    report={"split":"val","samples":min(max_items,len(dataset)),"seed":seed,"nfe":means,"per_chunk":results,
+    manifest=dataset.root/"manifest.json"
+    source=json.loads(manifest.read_text()).get("source","unknown") if manifest.is_file() else "unknown"
+    report={"split":"val","dataset_source":source,"samples":min(max_items,len(dataset)),"seed":seed,"nfe":means,"per_chunk":results,
             "pixel_target":"raw chase JPEG; pixels normalized [-1,1]",
             "note":"Offline video rollout; not a vehicle-control or safety benchmark"}
     atomic_json(output/"metrics.json",report)
