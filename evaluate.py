@@ -7,6 +7,7 @@ import torch
 from fsd_reality.checkpoint import load_checkpoint
 from fsd_reality.data.dataset import CachedEpisodeChunkDataset
 from fsd_reality.data.cache import atomic_json
+from fsd_reality.data.splits import assert_unseen_test
 from fsd_reality.device import select_device,autocast_for
 from fsd_reality.models.pretrained_taesd import PretrainedTAESD
 from fsd_reality.visuals import contact_sheet,save_rollout
@@ -24,8 +25,15 @@ def evaluate_models(model, policy, decoder, dataset, device, output, max_items=8
     model.eval();policy.eval()
     output=Path(output);output.mkdir(parents=True,exist_ok=True)
     results={str(n):[] for n in (1,2,4)}
-    for i in range(min(max_items,len(dataset))):
-        item=dataset[i]
+    from collections import defaultdict,deque
+    groups=defaultdict(deque)
+    for index,(episode,_) in enumerate(dataset.index):groups[dataset.metadata[episode].get("source","unknown")].append(index)
+    indices=[]
+    while len(indices)<min(max_items,len(dataset)):
+        for source in sorted(groups):
+            if groups[source] and len(indices)<max_items:indices.append(groups[source].popleft())
+    for i,index in enumerate(indices):
+        item=dataset[index]
         previous=item["z_prev"][None].to(device)
         target=item["z0"][None].to(device)
         tokens=item["uve_tokens"][None].to(device)
@@ -49,7 +57,8 @@ def evaluate_models(model, policy, decoder, dataset, device, output, max_items=8
             results[str(n)].append({**pixel_metrics(pixels,truth),
                    "latent_l1":(latent-target).abs().mean().item(),
                    "waypoint_l1_m":(waypoints[0,:,:2]-item["waypoints"][:,:2].to(device)).abs().mean().item(),
-                   "episode":item["episode"],"start":item["start"]})
+                   "episode":item["episode"],"start":item["start"],"source":item["source"],
+                   "source_id":item["source_id"],"fps":item["fps"]})
         if i==0:
             contact_sheet([("Previous chunk",decoder.decode(previous)[0]),("Ground truth",truth[0]),
                            ("1-NFE",predictions[1][0]),("2-NFE",predictions[2][0])],output/"contact_sheet.png")
@@ -59,14 +68,21 @@ def evaluate_models(model, policy, decoder, dataset, device, output, max_items=8
                ("psnr_db","pixel_l1","latent_l1","waypoint_l1_m")} for n,rows in results.items()}
     manifest=dataset.root/"manifest.json"
     source=json.loads(manifest.read_text()).get("source","unknown") if manifest.is_file() else "unknown"
-    report={"split":"val","dataset_source":source,"samples":min(max_items,len(dataset)),"seed":seed,"nfe":means,"per_chunk":results,
-            "pixel_target":"raw chase JPEG; pixels normalized [-1,1]",
+    by_source={}
+    for name in sorted(groups):
+        by_source[name]={n:{key:float(np.mean([r[key] for r in rows if r["source"]==name])) for key in
+                        ("psnr_db","pixel_l1","latent_l1","waypoint_l1_m")} for n,rows in results.items()
+                         if any(r["source"]==name for r in rows)}
+    report={"split":dataset.split,"dataset_source":source,"samples":len(indices),"seed":seed,"nfe":means,"per_chunk":results,
+            "by_dataset":by_source,"target_views":sorted(set(m.get("target_view","elevated_chase") for m in dataset.metadata)),
+            "pixel_target":"cached reference JPEG (native_front baseline or declared chase teacher); pixels [-1,1]",
             "note":"Offline video rollout; not a vehicle-control or safety benchmark"}
     atomic_json(output/"metrics.json",report)
     # Four consecutive 8-frame chunks, never reseeding previous with GT.
     ep=dataset.episodes[0]
     previous=ep["chase_latents"][:8].permute(1,0,2,3)[None].float().to(device)
     videos,drift=[],[]
+    gen=torch.Generator(device=device).manual_seed(seed+10000)
     for chunk in range(4):
         start=8+chunk*8
         ids=(start+torch.tensor([-1,1,3,5])).clamp(max=len(ep["uve_tokens"])-1)
@@ -79,7 +95,7 @@ def evaluate_models(model, policy, decoder, dataset, device, output, max_items=8
         drift.append({"chunk":chunk,"latent_l1":(previous-gt).abs().mean().item()})
         previous=previous.float()
     rollout=torch.cat(videos,dim=1)
-    save_rollout(rollout,output/"closed_loop_32_frames.gif")
+    save_rollout(rollout,output/"closed_loop_32_frames.gif",fps=float(dataset.metadata[0].get("fps",36)))
     contact_sheet([("Closed-loop 1-NFE",rollout)],output/"closed_loop_contact_sheet.png",(0,7,15,23,31))
     atomic_json(output/"rollout_metrics.json",{"chunks":drift,"zero_drift_verified":False,
                                               "note":"Drift is reported; no zero-drift assertion"})
@@ -88,15 +104,18 @@ def evaluate_models(model, policy, decoder, dataset, device, output, max_items=8
 
 def main():
     p=argparse.ArgumentParser(description=__doc__)
-    p.add_argument("--checkpoint",default="outputs/train/checkpoint")
-    p.add_argument("--data",default="outputs/dataset")
+    p.add_argument("--checkpoint",default="outputs/real_train/checkpoint")
+    p.add_argument("--data",default="outputs/real_dataset")
     p.add_argument("--output",default="outputs/evaluation")
     p.add_argument("--device",default="auto")
     p.add_argument("--max-items",type=int,default=8)
+    p.add_argument("--split",choices=("val","test"),default="val")
     a=p.parse_args();device=select_device(a.device)
-    model,policy,_=load_checkpoint(a.checkpoint,device)
+    if a.max_items<1:p.error("max-items must be positive")
+    model,policy,config=load_checkpoint(a.checkpoint,device)
     decoder=PretrainedTAESD().to(device)
-    dataset=CachedEpisodeChunkDataset(a.data,"val",jitter=False)
+    dataset=CachedEpisodeChunkDataset(a.data,a.split,jitter=False)
+    if a.split=="test":assert_unseen_test(config.get("data_provenance"),[m["source_id"] for m in dataset.metadata if "source_id" in m])
     print(json.dumps(evaluate_models(model,policy,decoder,dataset,device,a.output,a.max_items),indent=2))
 
 

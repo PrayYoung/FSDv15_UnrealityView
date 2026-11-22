@@ -2,7 +2,7 @@
 const $ = id => document.getElementById(id);
 const canvas = $("reality"), ctx = canvas.getContext("2d");
 const state = {chunk:1,nfe:1,playing:false,busy:false,pending:false,frame:0,images:[],data:null,
-  goal:null,session:crypto.randomUUID(),episodes:[],lastTick:0,revision:0,cameraFrames:[]};
+  goal:null,session:crypto.randomUUID(),episodes:[],lastTick:0,revision:0,cameraFrames:[],fps:36};
 const cameraNames=["FRONT LEFT","FRONT","FRONT RIGHT","REAR LEFT","REAR","REAR RIGHT"];
 const cameraImages=cameraNames.map((name,index)=>{
   const card=document.createElement("div");card.className="camera-card";
@@ -20,6 +20,13 @@ function loadImage(src){return new Promise((resolve,reject)=>{const img=new Imag
 function format(value,digits=1){return value==null||!Number.isFinite(value)?"—":value.toFixed(digits);}
 function updateTelemetry(data){
   const t=data.telemetry;
+  state.fps=data.fps??36;
+  $("cadence-target").textContent=`${state.fps.toFixed(1)} fps recorded cadence`;
+  const front=data.target_view==="native_front";
+  document.querySelector(".view-caption").textContent=front?"NATIVE FRONT CAMERA TARGET":"ELEVATED CHASE CAMERA";
+  document.querySelector(".camera-symbol").textContent=front?"CAMERA REFERENCE":"75° FOV";
+  $("clear-goal").disabled=front;
+  cameraImages.forEach((img,i)=>{const label=img.parentElement.querySelector(".camera-label");label.textContent=(data.camera_names?.[i]??cameraNames[i]).toUpperCase()+(data.camera_available?.[i]===false?" / UNAVAILABLE":"");});
   for(const [id,key] of [["dit-ms","dit_ms"],["decode-ms","decode_ms"],["policy-ms","policy_ms"],["effective-fps","effective_fps"],["psnr","psnr_db"],["sram","sram_mib"]])$(id).textContent=format(t[key]);
   const stages=t.uve_stage_frames.slice(0,4);$("stage-frames").textContent=stages.length?stages.join(" / "):"— / — / — / —";
   $("stream-mode").textContent=t.stream_mode;
@@ -28,7 +35,7 @@ function updateTelemetry(data){
   $("runtime-state").textContent=data.trained?`EMA CHECKPOINT / STEP ${data.checkpoint_step}`:data.source.toUpperCase();
   $("episode-label").textContent=$("episode").value==="demo"?"PREVIEW / SCENE 01":$("episode").value.toUpperCase().replaceAll("_"," ");
   if(data.goal_xy){const [x,y]=data.goal_xy;$("goal-readout").textContent=`${x.toFixed(1)} m forward · ${Math.abs(y).toFixed(1)} m ${y>=0?"left":"right"}`;$("goal-label").textContent="Destination set · ego ground plane";}
-  else{$("goal-readout").textContent="No destination selected";$("goal-label").textContent="Tap the road to set a goal";}
+  else{$("goal-readout").textContent=front?"Tap-to-drive unavailable for front-view baseline":"No destination selected";$("goal-label").textContent=front?"Front-camera baseline · not a novel chase view":"Tap the road to set a goal";}
 }
 function draw(){
   const image=state.images[state.frame];
@@ -48,7 +55,7 @@ function draw(){
   const frame=(state.data?.frame_start??state.chunk*8)+state.frame;
   $("frame-label").textContent=`FRAME ${String(frame).padStart(5,"0")}`;
   $("chunk-label").textContent=`CHUNK ${String(state.chunk).padStart(2,"0")}`;
-  const ms=Math.round(frame/36*1000);$("time-label").textContent=`00:${String(Math.floor(ms/1000)).padStart(2,"0")}.${String(ms%1000).padStart(3,"0")}`;
+  const ms=Math.round(frame/state.fps*1000);$("time-label").textContent=`00:${String(Math.floor(ms/1000)).padStart(2,"0")}.${String(ms%1000).padStart(3,"0")}`;
   $("progress").style.width=`${Math.min(100,(state.chunk-1+state.frame/8)/maxChunks()*100)}%`;
 }
 async function renderChunk(){
@@ -75,12 +82,12 @@ async function renderChunk(){
 function nextChunk(){if(state.busy)return;if(state.chunk>=maxChunks()){setPlaying(false);notice("End of episode. Reset playback or select the next episode.");return;}state.chunk++;state.frame=0;renderChunk();}
 function nextEpisode(){const options=Array.from($("episode").options);const index=options.findIndex(o=>o.value===$("episode").value);$("episode").value=options[(index+1)%options.length].value;selectEpisode();}
 function selectEpisode(){const demo=$("episode").value==="demo";$("source").value=demo?"demo":"ground_truth";Array.from($("source").options).forEach(o=>{o.disabled=demo?o.value!=="demo":o.value==="demo"||(o.value==="model"&&!state.checkpoint);});state.goal=null;reset();}
-function animate(timestamp){if(state.playing&&!state.busy&&state.images.length){if(!state.lastTick)state.lastTick=timestamp;const elapsed=timestamp-state.lastTick;if(elapsed>=1000/36){const advance=Math.floor(elapsed/(1000/36));state.lastTick+=advance*1000/36;state.frame+=advance;if(state.frame>=state.images.length){state.frame=state.images.length-1;draw();nextChunk();}else draw();}}requestAnimationFrame(animate);}
+function animate(timestamp){if(state.playing&&!state.busy&&state.images.length){if(!state.lastTick)state.lastTick=timestamp;const elapsed=timestamp-state.lastTick;if(elapsed>=1000/state.fps){const advance=Math.floor(elapsed/(1000/state.fps));state.lastTick+=advance*1000/state.fps;state.frame+=advance;if(state.frame>=state.images.length){state.frame=state.images.length-1;draw();nextChunk();}else draw();}}requestAnimationFrame(animate);}
 $("play").addEventListener("click",()=>setPlaying(!state.playing));$("next-chunk").addEventListener("click",nextChunk);$("next-episode").addEventListener("click",nextEpisode);$("reset").addEventListener("click",reset);
 $("episode").addEventListener("change",selectEpisode);
 for(const id of ["source","rollout","interleaving","tiled"])$(id).addEventListener("change",changeConfig);
 for(const button of document.querySelectorAll("[data-nfe]"))button.addEventListener("click",()=>{state.nfe=Number(button.dataset.nfe);for(const other of document.querySelectorAll("[data-nfe]")){const selected=other===button;other.classList.toggle("selected",selected);other.setAttribute("aria-pressed",String(selected));}changeConfig();});
-canvas.addEventListener("click",event=>{if($("source").value==="ground_truth"){notice("Select Mean-Flow prediction to condition the planner, or procedural preview to illustrate a route.");return;}const box=canvas.getBoundingClientRect();state.goal={u:(event.clientX-box.left)/box.width*320,v:(event.clientY-box.top)/box.height*192};reset();});
+canvas.addEventListener("click",event=>{if(state.data?.target_view==="native_front"){notice("Tap-to-drive is unavailable for the native-front baseline; the chase-camera raycast does not apply to this view.");return;}if($("source").value==="ground_truth"){notice("Select Mean-Flow prediction to condition the planner, or procedural preview to illustrate a route.");return;}const box=canvas.getBoundingClientRect();state.goal={u:(event.clientX-box.left)/box.width*320,v:(event.clientY-box.top)/box.height*192};reset();});
 $("clear-goal").addEventListener("click",()=>{state.goal=null;reset();});
 $("fullscreen").addEventListener("click",async()=>{try{if(document.fullscreenElement)await document.exitFullscreen();else await $("canvas-wrap").requestFullscreen();}catch{notice("Fullscreen is unavailable in this browser.");}});
 $("help").addEventListener("click",()=>$("help-dialog").showModal());$("close-help").addEventListener("click",()=>$("help-dialog").close());

@@ -8,7 +8,7 @@ import random
 import time
 import numpy as np
 import torch
-from torch.utils.data import DataLoader
+from torch.utils.data import DataLoader,WeightedRandomSampler
 from fsd_reality.checkpoint import save_checkpoint
 from fsd_reality.data.cache import atomic_json
 from fsd_reality.data.dataset import CachedEpisodeChunkDataset
@@ -33,7 +33,16 @@ def train(args):
     validation=CachedEpisodeChunkDataset(args.data,"val",jitter=False)
     manifest=Path(args.data)/"manifest.json"
     data_source=json.loads(manifest.read_text()).get("source","unknown") if manifest.is_file() else "unknown"
-    loader=DataLoader(train_data,batch_size=config["batch_size"],shuffle=True,num_workers=0)
+    sampler=None
+    if config.get("balance_sources",False):
+        from collections import Counter
+        sources=[train_data.metadata[ep].get("source","unknown") for ep,_ in train_data.index]
+        counts=Counter(sources)
+        sampler=WeightedRandomSampler([1/counts[s] for s in sources],len(sources),replacement=True,
+                                      generator=torch.Generator().manual_seed(seed))
+    loader=DataLoader(train_data,batch_size=config["batch_size"],shuffle=sampler is None,sampler=sampler,num_workers=0)
+    provenance={"train_source_ids":sorted(k for k,v in train_data.provenance.items() if v=="train"),
+                "validation_source_ids":sorted(k for k,v in train_data.provenance.items() if v=="val")}
     model=ConditionalMeanFlowDiT(DiTConfig(**config["dit"])).to(device)
     policy=DrivingPolicyHead().to(device)
     ema_model,ema_policy=copy.deepcopy(model).eval().requires_grad_(False),copy.deepcopy(policy).eval().requires_grad_(False)
@@ -54,7 +63,8 @@ def train(args):
         for _ in range(config["grad_accum"]):
             try: batch=next(iterator)
             except StopIteration: iterator=iter(loader);batch=next(iterator)
-            b={k:v.to(device) if isinstance(v,torch.Tensor) else v for k,v in batch.items()}
+            model_inputs={"z0","z_prev","uve_tokens","stage_ages","waypoints"}
+            b={k:v.to(device) if k in model_inputs and isinstance(v,torch.Tensor) else v for k,v in batch.items()}
             with autocast_for(device):
                 flow,details=meanflow_loss(model,b["z0"],b["z_prev"],b["uve_tokens"],b["stage_ages"],jvp_method=config["jvp_method"])
                 goal=training_goals(b["waypoints"])
@@ -81,7 +91,9 @@ def train(args):
         if step==1 or step%25==0: print(json.dumps(row),flush=True)
         if step%config["eval_every"]==0 or step==config["steps"]:
             save_checkpoint(output/"checkpoint",ema_model,ema_policy,step,
-                            {"training_config":config,"weights":"EMA","data_source":data_source})
+                            {"training_config":config,"weights":"EMA","data_source":data_source,
+                             "data_provenance":provenance,
+                             "target_views":sorted(set(m.get("target_view","elevated_chase") for m in train_data.metadata))})
             report=evaluate_models(ema_model,ema_policy,decoder,validation,device,
                                    output/f"eval_{step:06d}",config["eval_items"])
             print("EVALUATION",json.dumps(report["nfe"]),flush=True)
@@ -93,9 +105,9 @@ def train(args):
 
 def main():
     p=argparse.ArgumentParser(description=__doc__)
-    p.add_argument("--config",default="configs/train.json")
-    p.add_argument("--data",default="outputs/dataset")
-    p.add_argument("--output",default="outputs/train")
+    p.add_argument("--config",default="configs/real_train.json")
+    p.add_argument("--data",default="outputs/real_dataset")
+    p.add_argument("--output",default="outputs/real_train")
     p.add_argument("--device",default="auto")
     p.add_argument("--steps",type=int)
     p.add_argument("--batch-size",type=int)

@@ -29,7 +29,7 @@ class MiniUVE(nn.Module):
         return self
 
     @torch.no_grad()
-    def forward(self, cameras, intrinsics=None, camera_to_ego=None):
+    def forward(self, cameras, intrinsics=None, camera_to_ego=None, camera_mask=None):
         if cameras.ndim != 5 or tuple(cameras.shape[1:]) != (6,3,140,224):
             raise ValueError("cameras must be (B,6,3,140,224), RGB in [0,1]")
         b = len(cameras)
@@ -51,4 +51,8 @@ class MiniUVE(nn.Module):
         if intrinsics is not None:
             rays = plucker_rays(intrinsics.float(), camera_to_ego.float()).to(tokens)
             tokens = tokens + rays @ self.ray_projection.to(tokens)
+        if camera_mask is not None:
+            if camera_mask.shape!=(b,6) or not camera_mask.bool().any(-1).all():
+                raise ValueError("camera_mask must be B,6 with at least one available camera")
+            tokens=tokens*camera_mask.to(tokens)[:,:,None,None]
         return tokens.reshape(b,192,384)

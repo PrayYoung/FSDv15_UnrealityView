@@ -26,8 +26,8 @@ from fsd_reality.runtime.ring_buffer_engine import UVERingBuffer,RealityViewStre
 from .demo import demo_frame,demo_waypoints
 
 APP_DIR=Path(__file__).resolve().parent
-DATA_ROOT=Path(os.environ.get("REALITY_DATA","outputs/dataset")).resolve()
-CHECKPOINT=Path(os.environ.get("REALITY_CHECKPOINT","outputs/train/checkpoint")).resolve()
+DATA_ROOT=Path(os.environ.get("REALITY_DATA","outputs/real_dataset")).resolve()
+CHECKPOINT=Path(os.environ.get("REALITY_CHECKPOINT","outputs/real_train/checkpoint")).resolve()
 app=FastAPI(title="Mini-RealityView",docs_url=None,redoc_url=None)
 app.add_middleware(TrustedHostMiddleware,allowed_hosts=["127.0.0.1","localhost","testserver"])
 app.mount("/static",StaticFiles(directory=APP_DIR/"static"),name="static")
@@ -95,7 +95,8 @@ def episodes():
         try:
             metadata=json.loads(path.with_name("metadata.json").read_text())
             rows.append({"id":str(path.parent.relative_to(DATA_ROOT)),"frames":metadata["frames"],
-                         "source":metadata.get("source","unknown")})
+                         "source":metadata.get("source","unknown"),"fps":metadata.get("fps",36),
+                         "target_view":metadata.get("target_view","elevated_chase")})
         except (OSError,ValueError,KeyError):
             continue
     return {"episodes":rows}
@@ -161,23 +162,31 @@ def render(req:RenderRequest):
                 "telemetry":{"dit_ms":None,"decode_ms":None,"policy_ms":None,"effective_fps":None,
                              "psnr_db":None,"sram_mib":None,"uve_stage_frames":[],"stream_mode":"illustration"}}
     if not (directory/"episode.safetensors").is_file():
-        raise HTTPException(404,"Episode cache missing; collect simulator data first")
+        raise HTTPException(404,"Episode cache missing; import camera data with prepare_real_data.py first")
     # Serialize model access and each user's closed-loop state. No browser-side
     # hidden state is trusted for model tensors or paths.
     with _lock:
         episode=get_episode(directory)
+        if start+8>len(episode["chase_latents"]): raise HTTPException(422,"Chunk exceeds episode length")
         metadata_path=directory/"metadata.json"
         metadata=json.loads(metadata_path.read_text()) if metadata_path.is_file() else {}
         dataset_source=metadata.get("source","unknown cache")
-        if start+8>len(episode["chase_latents"]): raise HTTPException(422,"Chunk exceeds episode length")
+        fps=float(metadata.get("fps",36))
+        target_view=metadata.get("target_view","elevated_chase")
+        camera_names=metadata.get("camera_names",("front_left","front","front_right","rear_left","rear","rear_right"))
+        times=episode.get("timestamps",torch.arange(len(episode["uve_tokens"]),dtype=torch.float64)/fps)
+        available=episode.get("camera_mask",torch.ones(len(times),6,dtype=torch.bool))[start].tolist()
+        if req.goal is not None and target_view!="elevated_chase":
+            raise HTTPException(422,"Tap-to-drive raycasting requires an elevated chase target; unavailable in the native-front baseline")
         relative=str(directory.relative_to(DATA_ROOT))
         camera_urls=[f"/api/assets/{relative}/raw/{c}/{start:05d}.jpg" for c in cameras]
         camera_frames=[[f"/api/assets/{relative}/raw/{c}/{start+i:05d}.jpg" for c in cameras] for i in range(8)]
         if req.source=="ground_truth":
             waypoints=ego_waypoints(episode["ego_states"].float(),start).tolist()
             return {"frames":[f"/api/assets/{relative}/raw/chase/{start+i:05d}.jpg" for i in range(8)],
-                    "cameras":camera_urls,"camera_frames":camera_frames,"waypoints":waypoints,"projected_waypoints":project_waypoints(waypoints),
-                    "goal_xy":goal,"source":"ground truth","dataset_source":dataset_source,"trained":False,"frame_start":start,"fps":36,
+                    "cameras":camera_urls,"camera_frames":camera_frames,"waypoints":waypoints,"projected_waypoints":project_waypoints(waypoints) if target_view=="elevated_chase" else [],
+                    "goal_xy":goal,"source":"reference frames","dataset_source":dataset_source,"trained":False,"frame_start":start,"fps":fps,
+                    "target_view":target_view,"camera_names":camera_names,"camera_available":available,
                     "telemetry":{"dit_ms":None,"decode_ms":None,"policy_ms":None,"effective_fps":None,
                                  "psnr_db":None,"sram_mib":None,"uve_stage_frames":[],"stream_mode":"cached ground truth"}}
         model,policy,decoder,device,config=get_models()
@@ -191,16 +200,16 @@ def render(req:RenderRequest):
             previous=old[2].to(device)
         ring=UVERingBuffer()
         first=start-1
-        ring.publish(episode["uve_tokens"][first][None].float().to(device),ts=first/36,frame_id=first)
+        ring.publish(episode["uve_tokens"][first][None].float().to(device),ts=float(times[first]),frame_id=first)
         engine=RealityViewStreamingEngine(model,ring)
-        stage_current=[start/36]
+        stage_current=[float(times[start])]
         newest_frame=[first]
         def stage_hook(stage):
             frame=max(newest_frame[0],min(start+stage*2-1,len(episode["uve_tokens"])-1))
             newest_frame[0]=frame
-            stage_current[0]=max(stage_current[0],(start+stage*2)/36)
+            stage_current[0]=max(stage_current[0],float(times[min(start+stage*2,len(times)-1)]))
             if req.interleaving:
-                ring.publish(episode["uve_tokens"][frame][None].float().to(device),ts=frame/36,frame_id=frame)
+                ring.publish(episode["uve_tokens"][frame][None].float().to(device),ts=float(times[frame]),frame_id=frame)
         generator=torch.Generator(device=device).manual_seed(req.seed+req.chunk)
         noise=torch.randn(previous.shape,device=device,generator=generator)
         initial_tokens=episode["uve_tokens"][first][None].float().to(device)
@@ -224,9 +233,10 @@ def render(req:RenderRequest):
         measured=pixel_metrics(pixels,truth)
         waypoints=points[0].float().cpu().tolist()
         return {"frames":video_urls(pixels),"cameras":camera_urls,"camera_frames":camera_frames,"waypoints":waypoints,
-                "projected_waypoints":project_waypoints(waypoints),"goal_xy":goal,"source":"Mean-Flow",
+                "projected_waypoints":project_waypoints(waypoints) if target_view=="elevated_chase" else [],"goal_xy":goal,"source":"Mean-Flow",
                 "trained":True,"checkpoint_step":config["step"],"dataset_source":dataset_source,
-                "training_data_source":config.get("data_source","unknown"),"frame_start":start,"fps":36,
+                "training_data_source":config.get("data_source","unknown"),"frame_start":start,"fps":fps,
+                "target_view":target_view,"camera_names":camera_names,"camera_available":available,
                 "telemetry":{"dit_ms":dit_ms,"decode_ms":decode_ms,"policy_ms":policy_ms,
                              "effective_fps":8000/(dit_ms+decode_ms+policy_ms),"psnr_db":measured["psnr_db"],
                              "sram_mib":decoder.sram_budget_report()["total_mib"],

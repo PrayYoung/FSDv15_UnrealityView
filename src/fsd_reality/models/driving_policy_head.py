@@ -19,6 +19,7 @@ class DrivingPolicyHead(nn.Module):
 
     def forward(self, tokens, tap_goal_xy=None):
         b = len(tokens)
+        present=tokens.detach().ne(0).any(-1)
         if tap_goal_xy is None:
             tap_goal_xy = tokens.new_zeros(b,2)
         goal = tap_goal_xy/50
@@ -26,8 +27,9 @@ class DrivingPolicyHead(nn.Module):
         x = self.project(tokens)
         q = self.queries.expand(b,-1,-1)*(1+scale[:,None])+shift[:,None]
         x = torch.cat((q,x),1)
+        key_mask=torch.cat((torch.ones(b,q.shape[1],dtype=torch.bool,device=x.device),present),1)
         for norm,attn,norm2,mlp in self.layers:
-            x = x+attn(norm(x))
+            x = x+attn(norm(x),key_mask=key_mask)
             x = x+mlp(norm2(x))
         out = self.out(x[:,:q.shape[1]])
         heading = torch.nn.functional.normalize(out[...,2:]+1e-6,dim=-1)

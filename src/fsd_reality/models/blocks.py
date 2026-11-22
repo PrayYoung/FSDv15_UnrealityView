@@ -23,7 +23,9 @@ class Attention(nn.Module):
         self.kv = nn.Linear(context_dim or dim,dim*2)
         self.out = nn.Linear(dim,dim)
 
-    def forward(self, x, context=None):
+    def forward(self, x, context=None, key_mask=None):
+        if context is not None and key_mask is None:
+            key_mask=context.detach().ne(0).any(-1)
         context = x if context is None else context
         b,n,d = x.shape
         q = self.q(x).reshape(b,n,self.heads,d//self.heads).transpose(1,2)
@@ -36,9 +38,10 @@ class Attention(nn.Module):
             # Keep this backend's attention reduction and softmax in FP32.
             with torch.autocast("mps",enabled=False):
                 logits = (q.float() @ k.float().transpose(-1,-2)) / (q.shape[-1]**.5)
+                if key_mask is not None:logits=logits.masked_fill(~key_mask[:,None,None,:],float("-inf"))
                 y = (logits.softmax(-1) @ v.float()).to(q.dtype)
         else:
-            y = F.scaled_dot_product_attention(q,k,v)
+            y = F.scaled_dot_product_attention(q,k,v,attn_mask=None if key_mask is None else key_mask[:,None,None,:])
         return self.out(y.transpose(1,2).reshape(b,n,d))
 
 
