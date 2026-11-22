@@ -9,8 +9,8 @@ __pycache__/
 .vast-run.env
 .vast/runs/
 .cache/
-data/
-outputs/
+/data/
+/outputs/
 *.safetensors
 *.pt
 *.pth
