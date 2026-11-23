@@ -53,3 +53,25 @@ the unchanged $0.35/hour ceiling. The managed runner owns retrieval and destruct
 No periodic training-log polling is required; identity and recovery paths are saved
 privately. No claim is made that metadata preflight detects every possible image
 or hardware failure.
+
+## Bulk archive restart
+
+The four-worker range retry hit HTTP 429 after 18 native scenes, before any
+optimizer step. The next lease uses 120 GB disk and downloads the pinned 44.52 GB
+ZIP once, with the modern Hub/Xet SDK isolated from the training environment.
+The source revision, exact byte count and SHA-256 are frozen in
+`configs/pandaset_archive.json`. The SDK resumes incomplete transfers and handles
+rate limits; bounded outer retries cover transient HTTP and transport failures.
+Checksum, space and permanent-access errors stop the job rather than retry blindly.
+
+Only the selected camera JPEG/JSON members are extracted locally on the GPU host;
+LiDAR and pickle files are never opened. All 33 verified encoded caches are reused,
+leaving 43 scenes to encode. Full-archive transfer has a two-hour bound within the
+four-hour workload bound; training still stops at 5,000 steps with the same frozen
+quality criteria. The hourly ceiling remains $0.35. Actual download throughput and
+training completion time remain unmeasured for this transport.
+
+The archive and native sources are remote scratch, excluded from artifact return.
+They do not survive automatic instance destruction; no persistent object store is
+configured. Encoded caches, training checkpoints, metrics and the archive integrity
+record are returned by the managed runner. No periodic agent log polling is used.

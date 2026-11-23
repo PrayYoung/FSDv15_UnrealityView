@@ -83,13 +83,13 @@ def download_sequence(url,root,sequence,max_frames,expected,resume=True):
 
 
 def fetch(output,manifest_path,max_frames=80,max_bytes=2*2**30,seed=42,train_count=2,val_count=1,test_count=1,
-          all_sequences=False,workers=4,resume=True,selection=None,recovery_cache=None):
+          all_sequences=False,workers=4,resume=True,selection=None,recovery_cache=None,local_archive=None):
     if not 1<=workers<=8:raise ValueError("workers must be 1–8")
     root=Path(output).resolve();root.mkdir(parents=True,exist_ok=True)
     session_path=root/".fetch_state"/"session.json"
     prior=json.loads(session_path.read_text()) if session_path.is_file() else None
     revision=prior["revision"] if prior else selection["revision"] if selection else HfApi(token=False).dataset_info("georghess/pandaset").sha
-    url=f"https://huggingface.co/datasets/georghess/pandaset/resolve/{revision}/pandaset.zip"
+    url=str(Path(local_archive).resolve()) if local_archive else f"https://huggingface.co/datasets/georghess/pandaset/resolve/{revision}/pandaset.zip"
     with fsspec.open(url,"rb",block_size=1024*1024).open() as remote:
         with zipfile.ZipFile(remote) as archive:
             if selection is not None:
@@ -133,7 +133,7 @@ def fetch(output,manifest_path,max_frames=80,max_bytes=2*2**30,seed=42,train_cou
     manifest=validate_split_manifest({"version":1,"seed":seed,"source":"PandaSet camera-only",
                     "download":{"mirror":"georghess/pandaset","revision":revision,"frames":max_frames,"extracted_bytes":total,
                                 "reused_cache_source_ids":sorted(recovered),
-                                "transport":"parallel HTTP ranges; selected camera JPG/JSON only","members":records},
+                                "transport":"verified local ZIP; selected camera JPG/JSON only" if local_archive else "parallel HTTP ranges; selected camera JPG/JSON only","members":records},
                     "sequences":[dict(dataset="pandaset",sequence=s,split=split,root=str(root)) for s,split in selections]})
     atomic_json(manifest_path,manifest)
     return manifest
@@ -150,6 +150,7 @@ def main():
     p.add_argument("--workers",type=int,default=4,help="Independent sequence downloads, 1–8")
     p.add_argument("--selection",help="CPU-validated preflight JSON with immutable source revision")
     p.add_argument("--recovery-cache",help="Verified encoded episode cache to reuse instead of downloading native files again")
+    p.add_argument("--local-archive",help="Extract a previously checksum-verified ZIP without network access")
     p.add_argument("--no-resume",action="store_true",help="Redownload rather than reuse hash-verified files")
     p.add_argument("--max-gib",type=float,default=2.)
     a=p.parse_args()
@@ -157,7 +158,13 @@ def main():
     if not 0<a.max_gib<=25:p.error("max-gib must be >0 and <=25")
     if min(a.train_count,a.val_count,a.test_count)<0:p.error("Sequence counts must be nonnegative")
     if not 1<=a.workers<=8:p.error("workers must be 1–8")
-    fetch(a.output,a.manifest,a.frames,int(a.max_gib*2**30),a.seed,a.train_count,a.val_count,a.test_count,a.all_sequences,a.workers,not a.no_resume,json.loads(Path(a.selection).read_text()) if a.selection else None,a.recovery_cache)
+    if a.local_archive:
+        from download_pandaset_archive import verify_archive
+        spec=json.loads(Path('configs/pandaset_archive.json').read_text())
+        if not a.selection or json.loads(Path(a.selection).read_text())['revision']!=spec['revision']:
+            p.error('Local archive requires matching pinned preflight selection')
+        verify_archive(Path(a.local_archive),spec)
+    fetch(a.output,a.manifest,a.frames,int(a.max_gib*2**30),a.seed,a.train_count,a.val_count,a.test_count,a.all_sequences,a.workers,not a.no_resume,json.loads(Path(a.selection).read_text()) if a.selection else None,a.recovery_cache,a.local_archive)
 
 
 if __name__=="__main__":main()
