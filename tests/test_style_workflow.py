@@ -50,8 +50,12 @@ def test_cache_training_export_and_internal_evaluation(tmp_path,monkeypatch):
     monkeypatch.setattr(train_style_lora,"PretrainedTAESD",FixtureCodec)
     args=SimpleNamespace(device="cpu",seed=1,base=checkpoint,rank=4,alpha=4.,start_block=0,no_unpatch=False,
         data=data,styles_data=styles,style="comic",batch_size=1,lr=2.5e-4,output=tmp_path/"training",
-        grad_accum=1,steps=1,warmup=1,ema=.9,eval_every=1,eval_items=1)
+        grad_accum=1,steps=2,stop_after=1,warmup=1,ema=.9,eval_every=1,eval_items=1)
     train_style_lora.train(args)
+    args.resume=args.output/"checkpoint";args.stop_after=None
+    train_style_lora.train(args)
+    assert (args.output/"checkpoint_best/comic_lora.safetensors").is_file()
+    assert json.loads((args.output/"summary.json").read_text())["steps"]==2
     adapter=load_lora(args.output/"comic_lora.safetensors",model_fingerprint(base))
     assert any(t.abs().sum()>0 for key,t in adapter.tensors.items() if key.endswith("lora_b"))
     assert json.loads((args.output/"summary.json").read_text())["policy_unchanged"] is True

@@ -20,6 +20,7 @@ def save_checkpoint(directory, model, policy, step, extra=None):
 def load_checkpoint(directory, device="cpu"):
     directory = Path(directory)
     config = json.loads((directory/"config.json").read_text())
+    config["dit"].setdefault("cross_attention","stage")
     model = ConditionalMeanFlowDiT(DiTConfig(**config["dit"]))
     policy = DrivingPolicyHead(**config["policy"])
     weights = load_file(str(directory/"model.safetensors"))

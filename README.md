@@ -5,10 +5,9 @@ switchable visual styles. **PandaSet cameras are the active training and testing
 source.** This is an independent research prototype with no vehicle control.
 
 The camera-only import, Mean-Flow training, held-out evaluation and CUDA smoke
-pipeline work. The current checkpoint has only 30 training steps and produces
-noise-like predictions. Comic/cyberpunk adapter training and Style Studio are
-implemented and tested, but quality base training and real-data style training
-are still pending. No successful styled model result is claimed.
+pipeline work. Only short smoke checkpoints exist, and predictions remain noise-like.
+Comic/cyberpunk adapters, real-data stop/resume and Style Studio are implemented
+and tested, but quality base and style training are still pending. No successful styled model result is claimed.
 
 The first target is the observed **native front camera**, also present among the
 conditioning inputs. It is reconstruction, not future-only prediction or an
@@ -32,8 +31,8 @@ are installed, strength 0–1.5, and measured adapter size and merge time.
 Defaults are `outputs/real_dataset`, `outputs/real_train/checkpoint`,
 `outputs/adapters` and `outputs/styles`. Override with `UNREALITYVIEW_DATA`,
 `UNREALITYVIEW_CHECKPOINT`, `UNREALITYVIEW_LORA_DIR`, and
-`UNREALITYVIEW_STYLES_DATA`. The server also accepts `--lora-dir` and
-`--styles-data-dir`. It binds to localhost and uses safetensors for weights/caches.
+`UNREALITYVIEW_STYLES_DATA`. The server accepts `--data`, `--checkpoint`, `--port`, `--lora-dir` and
+`--styles-data-dir`; origin checks follow the configured localhost port. It binds to localhost and uses safetensors for weights/caches.
 
 ## PandaSet training
 
@@ -51,11 +50,40 @@ uv run --no-sync python train_cached_meanflow.py
 uv run --no-sync python evaluate.py --split val
 ```
 
-The full configuration uses a width-512/depth-12 DiT and 20,000 optimizer steps.
+The full configuration uses a width-512/depth-12 DiT with gated cross-attention
+in every block, batch 16 / accumulation 1, and 20,000 optimizer steps. Training windows use stride 2; validation
+and test use stride 8. The policy consumes tokens at the waypoint origin frame.
 Choose the checkpoint using validation scenes. Final testing is a separate
 `evaluate.py --split test --output outputs/final_test` invocation. Whole sequences
 are split before caching; provenance checks reject train/test overlap.
 [Recorded smoke results](docs/PANDASET_RESULTS.md) establish integration, not quality.
+
+## Scaling and resuming
+
+The selective fetcher accepts `--train-count`, `--val-count`, `--test-count`,
+`--frames` (default 80), or `--all` for every available scene. Hash assignments stay
+fixed. Set an explicit extraction budget up to `--max-gib 25` for a larger download.
+Run it on remote storage; archive/image sizes depend on the selected mirror.
+
+Both trainers ramp EMA decay with `min(target, (1+step)/(10+step))`. They preserve
+latest and best validation 1-NFE PSNR weights (`checkpoint/`, `checkpoint_best/`).
+Restart state uses safetensors plus an atomic, fingerprinted JSON manifest for raw
+weights, optimizer, scaler, EMA, RNG and sampler position; no pickle is loaded.
+Keep the same configuration, total-step schedule and cached data when resuming:
+
+```bash
+uv run --no-sync python train_cached_meanflow.py \
+  --resume outputs/real_train/checkpoint
+uv run --no-sync python train_style_lora.py --style comic \
+  --output outputs/adapters/comic --resume outputs/adapters/comic/checkpoint
+```
+
+`--stop-after N` safely checkpoints at step N without changing the planned schedule.
+CUDA training enables TF32 and pinned transfers. Decoder encode/decode batches all
+frames and uses CUDA FP16/cuDNN by default (or an explicit caller autocast dtype).
+DiT training remains BF16 where supported. `PretrainedTAESD(precise=True)`
+selects FP32 reference convolutions for strict tiled-equivalence checks. Tiled decode
+keeps its module-wise halos; an 8-latent full-decoder halo is not exact.
 
 ## Style adapters
 
@@ -75,8 +103,9 @@ uv run --no-sync python train_style_lora.py --style cyberpunk \
 uv run --no-sync python benchmark_styles.py
 ```
 
-Rank-16 LoRA targets later DiT attention/MLP projections and the output projection.
-The encoder, early geometry blocks and independent planner stay frozen. Training
+Style training defaults to rank 8 in blocks 0–3 and rank 16 in later self/cross
+attention and MLP projections, plus the output projection. Base weights, encoder
+and independent planner stay frozen. Use `--start-block 4` to omit early adapters. Training
 uses improved Mean-Flow with JVP, adapter EMA, 80% styled/20% real previous context,
 noise up to 0.25, effective batch 16 and 1,000 steps by default. Validation includes
 real-to-style switching and a 32-frame autoregressive rollout.
@@ -97,9 +126,29 @@ It writes an internal 32-frame comparison under `outputs/demo/`. Publish one GIF
 only after inspecting learned results. The README intentionally has no demo media
 until that evidence exists.
 
+## Optional elevated-view teacher
+
+`uv sync --extra realdata --extra teacher` installs the optional CUDA
+[gsplat renderer](https://docs.gsplat.studio/versions/1.5.3/apis/rasterization.html).
+Use a CUDA development image with `nvcc` and a C++ compiler for gsplat kernel
+building (the extra includes setuptools and Ninja). `prepare_chase_teacher.py` initializes a static 3DGS scene using calibrated SIFT
+triangulation from cameras, fits each sequence independently, and exports the
+existing elevated-camera manifest only after held-out reconstruction PSNR and
+chase-view alpha coverage pass configurable gates:
+
+```bash
+uv run --no-sync python prepare_chase_teacher.py --pandaset-root /path/to/pandaset \
+  --sequence 002 --output outputs/chase_targets
+```
+
+This is experimental: dynamic objects, occluded areas and unseen elevated surfaces
+may fail. Native timestamps are preserved; no 36 Hz observations are invented.
+Full real-scene teacher quality is not yet established. See [data details](docs/REAL_DATA.md).
+
 ## Implementation and verification
 
-See [architecture and style design](docs/IMPLEMENTATION.md). The shared frozen
+See the [implementation audit](docs/UPGRADE_REVIEW.md) and
+[architecture and style design](docs/IMPLEMENTATION.md). The shared frozen
 DINOv2-S/14 encoder produces 6×32 tokens with calibrated rays; the separate planner
 predicts 12 ego waypoints. Frozen TAESD provides full/halo-tiled decoding. Streaming
 uses immutable completed camera snapshots and timestamp-derived context ages.

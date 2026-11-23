@@ -15,6 +15,7 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
+teacher = ["gsplat==1.5.3", "opencv-python-headless>=4.9,<4.12", "ninja>=1.11,<2", "setuptools>=70,<81"]
 realdata = ["pyarrow>=17,<24", "opencv-python-headless>=4.9,<4.12", "fsspec[http]>=2024.10,<2027"]
 dev = ["pytest>=8,<10", "httpx>=0.28,<1"]
 

@@ -15,8 +15,10 @@ class DiTConfig:
     num_heads: int = 8
     context_dim: int = 384
     stages: int = 4
+    cross_attention: str = "block"
 
     def __post_init__(self):
+        if self.cross_attention not in ("block","stage"):raise ValueError("Unknown cross-attention architecture")
         self.latent_shape = tuple(self.latent_shape)
         self.patch_size = tuple(self.patch_size)
         if self.stages != 4 or self.depth % self.stages or self.hidden_dim % self.num_heads:
@@ -37,10 +39,15 @@ class ConditionalMeanFlowDiT(nn.Module):
         self.position = nn.Parameter(torch.randn(1,self.grid[0]*self.grid[1]*self.grid[2],c.hidden_dim)*.02)
         self.time = TimeEmbed(c.hidden_dim)
         self.interval = TimeEmbed(c.hidden_dim)
-        self.age = TimeEmbed(c.hidden_dim)
-        self.blocks = nn.ModuleList([AdaLNBlock(c.hidden_dim,c.num_heads) for _ in range(c.depth)])
-        self.cross = nn.ModuleList([Attention(c.hidden_dim,c.num_heads,c.context_dim) for _ in range(c.stages)])
-        self.cross_norm = nn.ModuleList([nn.LayerNorm(c.hidden_dim) for _ in range(c.stages)])
+        self.blocks = nn.ModuleList([AdaLNBlock(c.hidden_dim,c.num_heads,
+                             c.context_dim if c.cross_attention=="block" else None) for _ in range(c.depth)])
+        if c.cross_attention=="block":
+            self.age_embed=TimeEmbed(c.context_dim)
+        else:
+            # Version-1 checkpoints remain readable with their original architecture.
+            self.age = TimeEmbed(c.hidden_dim)
+            self.cross = nn.ModuleList([Attention(c.hidden_dim,c.num_heads,c.context_dim) for _ in range(c.stages)])
+            self.cross_norm = nn.ModuleList([nn.LayerNorm(c.hidden_dim) for _ in range(c.stages)])
         self.final_norm = nn.LayerNorm(c.hidden_dim,elementwise_affine=False)
         # Non-overlapping ConvTranspose3d is exactly a per-token linear
         # projection + unpatchify. This form also supports Apple MPS.
@@ -62,10 +69,18 @@ class ConditionalMeanFlowDiT(nn.Module):
                 update = uve_provider(stage)
                 if update is not None:
                     tokens, age = update
-            x = x + self.cross[stage](self.cross_norm[stage](x),tokens)
-            stage_cond = cond + self.age(age)
-            for block in self.blocks[stage*(c.depth//4):(stage+1)*(c.depth//4)]:
-                x = block(x,stage_cond)
+            if c.cross_attention=="stage":
+                x = x + self.cross[stage](self.cross_norm[stage](x),tokens)
+                stage_cond = cond + self.age(age)
+                for block in self.blocks[stage*(c.depth//4):(stage+1)*(c.depth//4)]:
+                    x = block(x,stage_cond)
+            else:
+                # Derive the missing-camera mask BEFORE adding freshness embeddings.
+                mask=tokens.detach().ne(0).any(-1)
+                fresh=tokens+self.age_embed(age)[:,None,:].to(tokens.dtype)
+                fresh=fresh*mask[...,None].to(fresh.dtype)
+                for block in self.blocks[stage*(c.depth//4):(stage+1)*(c.depth//4)]:
+                    x=block(x,cond,fresh,mask)
         x = self.output(self.final_norm(x))
         gt,gh,gw = self.grid
         pt,ph,pw = c.patch_size

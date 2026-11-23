@@ -3,6 +3,8 @@
 A camera-only CUDA smoke run completed on an RTX 3090 with PyTorch 2.5.1/CUDA 12.4.
 This report contains aggregate technical evidence only. The model is a native-front
 reconstruction baseline; 30 optimizer steps leave predictions noise-like.
+These are version-1 stage-attention results and the older strict decoder timing
+path. See the [implementation audit](UPGRADE_REVIEW.md) for the upgraded model.
 Full base training and style-adapter quality training have not been completed.
 There is no public results GIF yet.
 

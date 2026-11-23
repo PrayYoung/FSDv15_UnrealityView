@@ -1,34 +1,45 @@
 """TAESD wrapper. INT8 SRAM figures are analytical, execution remains floating point."""
 import torch
 from torch import nn
-from contextlib import nullcontext
+from contextlib import nullcontext,contextmanager
 from functools import wraps
+from unrealityview.device import autocast_for
 
 LATENT_SCALE = 1.0
 
 
-def precise_convolutions(function):
-    """FP32 convolution must not silently become TF32 on CUDA.
+@contextmanager
+def reference_convolutions():
+    # Native CUDA convolution can use GEMM internally: cuDNN flags alone do not
+    # disable TF32. Restore both global settings even if decoding raises.
+    previous=torch.backends.cuda.matmul.allow_tf32
+    try:
+        torch.backends.cuda.matmul.allow_tf32=False
+        with torch.backends.cudnn.flags(enabled=False,allow_tf32=False):yield
+    finally:
+        torch.backends.cuda.matmul.allow_tf32=previous
 
-    Different tile shapes can select different TF32 cuDNN algorithms. Use the
-    native convolution reference backend on CUDA for this exactness prototype.
-    Explicit FP16/BF16 autocast is retained, and the outer flags are restored.
-    Benchmark results include this conservative backend choice.
-    """
+
+def precise_convolutions(function):
+    """Strict reference convolutions are opt-in; normal CUDA uses cuDNN."""
     @wraps(function)
     def wrapped(self,tensor,*args,**kwargs):
-        context=torch.backends.cudnn.flags(enabled=False,allow_tf32=False) if tensor.device.type=="cuda" else nullcontext()
-        with context:return function(self,tensor,*args,**kwargs)
+        context=reference_convolutions() if self.precise and tensor.device.type=="cuda" else nullcontext()
+        precision=(torch.autocast(tensor.device.type,enabled=False) if self.precise else
+                   nullcontext() if torch.is_autocast_enabled(tensor.device.type) else
+                   torch.autocast("cuda",dtype=torch.float16) if tensor.device.type=="cuda" else autocast_for(tensor.device))
+        with context,precision:return function(self,tensor.float() if self.precise else tensor,*args,**kwargs)
     return wrapped
 
 
 class PretrainedTAESD(nn.Module):
-    def __init__(self, pretrained=True, autoencoder=None):
+    def __init__(self, pretrained=True, autoencoder=None, precise: bool=False):
         super().__init__()
         if autoencoder is None:
             from diffusers import AutoencoderTiny
             autoencoder = (AutoencoderTiny.from_pretrained("madebyollin/taesd", use_safetensors=True,low_cpu_mem_usage=False)
                            if pretrained else AutoencoderTiny())
+        self.precise=precise
         self.vae = autoencoder.eval().requires_grad_(False)
 
     def train(self, mode=True):
@@ -43,8 +54,7 @@ class PretrainedTAESD(nn.Module):
             raise ValueError("video must be B,3,T,H,W in [-1,1]")
         b, _, t, _, _ = video.shape
         frames = video.permute(0,2,1,3,4).flatten(0,1)
-        # Frame-by-frame to keep transient decoder/encoder working sets bounded.
-        latents = torch.cat([self.vae.encode(x[None]).latents for x in frames])
+        latents = self.vae.encode(frames).latents
         return latents.reshape(b,t,4,*latents.shape[-2:]).permute(0,2,1,3,4).contiguous()
 
     @torch.no_grad()
@@ -54,7 +64,7 @@ class PretrainedTAESD(nn.Module):
             raise ValueError("latents must be B,4,T,H,W")
         b, _, t, h, w = z.shape
         frames = z.permute(0,2,1,3,4).reshape(b*t,4,h,w)
-        pixels = torch.cat([self.vae.decode(x[None]).sample for x in frames])
+        pixels = self.vae.decode(frames).sample
         return pixels.reshape(b,t,3,h*8,w*8).permute(0,2,1,3,4).contiguous()
 
     @torch.no_grad()
@@ -114,4 +124,6 @@ class PretrainedTAESD(nn.Module):
         return {"int8_weight_bytes":weight_bytes,"fp16_tiled_activation_bytes":activation_bytes,
                 "total_mib":total/2**20,"budget_mib":32,"within_budget":total < 32*2**20,
                 "assumptions":"Analytical fused schedule: 3 FP16 feature buffers + INT8 weights; not measured hardware SRAM",
-                "execution_dtype":str(next(decoder.parameters()).dtype),"latent_tile":latent_tile,"latent_halo":latent_halo}
+                "weight_storage_dtype":str(next(decoder.parameters()).dtype),
+                "compute_precision":"FP32 reference" if self.precise else "caller autocast; defaults CUDA FP16 / MPS FP16 / CPU FP32",
+                "latent_tile":latent_tile,"latent_halo":latent_halo}

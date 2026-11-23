@@ -16,8 +16,9 @@ the PandaSet devkit's pickle-loading methods are not used.
    `native_front`. Chase-plane taps and chase waypoint overlays are disabled.
 2. **`--target teacher`:** calibrated elevated chase frames rendered by an external
    camera-only reconstruction teacher. The importer checks target identity,
-   timestamps and the chase calibration. An SfM/3DGS/4DGS teacher and its quality
-   validation are a separate stage; no such teacher is trained by this smoke job.
+   timestamps and the chase calibration. The optional `prepare_chase_teacher.py` fits static gsplat 3DGS from calibrated
+   camera feature triangulation, with held-out PSNR/coverage gates; real-scene
+   elevated-view quality is not established by the native-front smoke.
    This mode supports later genuine Reality View training without changing caches.
 
 The internal legacy `raw/chase/` filename is retained for cache compatibility.
@@ -70,7 +71,8 @@ checkpoint training IDs or missing provenance. Do not use final test scores to
 choose hyperparameters. These are sequence-disjoint splits; geographic disjointness
 is not claimed. Four short scenes cannot establish generalization.
 
-The small 30-step model tests software plumbing. Full real-data settings are in
+The small 30-step model tests software plumbing. Train windows use stride 2 while validation/test retain stride 8; the 36-frame
+future waypoint horizon still constrains the last eligible start. Full real-data settings are in
 `configs/real_train.json` (20,000 steps); start a larger quality experiment only
 after inspecting raw data, reconstructions, metrics and rollout results.
 
@@ -118,6 +120,13 @@ photograph captured from an elevated camera.
 uv run python prepare_real_data.py cache --manifest outputs/panda_splits.json \
   --output outputs/chase_dataset --target teacher --targets /path/to/teacher_exports
 ```
+
+The optional teacher installs with `uv sync --extra realdata --extra teacher`.
+It fits one source sequence at a time with its own calibrated feature cloud, never
+sharing reconstruction state across scene splits. It is a static 3DGS baseline,
+not a dynamic 4D teacher. Outputs include held-out camera PSNR, minimum chase
+alpha coverage and native-timestamp renders; a failed gate leaves no accepted
+`manifest.json`. Inspect all renders before using them for student supervision.
 
 ## Optional Waymo adapter
 

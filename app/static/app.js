@@ -30,10 +30,11 @@ function updateTelemetry(data){
   for(const [id,key] of [["dit-ms","dit_ms"],["decode-ms","decode_ms"],["policy-ms","policy_ms"],["effective-fps","effective_fps"],["psnr","psnr_db"],["sram","sram_mib"]])$(id).textContent=format(t[key]);
   const stages=t.uve_stage_frames.slice(0,4);$("stage-frames").textContent=stages.length?stages.join(" / "):"— / — / — / —";
   $("stream-mode").textContent=t.stream_mode;
-  $("telemetry-note").textContent=data.trained?"Local inference timings · model compute only":"Measured values appear with trained inference";
+  $("telemetry-note").textContent=data.trained?"Video FPS excludes planner and adapter switching; request timings are separate":"Measured values appear with trained inference";
   $("view-label").textContent=data.source.toUpperCase();
   $("runtime-state").textContent=data.trained?`EMA CHECKPOINT / STEP ${data.checkpoint_step}`:data.source.toUpperCase();
   $("episode-label").textContent=$("episode").value.toUpperCase().replaceAll("_"," ");
+  $("psnr-reference").textContent=t.psnr_reference==="style_teacher"?"dB vs. style teacher (1×)":t.psnr_reference==="real_reference"?"dB vs. real target":"No matching reference";
   $("lora-size").textContent=format(t.lora_size_mb,2);$("lora-merge").textContent=format(t.lora_merge_ms,2);
   if(data.goal_xy){const [x,y]=data.goal_xy;$("goal-readout").textContent=`${x.toFixed(1)} m forward · ${Math.abs(y).toFixed(1)} m ${y>=0?"left":"right"}`;$("goal-label").textContent="Destination set · ego ground plane";}
   else{$("goal-readout").textContent=front?"Tap-to-drive unavailable for front-view baseline":"No destination selected";$("goal-label").textContent=front?"Front-camera baseline · not a novel chase view":"Tap the road to set a goal";}

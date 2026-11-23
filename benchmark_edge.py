@@ -42,7 +42,7 @@ def benchmark(args):
     ages=torch.full((1,4),1/36,device=device)
     report={"device":str(device),"gpu":torch.cuda.get_device_name(0) if device.type=="cuda" else None,
             "torch":torch.__version__,"weights":weights,"budget_ms":8/36*1000,"batch":1,
-            "dit_config":model.config.to_dict(),"sram":decoder.sram_budget_report(),"variants":{}}
+            "dit_config":model.config.to_dict(),"decoder_precise":decoder.precise,"sram":decoder.sram_budget_report(),"variants":{}}
     with autocast_for(device):
         policy_result=measure(lambda:policy(tokens[:,0]),device,args.repeats)
     report["decoupled_policy"]=policy_result
@@ -55,10 +55,12 @@ def benchmark(args):
             result=measure(generate,device,args.repeats)
             result["policy_plus_video_ms"]=result["median_ms"]+policy_result["median_ms"]
             result["headroom_ms"]=report["budget_ms"]-result["policy_plus_video_ms"]
-            result["effective_fps"]=8000/result["policy_plus_video_ms"]
+            result["effective_fps"]=8000/result["median_ms"]
+            result["serial_policy_plus_video_fps"]=8000/result["policy_plus_video_ms"]
             report["variants"][f"{nfe}_nfe_{'tiled' if tiled else 'full'}"]=result
     full,tiled=decoder.decode(previous),decoder.decode_tiled(previous)
-    report["tiled_equivalence"]={"max_abs_error":(full-tiled).abs().max().item(),
+    report["tiled_equivalence"]={"precision_note":"Normal autocast measurement; strict equivalence uses precise=True",
+                                    "max_abs_error":(full-tiled).abs().max().item(),
                                     "mean_abs_error":(full-tiled).abs().mean().item()}
     atomic_json(args.output,report)
     print(json.dumps(report,indent=2),flush=True)

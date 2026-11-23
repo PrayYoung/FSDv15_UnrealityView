@@ -34,7 +34,7 @@ def test_lora_zero_initialization_freezing_and_jvp():
     torch.testing.assert_close(base(**example),expected,atol=0,rtol=0)
     assert all(not p.requires_grad for block in base.blocks[:4] for p in block.parameters())
     assert all("lora_" in name for name,p in base.named_parameters() if p.requires_grad)
-    assert not any(isinstance(m,LoRALinear) for m in base.cross[:2].modules())
+    assert not any(isinstance(m,LoRALinear) for m in base.blocks[:4].modules())
     loss,_=meanflow_loss(base,example["z"],example["z_prev"],example["uve_tokens"],fm_ratio=0,jvp_method="exact")
     loss.backward()
     assert torch.isfinite(loss)

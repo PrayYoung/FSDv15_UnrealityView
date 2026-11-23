@@ -74,4 +74,26 @@ def test_model_and_ground_truth_routes_and_closed_loop_state(tmp_path,monkeypatc
         assert payload["telemetry"]["active_style"]==style
         if style!="reality":assert payload["telemetry"]["lora_size_mb"]>0
     assert payload["frames"]==previous["frames"]
+    assert payload["telemetry"]["psnr_reference"]=="real_reference"
+    t=payload["telemetry"]
+    assert t["effective_fps"]==pytest.approx(8000/(t["dit_ms"]+t["decode_ms"]))
+    assert t["request_compute_ms"]>=t["dit_ms"]+t["decode_ms"]
+    monkeypatch.setattr(server,"STYLES_DATA_DIR",tmp_path/"teachers")
+    import evaluate
+    original_metrics=evaluate.pixel_metrics;references=[]
+    def capture_reference(prediction,target):
+        references.append(target.detach().cpu())
+        return original_metrics(prediction,target)
+    monkeypatch.setattr(evaluate,"pixel_metrics",capture_reference)
+    for style in ("comic","cyberpunk"):
+        teacher=server.STYLES_DATA_DIR/style/"val/episode_0000/frames";teacher.mkdir(parents=True)
+        for i in range(16,24):Image.new("RGB",(320,192),(130,20,190)).save(teacher/f"{i:05d}.png")
+        response=client.post("/api/render",json={**closed,"chunk":2,"style":style})
+        assert response.status_code==200,response.text
+        assert response.json()["telemetry"]["psnr_reference"]=="style_teacher"
+        torch.testing.assert_close(references[-1][0,:,0,0,0],torch.tensor([130.,20.,190.])/127.5-1)
+    response=client.post("/api/render",json={**closed,"chunk":2,"style":"hybrid"})
+    assert response.json()["telemetry"]["psnr_db"] is None
+    assert response.json()["telemetry"]["psnr_reference"]=="unavailable"
+    client.post("/api/render",json={**closed,"chunk":2,"style":"reality"})
     assert model_fingerprint(model)==base_before and model_fingerprint(policy)==policy_before

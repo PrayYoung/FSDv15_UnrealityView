@@ -106,7 +106,7 @@ def cache_manifest(manifest,output,device="auto",max_frames=None,target="front",
             mask=torch.from_numpy(frame.camera_mask)[None].to(device)
             with autocast_for(device):
                 tokens.append(encoder(cameras,k,ext,camera_mask=mask)[0].half().cpu())
-                latents.append(decoder.encode(video)[0,:,0].half().cpu())
+            latents.append(decoder.encode(video)[0,:,0].half().cpu())
             poses.append(frame.ego_pose);times.append(frame.timestamp);masks.append(frame.camera_mask)
             ks.append(frame.intrinsics);extrinsics.append(frame.camera_to_ego);cam_times.append(frame.camera_timestamps)
         fps=float(1/np.median(np.diff(times)))

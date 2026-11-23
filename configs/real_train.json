@@ -1,6 +1,6 @@
 {
-  "dit":{"hidden_dim":512,"depth":12,"num_heads":8},
-  "steps":20000,"batch_size":8,"grad_accum":2,"learning_rate":0.0003,
+  "dit":{"hidden_dim":512,"depth":12,"num_heads":8,"cross_attention":"block"},
+  "steps":20000,"batch_size":16,"grad_accum":1,"learning_rate":0.0003,
   "warmup_steps":500,"ema_decay":0.995,"eval_every":500,"eval_items":16,
   "seed":42,"jvp_method":"auto","policy_weight":1.0,"balance_sources":true
 }

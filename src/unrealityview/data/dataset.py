@@ -23,18 +23,20 @@ def stage_context(episode,start,fps=36,jitter=None):
 
 
 class CachedEpisodeChunkDataset(Dataset):
-    def __init__(self, root, split="train", chunk_size=8, jitter=True, seed=42):
+    def __init__(self, root, split="train", chunk_size=8, jitter=True, seed=42, stride: int | None=None):
         self.root = Path(root)
         self.split=split
         self.provenance=audit_cache_splits(root)
         self.paths = sorted((self.root/split).glob("*/episode.safetensors"))
         if not self.paths:
             raise ValueError(f"No episodes in {self.root/split}; collect data first")
+        self.stride=(2 if split=="train" else chunk_size) if stride is None else stride
+        if type(self.stride) is not int or self.stride<1:raise ValueError("stride must be a positive integer")
         self.chunk_size,self.jitter,self.seed = chunk_size,jitter,seed
         self.episodes = [load_episode(path) for path in self.paths]
         self.metadata=[json.loads(path.with_name("metadata.json").read_text()) for path in self.paths]
         self.index = [(ep,start) for ep,e in enumerate(self.episodes)
-                      for start in range(chunk_size,len(e["chase_latents"])-max(chunk_size,36),chunk_size)]
+                      for start in range(chunk_size,len(e["chase_latents"])-max(chunk_size,36),self.stride)]
         if not self.index:
             raise ValueError("Episodes are too short for chunks plus 12 future waypoints")
 
@@ -50,6 +52,7 @@ class CachedEpisodeChunkDataset(Dataset):
         return {"z_prev":e["chase_latents"][start-self.chunk_size:start].permute(1,0,2,3).float(),
                 "z0":e["chase_latents"][start:start+self.chunk_size].permute(1,0,2,3).float(),
                 "uve_tokens":e["uve_tokens"][ids].float(),
+                "policy_tokens":e["uve_tokens"][start].float(),
                 "stage_ages":ages,
                 "waypoints":ego_waypoints(e["ego_states"].float(),start),
                 "episode":ep,"start":start,"stage_frames":ids,"fps":fps,

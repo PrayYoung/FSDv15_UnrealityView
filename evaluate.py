@@ -51,7 +51,7 @@ def evaluate_models(model, policy, decoder, dataset, device, output, max_items=8
         for n in (1,2,4):
             with autocast_for(device):
                 latent=model.sample_chunk(previous,tokens,n,ages,noise=noise)
-                waypoints=policy(tokens[:,0])
+                waypoints=policy(item["policy_tokens"][None].to(device))
             pixels=decoder.decode(latent.float())
             predictions[n]=pixels
             results[str(n)].append({**pixel_metrics(pixels,truth),

@@ -30,6 +30,7 @@ DATA_ROOT=Path(os.environ.get("UNREALITYVIEW_DATA","outputs/real_dataset")).reso
 CHECKPOINT=Path(os.environ.get("UNREALITYVIEW_CHECKPOINT","outputs/real_train/checkpoint")).resolve()
 LORA_DIR=Path(os.environ.get("UNREALITYVIEW_LORA_DIR","outputs/adapters")).resolve()
 STYLES_DATA_DIR=Path(os.environ.get("UNREALITYVIEW_STYLES_DATA","outputs/styles")).resolve()
+PORT=int(os.environ.get("UNREALITYVIEW_PORT","8088"))
 app=FastAPI(title="UnrealityView",docs_url=None,redoc_url=None)
 app.add_middleware(TrustedHostMiddleware,allowed_hosts=["127.0.0.1","localhost","testserver"])
 app.mount("/static",StaticFiles(directory=APP_DIR/"static"),name="static")
@@ -74,7 +75,7 @@ class RenderRequest(BaseModel):
 @app.middleware("http")
 async def local_security(request:Request,call_next):
     origin=request.headers.get("origin")
-    if origin and origin not in ("http://127.0.0.1:8088","http://localhost:8088"):
+    if origin and origin not in (f"http://127.0.0.1:{PORT}",f"http://localhost:{PORT}"):
         return JSONResponse({"detail":"Origin not allowed"},status_code=403)
     response=await call_next(request)
     response.headers["X-Content-Type-Options"]="nosniff"
@@ -270,10 +271,9 @@ def render(req:RenderRequest):
                 ring.publish(episode["uve_tokens"][frame][None].float().to(device),ts=float(completed[frame]),frame_id=frame)
         generator=torch.Generator(device=device).manual_seed(req.seed+req.chunk)
         noise=torch.randn(previous.shape,device=device,generator=generator)
-        initial_tokens=episode["uve_tokens"][first][None].float().to(device)
         synchronize(device);begin=time.perf_counter()
         with autocast_for(device):
-            points=policy(initial_tokens,None if goal is None else torch.tensor([goal],device=device))
+            points=policy(episode["uve_tokens"][start][None].float().to(device),None if goal is None else torch.tensor([goal],device=device))
         synchronize(device);policy_ms=(time.perf_counter()-begin)*1000
         begin=time.perf_counter()
         with autocast_for(device):
@@ -286,9 +286,18 @@ def render(req:RenderRequest):
         _sessions[sid]=(identity,req.chunk,latent.detach().cpu().float(),previous.detach().cpu().float())
         _sessions.move_to_end(sid)
         while len(_sessions)>16:_sessions.popitem(last=False)
-        truth=torch.from_numpy(np.stack([np.array(Image.open(directory/"raw"/"chase"/f"{start+i:05d}.jpg").convert("RGB")) for i in range(8)])).permute(3,0,1,2)[None].to(device).float()/127.5-1
-        from evaluate import pixel_metrics
-        measured=pixel_metrics(pixels,truth)
+        reference="real_reference";paths=[directory/"raw/chase"/f"{start+i:05d}.jpg" for i in range(8)]
+        active=style_metrics["active_style"]
+        if active in ("comic","cyberpunk"):
+            styled=resolve_safe_subpath(STYLES_DATA_DIR/active,relative)/"frames"
+            paths=[styled/f"{start+i:05d}.png" for i in range(8)]
+            reference="style_teacher" if all(path.is_file() for path in paths) else "unavailable"
+        elif active=="hybrid":reference="unavailable"
+        measured={"psnr_db":None}
+        if reference!="unavailable":
+            truth=torch.from_numpy(np.stack([np.array(Image.open(path).convert("RGB")) for path in paths])).permute(3,0,1,2)[None].to(device).float()/127.5-1
+            from evaluate import pixel_metrics
+            measured=pixel_metrics(pixels,truth)
         waypoints=points[0].float().cpu().tolist()
         return {"frames":video_urls(pixels),"cameras":camera_urls,"camera_frames":camera_frames,"waypoints":waypoints,
                 "projected_waypoints":project_waypoints(waypoints) if target_view=="elevated_chase" else [],"goal_xy":goal,"source":"Mean-Flow",
@@ -296,7 +305,9 @@ def render(req:RenderRequest):
                 "training_data_source":config.get("data_source","unknown"),"frame_start":start,"fps":fps,
                 "target_view":target_view,"camera_names":camera_names,"camera_available":available,
                 "telemetry":{"dit_ms":dit_ms,"decode_ms":decode_ms,"policy_ms":policy_ms,
-                             "effective_fps":8000/(dit_ms+decode_ms+policy_ms+style_metrics["lora_merge_ms"]),"psnr_db":measured["psnr_db"],
+                             "effective_fps":8000/max(dit_ms+decode_ms,1e-3),"psnr_db":measured["psnr_db"],
+                             "psnr_reference":reference,"psnr_teacher_strength":1. if reference=="style_teacher" else None,
+                             "request_compute_ms":dit_ms+decode_ms+policy_ms+style_metrics["lora_merge_ms"],
                              **style_metrics,
                              "sram_mib":decoder.sram_budget_report()["total_mib"],
                              "sram_kind":"analytical INT8 weights + FP16 tile estimate",
@@ -306,14 +317,21 @@ def render(req:RenderRequest):
 
 
 def main():
-    global LORA_DIR,STYLES_DATA_DIR
+    global LORA_DIR,STYLES_DATA_DIR,DATA_ROOT,CHECKPOINT,PORT
     import argparse
     import uvicorn
     parser=argparse.ArgumentParser(description="UnrealityView local cockpit")
     parser.add_argument("--lora-dir",default=str(LORA_DIR));parser.add_argument("--styles-data-dir",default=str(STYLES_DATA_DIR))
-    args=parser.parse_args();LORA_DIR=Path(args.lora_dir).resolve();STYLES_DATA_DIR=Path(args.styles_data_dir).resolve()
+    parser.add_argument("--data",default=str(DATA_ROOT));parser.add_argument("--checkpoint",default=str(CHECKPOINT))
+    parser.add_argument("--port",type=int,default=PORT)
+    args=parser.parse_args()
+    if not 1<=args.port<=65535:parser.error("port must be 1–65535")
+    DATA_ROOT=Path(args.data).resolve();CHECKPOINT=Path(args.checkpoint).resolve();PORT=args.port
+    os.environ["UNREALITYVIEW_DATA"]=str(DATA_ROOT);os.environ["UNREALITYVIEW_CHECKPOINT"]=str(CHECKPOINT)
+    os.environ["UNREALITYVIEW_PORT"]=str(PORT)
+    LORA_DIR=Path(args.lora_dir).resolve();STYLES_DATA_DIR=Path(args.styles_data_dir).resolve()
     os.environ["UNREALITYVIEW_LORA_DIR"]=str(LORA_DIR);os.environ["UNREALITYVIEW_STYLES_DATA"]=str(STYLES_DATA_DIR)
-    uvicorn.run("app.server:app",host="127.0.0.1",port=8088,workers=1)
+    uvicorn.run("app.server:app",host="127.0.0.1",port=PORT,workers=1)
 
 
 if __name__=="__main__":main()

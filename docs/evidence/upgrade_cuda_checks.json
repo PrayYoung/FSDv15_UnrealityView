@@ -1,0 +1,55 @@
+{
+  "gpu": "NVIDIA GeForce RTX 3090",
+  "torch": "2.5.1+cu124",
+  "note": "Software and capacity check, not trained quality evidence",
+  "fast_decoder_dtype": "float16",
+  "fast_batched_decode": {
+    "median_ms": 113.9056200045161,
+    "min_ms": 113.38168301153928,
+    "samples_ms": [
+      113.79347101319581,
+      114.13781996816397,
+      114.05642598401755,
+      113.9056200045161,
+      113.38168301153928
+    ],
+    "peak_vram_mib": 369.71923828125
+  },
+  "strict_batched_decode": {
+    "median_ms": 437.6783919869922,
+    "min_ms": 437.5028780195862,
+    "samples_ms": [
+      437.69630999304354,
+      437.74180801119655,
+      437.6783919869922,
+      437.5248820288107,
+      437.5028780195862
+    ],
+    "peak_vram_mib": 519.328125
+  },
+  "fast_vs_strict_pixel_l1": 0.0008023258997127414,
+  "strict_framewise_decode": {
+    "median_ms": 434.78989897994325,
+    "min_ms": 434.6388399717398,
+    "samples_ms": [
+      434.8919409676455,
+      434.771221014671,
+      434.6388399717398,
+      435.021354991477,
+      434.78989897994325
+    ],
+    "peak_vram_mib": 214.7724609375
+  },
+  "strict_tiled_max_error": 8.106231689453125e-06,
+  "fast_vs_strict_max_error": 0.023788392543792725,
+  "decode_speedup": 3.817106644630044,
+  "lora_exact_jvp_backward": true,
+  "full_model_capacity": {
+    "16": {
+      "fits": true,
+      "peak_mib": 9461.6123046875,
+      "seconds": 5.665582272980828
+    }
+  },
+  "gsplat_raster_backward": true
+}

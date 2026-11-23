@@ -85,7 +85,7 @@ def test_flow_matching_boundary_skips_jvp(monkeypatch):
 
 
 def test_taesd_tiled_equivalence_and_sram_budget():
-    decoder=PretrainedTAESD(pretrained=False)
+    decoder=PretrainedTAESD(pretrained=False,precise=True)
     z=torch.randn(1,4,1,4,6)
     full=decoder.decode(z)
     tiled=decoder.decode_tiled(z,latent_tile=2,latent_halo=8)
@@ -207,8 +207,13 @@ def test_actual_pretrained_vision_and_taesd():
     device=select_device()
     encoder=MiniUVE().to(device)
     assert encoder(torch.rand(1,6,3,140,224,device=device)).shape==(1,192,384)
-    decoder=PretrainedTAESD().to(device)
+    decoder=PretrainedTAESD(precise=True).to(device)
     z=torch.randn(1,4,1,24,40,device=device)
-    full,tiled=decoder.decode(z),decoder.decode_tiled(z)
+    previous=torch.backends.cuda.matmul.allow_tf32
+    try:
+        torch.backends.cuda.matmul.allow_tf32=True
+        full,tiled=decoder.decode(z),decoder.decode_tiled(z)
+        assert torch.backends.cuda.matmul.allow_tf32 is True
+    finally:torch.backends.cuda.matmul.allow_tf32=previous
     torch.testing.assert_close(full,tiled,atol=5e-5,rtol=1e-4)
     assert decoder.sram_budget_report()["within_budget"]

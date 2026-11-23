@@ -58,18 +58,20 @@ def adapter_targets(dit,start_block=4,include_unpatch=True):
     for index in range(start_block,dit.config.depth):
         names.extend(f"blocks.{index}.attn.{projection}" for projection in ("q","kv","out"))
         names.extend(f"blocks.{index}.mlp.{projection}" for projection in ("0","2"))
+        if dit.config.cross_attention=="block":
+            names.extend(f"blocks.{index}.cross_attn.{projection}" for projection in ("q","kv","out"))
     group_size=dit.config.depth//dit.config.stages
     # Cross-attention is stage-level in this architecture. Do not modify a
     # context group that also feeds an early protected geometric block.
     for stage in range(dit.config.stages):
-        if stage*group_size>=start_block:
+        if dit.config.cross_attention=="stage" and stage*group_size>=start_block:
             names.extend(f"cross.{stage}.{projection}" for projection in ("q","kv","out"))
     if include_unpatch:names.append("output")
     if not names:raise ValueError("No adapter targets selected")
     return names
 
 
-def inject_dit_lora(dit,rank=16,alpha=16.,start_block=4,include_unpatch=True):
+def inject_dit_lora(dit,rank=16,alpha=16.,start_block=4,include_unpatch=True,early_rank=None,early_blocks=4):
     if any(isinstance(m,LoRALinear) for m in dit.modules()):raise ValueError("DiT already contains LoRA layers")
     base_hash=model_fingerprint(dit)
     names=adapter_targets(dit,start_block,include_unpatch)
@@ -78,12 +80,15 @@ def inject_dit_lora(dit,rank=16,alpha=16.,start_block=4,include_unpatch=True):
     # Validate all dimensions before mutating the model.
     if any(rank>min(modules[name].in_features,modules[name].out_features) for name in names):
         raise ValueError("Rank exceeds a target dimension")
+    ranks={name:(early_rank if early_rank is not None and name.startswith("blocks.") and int(name.split(".")[1])<early_blocks else rank) for name in names}
+    if any(type(r) is not int or not 1<=r<=min(modules[name].in_features,modules[name].out_features) for name,r in ranks.items()):
+        raise ValueError("Invalid per-layer adapter rank")
     dit.requires_grad_(False)
     for name in names:
         parent,_,leaf=name.rpartition(".")
-        setattr(dit.get_submodule(parent) if parent else dit,leaf,LoRALinear(modules[name],rank,alpha))
+        setattr(dit.get_submodule(parent) if parent else dit,leaf,LoRALinear(modules[name],ranks[name],alpha))
     dit.lora_config=dict(rank=rank,alpha=float(alpha),start_block=start_block,include_unpatch=include_unpatch,
-                         base_sha256=base_hash,targets=names)
+                         base_sha256=base_hash,targets=names,early_rank=early_rank,early_blocks=early_blocks)
     return dit
 
 

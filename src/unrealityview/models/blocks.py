@@ -46,17 +46,26 @@ class Attention(nn.Module):
 
 
 class AdaLNBlock(nn.Module):
-    def __init__(self, dim, heads):
+    def __init__(self, dim, heads, context_dim=None):
         super().__init__()
         self.norm1 = nn.LayerNorm(dim,elementwise_affine=False,eps=1e-6)
         self.norm2 = nn.LayerNorm(dim,elementwise_affine=False,eps=1e-6)
         self.attn = Attention(dim,heads)
         self.mlp = nn.Sequential(nn.Linear(dim,dim*4),nn.GELU(approximate="tanh"),nn.Linear(dim*4,dim))
-        self.mod = nn.Sequential(nn.SiLU(),nn.Linear(dim,6*dim))
+        self.has_cross=context_dim is not None
+        if self.has_cross:
+            self.cross_norm=nn.LayerNorm(dim,elementwise_affine=False,eps=1e-6)
+            self.cross_attn=Attention(dim,heads,context_dim)
+        self.mod = nn.Sequential(nn.SiLU(),nn.Linear(dim,(9 if self.has_cross else 6)*dim))
         nn.init.zeros_(self.mod[-1].weight)
         nn.init.zeros_(self.mod[-1].bias)
 
-    def forward(self, x, conditioning):
-        s1,c1,g1,s2,c2,g2 = self.mod(conditioning).unsqueeze(1).chunk(6,-1)
+    def forward(self, x, conditioning, tokens=None, key_mask=None):
+        parts=self.mod(conditioning).unsqueeze(1).chunk(9 if self.has_cross else 6,-1)
+        s1,c1,g1,s2,c2,g2=parts[:6]
         x = x + g1*self.attn(self.norm1(x)*(1+c1)+s1)
+        if self.has_cross:
+            if tokens is None:raise ValueError("Per-block cross-attention needs camera tokens")
+            sc,cc,gc=parts[6:]
+            x=x+gc*self.cross_attn(self.cross_norm(x)*(1+cc)+sc,tokens,key_mask)
         return x + g2*self.mlp(self.norm2(x)*(1+c2)+s2)

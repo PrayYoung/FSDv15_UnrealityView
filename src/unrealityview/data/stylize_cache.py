@@ -13,7 +13,7 @@ from torch.utils.data import Dataset
 from safetensors.torch import load_file,save_file
 from unrealityview.data.cache import atomic_json
 from unrealityview.data.dataset import CachedEpisodeChunkDataset
-from unrealityview.device import select_device,autocast_for
+from unrealityview.device import select_device
 from unrealityview.models.pretrained_taesd import PretrainedTAESD
 
 STYLES=("comic","cyberpunk")
@@ -33,7 +33,9 @@ def spatial_shader(image,style,coordinates=None):
         luminance=x.mean(-1,keepdims=True);x=np.clip(luminance+(x-luminance)*1.65,0,1)
         # Smooth five-level posterization, not randomized framewise diffusion.
         levels=np.linspace(.125,.875,4,dtype=np.float32)
+        saturated=x.copy()
         x=(1/(1+np.exp(np.clip(-(x[...,None]-levels)*45,-80,80)))).sum(-1)/4
+        x=.72*x+.28*saturated
         if coordinates is None:
             gy,gx=np.mgrid[:h,:w].astype(np.float32);coordinates=np.stack((gx,gy),-1)
         angle=(coordinates[...,0]+coordinates[...,1])/np.sqrt(2)
@@ -57,7 +59,14 @@ def spatial_shader(image,style,coordinates=None):
     palette=cyan*(1-y)+magenta*y
     glow=cv2.GaussianBlur(neon,(0,0),1.8)[...,None] if neon.ndim==2 else cv2.GaussianBlur(neon,(0,0),1.8)
     if glow.ndim==2:glow=glow[...,None]
-    color+=palette*(neon*.65+glow*.8)
+    # Smooth color/luminance road-marking and taillight heuristics, not labels.
+    bright=np.clip((x.mean(-1,keepdims=True)-.5)*4,0,1)
+    white=bright*np.clip(1-(x.max(-1,keepdims=True)-x.min(-1,keepdims=True))*4,0,1)*road
+    yellow=np.clip((np.minimum(x[...,:1],x[...,1:2])-x[...,2:3]-.12)*5,0,1)*road
+    red=np.clip((x[...,:1]-np.maximum(x[...,1:2],x[...,2:3])-.12)*5,0,1)*np.clip((x[...,:1]-.35)*4,0,1)
+    masks=white*cyan+yellow*magenta+red*np.array([1.,.22,.35],np.float32)
+    bloom=cv2.GaussianBlur(masks,(0,0),2.)
+    color+=palette*(neon*.65+glow*.8)+masks*.7+bloom*.6
     return np.clip(color,0,1)
 
 
@@ -121,7 +130,7 @@ def build_style_cache(base_root,output,styles=STYLES,device="auto",decoder=None)
                     styled=Image.fromarray(stylizer(base))
                     styled.save(directory/"frames"/f"{index:05d}.png")
                     tensor=torch.from_numpy(np.array(styled)).permute(2,0,1)[None,:,None].float().to(device)/127.5-1
-                    with autocast_for(device):z=decoder.encode(tensor)
+                    z=decoder.encode(tensor)
                     latents.append(z[0,:,0].half().cpu())
                     if index in (0,len(episode["chase_latents"] )//2,len(episode["chase_latents"])-1):
                         reconstruction=decoder.decode(z.float())[0,:,0].float().cpu().clamp(-1,1)
