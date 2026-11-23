@@ -93,3 +93,24 @@ def test_nonfinite_json_cannot_be_published(archive,tmp_path):
     with pytest.raises(ValueError,match='Out of range float'):
         fetcher.fetch(tmp_path/'native',manifest,max_frames=4,max_bytes=1000000)
     assert not manifest.exists()
+
+
+def test_preflight_selection_is_pinned_and_recovery_skips_native_fetch(archive,tmp_path,monkeypatch):
+    _,selected=archive
+    report=dict(revision='frozen-revision',frames=4,seed=42,
+                sequences=[dict(dataset='pandaset',sequence=s,split=split) for s,split in selected])
+    monkeypatch.setattr(fetcher,'HfApi',lambda **k:pytest.fail('Validated selection must pin revision'))
+    from unrealityview.data import cache_recovery
+    recovered='pandaset/'+selected[0][0]
+    monkeypatch.setattr(cache_recovery,'recoverable_episodes',lambda *a:{recovered:tmp_path/'verified'})
+    calls=[];original=fetcher.download_sequence
+    def tracked(url,root,sequence,*a,**k):calls.append(sequence);return original(url,root,sequence,*a,**k)
+    monkeypatch.setattr(fetcher,'download_sequence',tracked)
+    result=fetcher.fetch(tmp_path/'native',tmp_path/'manifest.json',max_frames=4,max_bytes=1000000,
+                         selection=report,recovery_cache=tmp_path/'recovery')
+    assert selected[0][0] not in calls and len(calls)==3
+    assert result['download']['reused_cache_source_ids']==[recovered]
+    assert len(result['sequences'])==4 and len(result['download']['members'])==168
+    bad={**report,'sequences':[{**e,'sequence':'../secret'} for e in report['sequences']]}
+    with pytest.raises(ValueError,match='identity'):
+        fetcher.fetch(tmp_path/'other',tmp_path/'bad.json',max_frames=4,selection=bad)

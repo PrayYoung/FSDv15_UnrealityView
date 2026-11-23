@@ -1,0 +1,421 @@
+{
+  "revision": "e2e123aea3b3132c67f4b395ec6120f63e190271",
+  "frames": 80,
+  "seed": 42,
+  "available_valid": {
+    "train": 77,
+    "val": 10,
+    "test": 11
+  },
+  "rejected": [
+    {
+      "sequence": "052",
+      "valid": false,
+      "error": "back_camera: Timestamps must be finite and strictly increasing"
+    },
+    {
+      "sequence": "054",
+      "valid": false,
+      "error": "front_left_camera: Timestamps must be finite and strictly increasing"
+    },
+    {
+      "sequence": "058",
+      "valid": false,
+      "error": "back_camera: Timestamps must be finite and strictly increasing"
+    },
+    {
+      "sequence": "062",
+      "valid": false,
+      "error": "back_camera: Timestamps must be finite and strictly increasing"
+    },
+    {
+      "sequence": "139",
+      "valid": false,
+      "error": "back_camera: Timestamps must be finite and strictly increasing"
+    }
+  ],
+  "checked": 103,
+  "sequences": [
+    {
+      "dataset": "pandaset",
+      "sequence": "002",
+      "split": "train"
+    },
+    {
+      "dataset": "pandaset",
+      "sequence": "003",
+      "split": "train"
+    },
+    {
+      "dataset": "pandaset",
+      "sequence": "004",
+      "split": "train"
+    },
+    {
+      "dataset": "pandaset",
+      "sequence": "006",
+      "split": "train"
+    },
+    {
+      "dataset": "pandaset",
+      "sequence": "011",
+      "split": "train"
+    },
+    {
+      "dataset": "pandaset",
+      "sequence": "012",
+      "split": "train"
+    },
+    {
+      "dataset": "pandaset",
+      "sequence": "013",
+      "split": "train"
+    },
+    {
+      "dataset": "pandaset",
+      "sequence": "015",
+      "split": "train"
+    },
+    {
+      "dataset": "pandaset",
+      "sequence": "017",
+      "split": "train"
+    },
+    {
+      "dataset": "pandaset",
+      "sequence": "018",
+      "split": "train"
+    },
+    {
+      "dataset": "pandaset",
+      "sequence": "019",
+      "split": "train"
+    },
+    {
+      "dataset": "pandaset",
+      "sequence": "021",
+      "split": "train"
+    },
+    {
+      "dataset": "pandaset",
+      "sequence": "023",
+      "split": "train"
+    },
+    {
+      "dataset": "pandaset",
+      "sequence": "024",
+      "split": "train"
+    },
+    {
+      "dataset": "pandaset",
+      "sequence": "027",
+      "split": "train"
+    },
+    {
+      "dataset": "pandaset",
+      "sequence": "028",
+      "split": "train"
+    },
+    {
+      "dataset": "pandaset",
+      "sequence": "029",
+      "split": "train"
+    },
+    {
+      "dataset": "pandaset",
+      "sequence": "030",
+      "split": "train"
+    },
+    {
+      "dataset": "pandaset",
+      "sequence": "032",
+      "split": "train"
+    },
+    {
+      "dataset": "pandaset",
+      "sequence": "033",
+      "split": "train"
+    },
+    {
+      "dataset": "pandaset",
+      "sequence": "034",
+      "split": "train"
+    },
+    {
+      "dataset": "pandaset",
+      "sequence": "037",
+      "split": "train"
+    },
+    {
+      "dataset": "pandaset",
+      "sequence": "038",
+      "split": "train"
+    },
+    {
+      "dataset": "pandaset",
+      "sequence": "039",
+      "split": "train"
+    },
+    {
+      "dataset": "pandaset",
+      "sequence": "040",
+      "split": "train"
+    },
+    {
+      "dataset": "pandaset",
+      "sequence": "041",
+      "split": "train"
+    },
+    {
+      "dataset": "pandaset",
+      "sequence": "042",
+      "split": "train"
+    },
+    {
+      "dataset": "pandaset",
+      "sequence": "043",
+      "split": "train"
+    },
+    {
+      "dataset": "pandaset",
+      "sequence": "044",
+      "split": "train"
+    },
+    {
+      "dataset": "pandaset",
+      "sequence": "045",
+      "split": "train"
+    },
+    {
+      "dataset": "pandaset",
+      "sequence": "046",
+      "split": "train"
+    },
+    {
+      "dataset": "pandaset",
+      "sequence": "048",
+      "split": "train"
+    },
+    {
+      "dataset": "pandaset",
+      "sequence": "050",
+      "split": "train"
+    },
+    {
+      "dataset": "pandaset",
+      "sequence": "053",
+      "split": "train"
+    },
+    {
+      "dataset": "pandaset",
+      "sequence": "057",
+      "split": "train"
+    },
+    {
+      "dataset": "pandaset",
+      "sequence": "059",
+      "split": "train"
+    },
+    {
+      "dataset": "pandaset",
+      "sequence": "063",
+      "split": "train"
+    },
+    {
+      "dataset": "pandaset",
+      "sequence": "064",
+      "split": "train"
+    },
+    {
+      "dataset": "pandaset",
+      "sequence": "066",
+      "split": "train"
+    },
+    {
+      "dataset": "pandaset",
+      "sequence": "067",
+      "split": "train"
+    },
+    {
+      "dataset": "pandaset",
+      "sequence": "068",
+      "split": "train"
+    },
+    {
+      "dataset": "pandaset",
+      "sequence": "070",
+      "split": "train"
+    },
+    {
+      "dataset": "pandaset",
+      "sequence": "072",
+      "split": "train"
+    },
+    {
+      "dataset": "pandaset",
+      "sequence": "073",
+      "split": "train"
+    },
+    {
+      "dataset": "pandaset",
+      "sequence": "077",
+      "split": "train"
+    },
+    {
+      "dataset": "pandaset",
+      "sequence": "078",
+      "split": "train"
+    },
+    {
+      "dataset": "pandaset",
+      "sequence": "079",
+      "split": "train"
+    },
+    {
+      "dataset": "pandaset",
+      "sequence": "080",
+      "split": "train"
+    },
+    {
+      "dataset": "pandaset",
+      "sequence": "084",
+      "split": "train"
+    },
+    {
+      "dataset": "pandaset",
+      "sequence": "085",
+      "split": "train"
+    },
+    {
+      "dataset": "pandaset",
+      "sequence": "086",
+      "split": "train"
+    },
+    {
+      "dataset": "pandaset",
+      "sequence": "088",
+      "split": "train"
+    },
+    {
+      "dataset": "pandaset",
+      "sequence": "089",
+      "split": "train"
+    },
+    {
+      "dataset": "pandaset",
+      "sequence": "090",
+      "split": "train"
+    },
+    {
+      "dataset": "pandaset",
+      "sequence": "091",
+      "split": "train"
+    },
+    {
+      "dataset": "pandaset",
+      "sequence": "092",
+      "split": "train"
+    },
+    {
+      "dataset": "pandaset",
+      "sequence": "094",
+      "split": "train"
+    },
+    {
+      "dataset": "pandaset",
+      "sequence": "097",
+      "split": "train"
+    },
+    {
+      "dataset": "pandaset",
+      "sequence": "098",
+      "split": "train"
+    },
+    {
+      "dataset": "pandaset",
+      "sequence": "099",
+      "split": "train"
+    },
+    {
+      "dataset": "pandaset",
+      "sequence": "014",
+      "split": "val"
+    },
+    {
+      "dataset": "pandaset",
+      "sequence": "016",
+      "split": "val"
+    },
+    {
+      "dataset": "pandaset",
+      "sequence": "047",
+      "split": "val"
+    },
+    {
+      "dataset": "pandaset",
+      "sequence": "056",
+      "split": "val"
+    },
+    {
+      "dataset": "pandaset",
+      "sequence": "071",
+      "split": "val"
+    },
+    {
+      "dataset": "pandaset",
+      "sequence": "074",
+      "split": "val"
+    },
+    {
+      "dataset": "pandaset",
+      "sequence": "093",
+      "split": "val"
+    },
+    {
+      "dataset": "pandaset",
+      "sequence": "095",
+      "split": "val"
+    },
+    {
+      "dataset": "pandaset",
+      "sequence": "001",
+      "split": "test"
+    },
+    {
+      "dataset": "pandaset",
+      "sequence": "005",
+      "split": "test"
+    },
+    {
+      "dataset": "pandaset",
+      "sequence": "008",
+      "split": "test"
+    },
+    {
+      "dataset": "pandaset",
+      "sequence": "020",
+      "split": "test"
+    },
+    {
+      "dataset": "pandaset",
+      "sequence": "035",
+      "split": "test"
+    },
+    {
+      "dataset": "pandaset",
+      "sequence": "051",
+      "split": "test"
+    },
+    {
+      "dataset": "pandaset",
+      "sequence": "055",
+      "split": "test"
+    },
+    {
+      "dataset": "pandaset",
+      "sequence": "065",
+      "split": "test"
+    }
+  ],
+  "policy": "Reject invalid whole scenes; preserve clocks, calibration and stable hash partitions"
+}

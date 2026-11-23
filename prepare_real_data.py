@@ -6,7 +6,7 @@ from pathlib import Path
 import numpy as np
 from PIL import Image,ImageDraw
 import torch
-from unrealityview.data.cache import atomic_json,save_episode,resolve_safe_subpath
+from unrealityview.data.cache import atomic_json,save_episode,resolve_safe_subpath,load_episode
 from unrealityview.data.real_world import CAMERA_SLOTS,PandaSetSequence,WaymoSequence
 from unrealityview.data.splits import stable_split,validate_split_manifest
 from unrealityview.device import select_device,autocast_for
@@ -51,7 +51,7 @@ def target_frame(targets,entry,index,timestamp):
 
 
 @torch.no_grad()
-def cache_manifest(manifest,output,device="auto",max_frames=None,target="front",targets=None,encoder=None,decoder=None):
+def cache_manifest(manifest,output,device="auto",max_frames=None,target="front",targets=None,encoder=None,decoder=None,reuse_existing=False):
     manifest=validate_split_manifest(manifest)
     output=Path(output);output.mkdir(parents=True,exist_ok=True)
     if (output/"split_manifest.json").exists():
@@ -68,6 +68,18 @@ def cache_manifest(manifest,output,device="auto",max_frames=None,target="front",
                  split_manifest_sha256=provenance,temporal_policy="native timestamps; no invented 36Hz frames"))
     for entry in manifest["sequences"]:
         source_id=f"{entry['dataset']}/{entry['sequence']}"
+        name=entry['dataset']+'_'+hashlib.sha256(source_id.encode()).hexdigest()[:16]
+        directory=output/entry['split']/name
+        if reuse_existing and (directory/'episode.safetensors').is_file():
+            meta=json.loads((directory/'metadata.json').read_text())
+            expected_frames=manifest.get('download',{}).get('frames')
+            if (meta.get('source_id')!=source_id or meta.get('split')!=entry['split']
+                or meta.get('target_view')!=('native_front' if target=='front' else 'elevated_chase')
+                or meta.get('split_manifest_sha256')!=provenance or meta['frames']!=expected_frames
+                or max_frames is not None and meta['frames']>max_frames):raise ValueError('Existing cache provenance/configuration mismatch')
+            load_episode(directory/'episode.safetensors')
+            print(f'REUSED_CACHE {source_id}',flush=True)
+            continue
         sequence=(PandaSetSequence if entry["dataset"]=="pandaset" else WaymoSequence)(entry["root"],entry["sequence"])
         count=len(sequence) if max_frames is None else min(len(sequence),max_frames)
         if count<48:raise ValueError(f"Need >=48 frames for chunks, waypoints and four-chunk rollout: {source_id}")
@@ -127,10 +139,11 @@ def main():
     inventory.add_argument("--seed",type=int,default=42);inventory.add_argument("--output",default="outputs/real_splits.json")
     cache=sub.add_parser("cache");cache.add_argument("--manifest",required=True);cache.add_argument("--output",default="outputs/real_dataset")
     cache.add_argument("--device",default="auto");cache.add_argument("--max-frames",type=int)
+    cache.add_argument("--reuse-existing",action="store_true")
     cache.add_argument("--target",choices=("front","teacher"),default="front");cache.add_argument("--targets")
     a=p.parse_args()
     if a.command=="plan":atomic_json(a.output,plan(a.pandaset_root,a.waymo_root,a.seed))
-    else:cache_manifest(json.loads(Path(a.manifest).read_text()),a.output,a.device,a.max_frames,a.target,a.targets)
+    else:cache_manifest(json.loads(Path(a.manifest).read_text()),a.output,a.device,a.max_frames,a.target,a.targets,reuse_existing=a.reuse_existing)
 
 
 if __name__=="__main__":main()

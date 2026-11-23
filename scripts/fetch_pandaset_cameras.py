@@ -83,16 +83,23 @@ def download_sequence(url,root,sequence,max_frames,expected,resume=True):
 
 
 def fetch(output,manifest_path,max_frames=80,max_bytes=2*2**30,seed=42,train_count=2,val_count=1,test_count=1,
-          all_sequences=False,workers=4,resume=True):
+          all_sequences=False,workers=4,resume=True,selection=None,recovery_cache=None):
     if not 1<=workers<=8:raise ValueError("workers must be 1–8")
     root=Path(output).resolve();root.mkdir(parents=True,exist_ok=True)
     session_path=root/".fetch_state"/"session.json"
     prior=json.loads(session_path.read_text()) if session_path.is_file() else None
-    revision=prior["revision"] if prior else HfApi(token=False).dataset_info("georghess/pandaset").sha
+    revision=prior["revision"] if prior else selection["revision"] if selection else HfApi(token=False).dataset_info("georghess/pandaset").sha
     url=f"https://huggingface.co/datasets/georghess/pandaset/resolve/{revision}/pandaset.zip"
     with fsspec.open(url,"rb",block_size=1024*1024).open() as remote:
         with zipfile.ZipFile(remote) as archive:
-            selections=selected_sequences(archive.namelist(),seed,train_count,val_count,test_count,all_sequences)
+            if selection is not None:
+                if selection['frames']!=max_frames or selection['seed']!=seed or selection['revision']!=revision:raise ValueError('Preflight plan mismatch')
+                known={PurePosixPath(n).parts[-4] for n in archive.namelist() if n.endswith('camera/front_camera/timestamps.json')}
+                if any(e.get('dataset')!='pandaset' or e.get('sequence') not in known for e in selection['sequences']):raise ValueError('Unknown preflight source identity')
+                selections=[(e['sequence'],e['split']) for e in selection['sequences']]
+                if len({s for s,_ in selections})!=len(selections) or any(stable_split('pandaset',s,seed)!=split for s,split in selections):raise ValueError('Invalid preflight scene splits')
+                if [sum(split==key for _,split in selections) for key in ('train','val','test')]!=[train_count,val_count,test_count]:raise ValueError('Preflight scene counts mismatch')
+            else:selections=selected_sequences(archive.namelist(),seed,train_count,val_count,test_count,all_sequences)
             plans={sequence:[(m.filename,m.CRC,m.file_size) for m in camera_members(archive,sequence,max_frames)]
                    for sequence,_ in selections}
     total=sum(size for members in plans.values() for _,_,size in members)
@@ -100,10 +107,18 @@ def fetch(output,manifest_path,max_frames=80,max_bytes=2*2**30,seed=42,train_cou
     session=dict(revision=revision,max_frames=max_frames,seed=seed,sequences=[list(p) for p in selections])
     if prior is not None and prior!=session:raise ValueError("Resume plan changed; use a new output directory")
     atomic_json(session_path,session)
-    results={};extracted=0
+    results={};extracted=0;recovered={}
+    entries=[dict(dataset='pandaset',sequence=s,split=split,root=str(root)) for s,split in selections]
+    if recovery_cache:
+        from unrealityview.data.cache_recovery import recoverable_episodes
+        recovered=recoverable_episodes(recovery_cache,revision,entries,max_frames)
+        for sequence,split in selections:
+            if 'pandaset/'+sequence in recovered:
+                results[sequence]=[dict(member=name,crc32=crc,bytes=size) for name,crc,size in plans[sequence]]
+        print(f'REUSING_ENCODED_CACHE scenes={len(recovered)}',flush=True)
     with ThreadPoolExecutor(max_workers=workers) as pool:
         pending={pool.submit(download_sequence,url,root,sequence,max_frames,plans[sequence],resume):(sequence,split)
-                 for sequence,split in selections}
+                 for sequence,split in selections if sequence not in results}
         try:
             for future in as_completed(pending):
                 sequence,split=pending[future];records,reused,fetched=future.result();results[sequence]=records
@@ -116,7 +131,8 @@ def fetch(output,manifest_path,max_frames=80,max_bytes=2*2**30,seed=42,train_cou
     # Completion order cannot change provenance or scene assignments.
     records=[r for sequence,_ in selections for r in results[sequence]]
     manifest=validate_split_manifest({"version":1,"seed":seed,"source":"PandaSet camera-only",
-                    "download":{"mirror":"georghess/pandaset","revision":revision,"extracted_bytes":total,
+                    "download":{"mirror":"georghess/pandaset","revision":revision,"frames":max_frames,"extracted_bytes":total,
+                                "reused_cache_source_ids":sorted(recovered),
                                 "transport":"parallel HTTP ranges; selected camera JPG/JSON only","members":records},
                     "sequences":[dict(dataset="pandaset",sequence=s,split=split,root=str(root)) for s,split in selections]})
     atomic_json(manifest_path,manifest)
@@ -132,6 +148,8 @@ def main():
     p.add_argument("--test-count",type=int,default=1);p.add_argument("--all",action="store_true",dest="all_sequences")
     p.add_argument("--seed",type=int,default=42)
     p.add_argument("--workers",type=int,default=4,help="Independent sequence downloads, 1–8")
+    p.add_argument("--selection",help="CPU-validated preflight JSON with immutable source revision")
+    p.add_argument("--recovery-cache",help="Verified encoded episode cache to reuse instead of downloading native files again")
     p.add_argument("--no-resume",action="store_true",help="Redownload rather than reuse hash-verified files")
     p.add_argument("--max-gib",type=float,default=2.)
     a=p.parse_args()
@@ -139,7 +157,7 @@ def main():
     if not 0<a.max_gib<=25:p.error("max-gib must be >0 and <=25")
     if min(a.train_count,a.val_count,a.test_count)<0:p.error("Sequence counts must be nonnegative")
     if not 1<=a.workers<=8:p.error("workers must be 1–8")
-    fetch(a.output,a.manifest,a.frames,int(a.max_gib*2**30),a.seed,a.train_count,a.val_count,a.test_count,a.all_sequences,a.workers,not a.no_resume)
+    fetch(a.output,a.manifest,a.frames,int(a.max_gib*2**30),a.seed,a.train_count,a.val_count,a.test_count,a.all_sequences,a.workers,not a.no_resume,json.loads(Path(a.selection).read_text()) if a.selection else None,a.recovery_cache)
 
 
 if __name__=="__main__":main()
