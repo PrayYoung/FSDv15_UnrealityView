@@ -5,12 +5,12 @@ from pathlib import Path
 import statistics
 import time
 import torch
-from fsd_reality.checkpoint import load_checkpoint
-from fsd_reality.data.cache import atomic_json
-from fsd_reality.device import select_device,synchronize,autocast_for
-from fsd_reality.models.meanflow_dit import ConditionalMeanFlowDiT
-from fsd_reality.models.driving_policy_head import DrivingPolicyHead
-from fsd_reality.models.pretrained_taesd import PretrainedTAESD
+from unrealityview.checkpoint import load_checkpoint
+from unrealityview.data.cache import atomic_json
+from unrealityview.device import select_device,synchronize,autocast_for
+from unrealityview.models.meanflow_dit import ConditionalMeanFlowDiT
+from unrealityview.models.driving_policy_head import DrivingPolicyHead
+from unrealityview.models.pretrained_taesd import PretrainedTAESD
 
 
 def measure(fn,device,repeats=5,warmup=2):

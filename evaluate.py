@@ -4,13 +4,13 @@ import json
 from pathlib import Path
 import numpy as np
 import torch
-from fsd_reality.checkpoint import load_checkpoint
-from fsd_reality.data.dataset import CachedEpisodeChunkDataset,stage_context
-from fsd_reality.data.cache import atomic_json
-from fsd_reality.data.splits import assert_unseen_test
-from fsd_reality.device import select_device,autocast_for
-from fsd_reality.models.pretrained_taesd import PretrainedTAESD
-from fsd_reality.visuals import contact_sheet,save_rollout
+from unrealityview.checkpoint import load_checkpoint
+from unrealityview.data.dataset import CachedEpisodeChunkDataset,stage_context
+from unrealityview.data.cache import atomic_json
+from unrealityview.data.splits import assert_unseen_test
+from unrealityview.device import select_device,autocast_for
+from unrealityview.models.pretrained_taesd import PretrainedTAESD
+from unrealityview.visuals import contact_sheet,save_rollout
 
 
 def pixel_metrics(prediction, target):

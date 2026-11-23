@@ -1,7 +1,7 @@
 import torch
 from torch import nn
 import torch.nn.functional as F
-from fsd_reality.geometry import plucker_rays
+from unrealityview.geometry import plucker_rays
 
 
 class MiniUVE(nn.Module):

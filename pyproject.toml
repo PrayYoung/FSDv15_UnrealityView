@@ -3,9 +3,9 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "mini-reality-view"
+name = "unrealityview"
 version = "0.1.0"
-description = "Experimental six-camera conditional Mean-Flow video generation and decoupled planning"
+description = "UnrealityView: camera-conditioned video generation with isolated planning and composable style adapters"
 requires-python = ">=3.11,<3.12"
 dependencies = [
   "torch==2.5.1", "torchvision==0.20.1", "timm==1.0.15",
@@ -15,14 +15,13 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-simulator = ["metadrive-simulator>=0.4.3,<0.5"]
 realdata = ["pyarrow>=17,<24", "opencv-python-headless>=4.9,<4.12", "fsspec[http]>=2024.10,<2027"]
 dev = ["pytest>=8,<10", "httpx>=0.28,<1"]
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/fsd_reality", "app"]
+packages = ["src/unrealityview", "app"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
-markers = ["pretrained: requires downloaded pretrained model weights", "simulator: requires MetaDrive and graphics"]
+markers = ["pretrained: requires downloaded pretrained model weights"]
 

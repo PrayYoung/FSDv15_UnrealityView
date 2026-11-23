@@ -2,7 +2,7 @@ from pathlib import Path
 import json
 import torch
 from torch.utils.data import Dataset
-from fsd_reality.geometry import ego_waypoints
+from unrealityview.geometry import ego_waypoints
 from .cache import load_episode
 from .splits import audit_cache_splits
 
@@ -54,4 +54,4 @@ class CachedEpisodeChunkDataset(Dataset):
                 "waypoints":ego_waypoints(e["ego_states"].float(),start),
                 "episode":ep,"start":start,"stage_frames":ids,"fps":fps,
                 "source":self.metadata[ep].get("source","unknown"),
-                "source_id":self.metadata[ep].get("source_id",str(self.paths[ep].parent))}
+                "source_id":self.metadata[ep].get("source_id",self.paths[ep].parent.name)}

@@ -4,10 +4,10 @@ import pytest
 import torch
 from PIL import Image
 from fastapi.testclient import TestClient
-from fsd_reality.data.cache import save_episode
-from fsd_reality.models.meanflow_dit import ConditionalMeanFlowDiT,DiTConfig
-from fsd_reality.models.driving_policy_head import DrivingPolicyHead
-from fsd_reality.models.pretrained_taesd import PretrainedTAESD
+from unrealityview.data.cache import save_episode
+from unrealityview.models.meanflow_dit import ConditionalMeanFlowDiT,DiTConfig
+from unrealityview.models.driving_policy_head import DrivingPolicyHead
+from unrealityview.models.pretrained_taesd import PretrainedTAESD
 
 
 def test_model_and_ground_truth_routes_and_closed_loop_state(tmp_path,monkeypatch):
@@ -44,10 +44,34 @@ def test_model_and_ground_truth_routes_and_closed_loop_state(tmp_path,monkeypatc
     assert client.post("/api/render",json={**base,"chunk":5}).status_code==422
     # A real-data front baseline must preserve native cadence and never apply
     # the elevated-camera raycast or projected chase waypoints to front images.
-    from fsd_reality.data.cache import atomic_json
+    from unrealityview.data.cache import atomic_json
     atomic_json(directory/"metadata.json",{"frames":32,"source":"pandaset","fps":10.,"target_view":"native_front"})
     native=client.post("/api/render",json=base)
     assert native.status_code==200
     assert native.json()["fps"]==10 and native.json()["target_view"]=="native_front"
     assert native.json()["projected_waypoints"]==[]
     assert client.post("/api/render",json={**base,"goal":{"u":180.,"v":110.}}).status_code==422
+    # Switching styles can re-render the same closed-loop chunk without advancing
+    # context. The planner sees identical real tokens through every merge.
+    import copy
+    from unrealityview.models.lora import inject_dit_lora,save_lora,model_fingerprint,LoRALinear
+    adapters=tmp_path/"adapters";adapters.mkdir()
+    monkeypatch.setattr(server,"LORA_DIR",adapters)
+    adapted=copy.deepcopy(model);inject_dit_lora(adapted,rank=4,start_block=0)
+    for style in ("comic","cyberpunk"):
+        for layer in adapted.modules():
+            if isinstance(layer,LoRALinear):torch.nn.init.normal_(layer.lora_b,std=.03)
+        save_lora(adapters/f"{style}_lora.safetensors",adapted,style,1)
+    assert client.get("/api/health").json()["styles_available"]==["reality","comic","cyberpunk","hybrid"]
+    policy_before=model_fingerprint(policy);base_before=model_fingerprint(model)
+    previous=None
+    for style in ("reality","comic","cyberpunk","hybrid","reality"):
+        response=client.post("/api/render",json={**closed,"chunk":2,"style":style,"style_strength":1.25})
+        assert response.status_code==200,response.text
+        payload=response.json()
+        if previous is None:previous=payload
+        assert payload["waypoints"]==previous["waypoints"]
+        assert payload["telemetry"]["active_style"]==style
+        if style!="reality":assert payload["telemetry"]["lora_size_mb"]>0
+    assert payload["frames"]==previous["frames"]
+    assert model_fingerprint(model)==base_before and model_fingerprint(policy)==policy_before

@@ -1,9 +1,9 @@
 import json
 from pathlib import Path
 from safetensors.torch import load_file, save_file
-from fsd_reality.data.cache import atomic_json
-from fsd_reality.models.meanflow_dit import ConditionalMeanFlowDiT,DiTConfig
-from fsd_reality.models.driving_policy_head import DrivingPolicyHead
+from unrealityview.data.cache import atomic_json
+from unrealityview.models.meanflow_dit import ConditionalMeanFlowDiT,DiTConfig
+from unrealityview.models.driving_policy_head import DrivingPolicyHead
 
 
 def save_checkpoint(directory, model, policy, step, extra=None):
@@ -12,7 +12,7 @@ def save_checkpoint(directory, model, policy, step, extra=None):
     tensors = {"dit."+k:v.detach().cpu().contiguous() for k,v in model.state_dict().items()}
     tensors.update({"policy."+k:v.detach().cpu().contiguous() for k,v in policy.state_dict().items()})
     temporary = directory/"model.safetensors.tmp"
-    save_file(tensors,str(temporary),metadata={"step":str(step),"format":"mini-reality-view-v1"})
+    save_file(tensors,str(temporary),metadata={"step":str(step),"format":"unrealityview-v1"})
     temporary.replace(directory/"model.safetensors")
     atomic_json(directory/"config.json",{"dit":model.config.to_dict(),"policy":policy.config,"step":step,**(extra or {})})
 

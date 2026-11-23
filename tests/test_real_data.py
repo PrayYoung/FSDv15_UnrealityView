@@ -6,13 +6,13 @@ import pytest
 import torch
 from torch import nn
 pytest.importorskip("pyarrow")
-from fsd_reality.data.real_world import PandaSetSequence,WaymoSequence,PANDA_CAMERAS,CV_TO_FLU,resize_calibrated
-from fsd_reality.data.splits import stable_split,validate_split_manifest,audit_cache_splits,assert_unseen_test
-from fsd_reality.data.cache import atomic_json
-from fsd_reality.data.dataset import CachedEpisodeChunkDataset
-from fsd_reality.data.dataset import stage_context
-from fsd_reality.models.mini_uve import MiniUVE
-from fsd_reality.models.blocks import Attention
+from unrealityview.data.real_world import PandaSetSequence,WaymoSequence,PANDA_CAMERAS,CV_TO_FLU,resize_calibrated
+from unrealityview.data.splits import stable_split,validate_split_manifest,audit_cache_splits,assert_unseen_test
+from unrealityview.data.cache import atomic_json
+from unrealityview.data.dataset import CachedEpisodeChunkDataset
+from unrealityview.data.dataset import stage_context
+from unrealityview.models.mini_uve import MiniUVE
+from unrealityview.models.blocks import Attention
 from prepare_real_data import cache_manifest
 
 

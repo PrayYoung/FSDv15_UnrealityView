@@ -12,9 +12,9 @@ import shutil
 import zipfile
 import fsspec
 from huggingface_hub import HfApi
-from fsd_reality.data.cache import atomic_json,resolve_safe_subpath
-from fsd_reality.data.real_world import PANDA_CAMERAS
-from fsd_reality.data.splits import stable_split,validate_split_manifest
+from unrealityview.data.cache import atomic_json,resolve_safe_subpath
+from unrealityview.data.real_world import PANDA_CAMERAS
+from unrealityview.data.splits import stable_split,validate_split_manifest
 
 
 def selected_sequences(names,seed=42):

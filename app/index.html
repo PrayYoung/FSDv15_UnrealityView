@@ -2,31 +2,38 @@
 <html lang="en">
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Mini-RealityView: a local six-camera Mean-Flow research cockpit.">
-  <title>Mini-RealityView · Research Cockpit</title>
+  <meta name="description" content="UnrealityView: a local six-camera Mean-Flow research cockpit.">
+  <title>UnrealityView · Research Cockpit</title>
   <link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="/static/style.css">
   <script src="/static/app.js" defer></script>
 </head>
 <body>
   <header>
-    <a class="brand" href="/" aria-label="Mini-RealityView home"><svg viewBox="0 0 40 40" aria-hidden="true"><path d="M5 28 16 7h8l11 21-15 7Z"/><path d="m12 27 8-14 8 14-8 4Z"/></svg><span>REALITY<span class="brand-light">VIEW</span><small>MINI / RESEARCH COCKPIT</small></span></a>
+    <a class="brand" href="/" aria-label="UnrealityView home"><svg viewBox="0 0 40 40" aria-hidden="true"><path d="M5 28 16 7h8l11 21-15 7Z"/><path d="m12 27 8-14 8 14-8 4Z"/></svg><span>UNREALITY<span class="brand-light">VIEW</span><small>STYLE STUDIO / RESEARCH COCKPIT</small></span></a>
     <div class="header-right"><span id="device">CONNECTING</span><span class="local-badge">LOCAL SESSION</span><button id="help" class="icon-button" aria-label="Show keyboard shortcuts">?</button></div>
   </header>
   <main>
-    <section class="intro"><div><div class="eyebrow">PERCEPTION → GENERATION → PLANNING</div><h1>A different point of view.</h1><p>Six cameras. One shared representation. An independent path forward.</p></div><div class="project-meta"><span>CONDITIONAL MEAN-FLOW</span><strong>8 frames / chunk</strong><span>36 Hz target cadence</span></div></section>
+    <section class="intro"><div><div class="eyebrow">PERCEPTION → GENERATION → PLANNING</div><h1>A different point of view.</h1><p>Six cameras. One shared representation. An independent path forward.</p></div><div class="project-meta"><span>CONDITIONAL MEAN-FLOW</span><strong>8 frames / chunk</strong><span>Native recording cadence</span></div></section>
     <div id="status" class="notice" role="status">Loading local runtime…</div>
+    <section class="style-studio panel" aria-label="UnrealityView Style Studio">
+      <div><h2>Style Studio</h2><p>One scene. A different visual language.</p></div>
+      <label>STYLE<select id="style"><option value="reality">Reality</option><option value="comic">Comic / graphic novel</option><option value="cyberpunk">Cyberpunk neon</option><option value="hybrid">Comic + cyberpunk hybrid</option></select></label>
+      <label class="strength-control">STRENGTH <output id="strength-value" for="style-strength">1.00</output><input id="style-strength" type="range" min="0" max="1.5" step="0.05" value="1" aria-label="Style strength"></label>
+      <label class="studio-loop"><input id="style-closed-loop" type="checkbox"> Closed-loop rollout</label>
+      <div class="style-stats"><span>ADAPTER <strong id="lora-size">—</strong> MiB</span><span>SWITCH <strong id="lora-merge">—</strong> ms</span></div>
+    </section>
     <div class="workspace">
       <section class="view-panel panel" aria-label="Reality view">
-        <div class="panel-heading"><div><span class="live-mark"></span><h2>Reality View</h2><span id="view-label" class="tag">PROCEDURAL PREVIEW</span></div><button id="fullscreen" class="text-button">Expand view</button></div>
-        <div class="canvas-wrap" id="canvas-wrap"><canvas id="reality" width="960" height="576" aria-label="Elevated chase camera. Click a road point to set a destination." tabindex="0"></canvas><div class="view-top"><span id="episode-label">PREVIEW / SCENE 01</span><span id="frame-label">FRAME 00008</span></div><div class="view-bottom"><div><span class="view-caption">ELEVATED CHASE CAMERA</span><strong id="goal-label">Tap the road to set a goal</strong></div><span class="camera-symbol">75° FOV</span></div></div>
-        <div class="transport"><button id="play" class="play-button" aria-label="Play">▶</button><div class="timeline"><div class="timeline-label"><span id="chunk-label">CHUNK 01</span><span id="time-label">00:00.222</span></div><div class="track"><span id="progress"></span></div></div><button id="next-chunk" class="transport-button">Next chunk <kbd>N</kbd></button><button id="next-episode" class="transport-button">Next episode</button><button id="reset" class="text-button">Reset</button></div>
+        <div class="panel-heading"><div><span class="live-mark"></span><h2>UnrealityView</h2><span id="view-label" class="tag">NO RECORDING LOADED</span></div><button id="fullscreen" class="text-button">Expand view</button></div>
+        <div class="canvas-wrap" id="canvas-wrap"><canvas id="reality" width="960" height="576" aria-label="UnrealityView video output. Import recordings to begin." tabindex="0"></canvas><div class="view-top"><span id="episode-label">NO EPISODE SELECTED</span><span id="frame-label">FRAME 00008</span></div><div class="view-bottom"><div><span class="view-caption">NO RECORDING LOADED</span><strong id="goal-label">Import real PandaSet recordings</strong></div><span class="camera-symbol">CAMERA REFERENCE</span></div></div>
+        <div class="transport"><button id="play" class="play-button" aria-label="Play">▶</button><div class="timeline"><div class="timeline-label"><span id="chunk-label">CHUNK 01</span><span id="time-label">—</span></div><div class="track"><span id="progress"></span></div></div><button id="next-chunk" class="transport-button">Next chunk <kbd>N</kbd></button><button id="next-episode" class="transport-button">Next episode</button><button id="reset" class="text-button">Reset</button></div>
       </section>
       <aside class="controls-panel panel">
         <div class="panel-heading"><h2>Inference controls</h2><span class="small-label">CONFIG</span></div>
         <div class="control-body">
-          <label class="field-label" for="episode">EPISODE</label><select id="episode"><option value="demo">Procedural preview</option></select>
-          <label class="field-label" for="source">VIEW SOURCE</label><select id="source"><option value="demo">Procedural preview</option><option value="model">Mean-Flow prediction</option><option value="ground_truth">Ground truth</option></select>
+          <label class="field-label" for="episode">EPISODE</label><select id="episode"></select>
+          <label class="field-label" for="source">VIEW SOURCE</label><select id="source"><option value="ground_truth">Reference frames</option><option value="model">Mean-Flow prediction</option></select>
           <div class="field-label">FUNCTION EVALUATIONS</div><div class="segmented" role="group" aria-label="Function evaluations"><button class="selected" data-nfe="1" aria-pressed="true">1 NFE</button><button data-nfe="2" aria-pressed="false">2 NFE</button><button data-nfe="4" aria-pressed="false">4 NFE</button></div><p class="field-hint">Fewer steps, lower generation latency.</p>
           <label class="field-label" for="rollout">CONTEXT MODE</label><select id="rollout"><option value="teacher_forced">Teacher forced</option><option value="closed_loop">Closed-loop rollout</option></select>
           <div class="divider"></div>
@@ -35,13 +42,13 @@
           <div class="divider"></div>
           <div class="goal-heading"><span class="field-label">TAP-TO-DRIVE</span><button id="clear-goal" class="text-button">Clear goal</button></div><p class="goal-readout" id="goal-readout">No destination selected</p><p class="field-hint">A ground-plane raycast conditions the planner in ego coordinates.</p>
         </div>
-        <div class="runtime-label"><span id="runtime-state">PROCEDURAL MODE</span><span>LOOPBACK ONLY</span></div>
+        <div class="runtime-label"><span id="runtime-state">WAITING FOR DATA</span><span>LOOPBACK ONLY</span></div>
       </aside>
     </div>
-    <section class="telemetry panel" aria-label="Inference telemetry"><div class="telemetry-title"><span class="eyebrow">RUNTIME TELEMETRY</span><span id="telemetry-note">Measured values appear with trained inference</span></div><div class="metrics"><div><span>DiT latency</span><strong id="dit-ms">—</strong><small>ms / chunk</small></div><div><span>Decode</span><strong id="decode-ms">—</strong><small>ms / chunk</small></div><div><span>Policy</span><strong id="policy-ms">—</strong><small>ms / inference</small></div><div><span>Effective FPS</span><strong id="effective-fps">—</strong><small id="cadence-target">36 fps target</small></div><div><span>PSNR</span><strong id="psnr">—</strong><small>dB vs. reference</small></div><div><span>SRAM estimate</span><strong id="sram">—</strong><small>MiB · analytical</small></div></div></section>
-    <section class="surround panel" aria-label="Surround camera inputs"><div class="panel-heading"><div><h2>Surround vision</h2><span class="tag">SHARED UVE INPUT</span></div><span class="small-label">6 CAMERAS / 192 TOKENS / 384 DIM</span></div><div id="camera-grid" class="camera-grid"></div><div class="stage-strip"><span>UVE STAGE FRAMES</span><div id="stage-frames">— / — / — / —</div><span id="stream-mode">Procedural imagery · no learned inference</span></div></section>
-    <footer><span>MINI-REALITYVIEW <span class="footer-dot">·</span> INDEPENDENT RESEARCH PROTOTYPE</span><span>No vehicle control. Unaffiliated with Tesla.</span></footer>
+    <section class="telemetry panel" aria-label="Inference telemetry"><div class="telemetry-title"><span class="eyebrow">RUNTIME TELEMETRY</span><span id="telemetry-note">Measured values appear with trained inference</span></div><div class="metrics"><div><span>DiT latency</span><strong id="dit-ms">—</strong><small>ms / chunk</small></div><div><span>Decode</span><strong id="decode-ms">—</strong><small>ms / chunk</small></div><div><span>Policy</span><strong id="policy-ms">—</strong><small>ms / inference</small></div><div><span>Effective FPS</span><strong id="effective-fps">—</strong><small id="cadence-target">Recorded cadence</small></div><div><span>PSNR</span><strong id="psnr">—</strong><small>dB vs. real target</small></div><div><span>SRAM estimate</span><strong id="sram">—</strong><small>MiB · analytical</small></div></div></section>
+    <section class="surround panel" aria-label="Surround camera inputs"><div class="panel-heading"><div><h2>Surround vision</h2><span class="tag">SHARED UVE INPUT</span></div><span class="small-label">6 CAMERAS / 192 TOKENS / 384 DIM</span></div><div id="camera-grid" class="camera-grid"></div><div class="stage-strip"><span>UVE STAGE FRAMES</span><div id="stage-frames">— / — / — / —</div><span id="stream-mode">Real camera recordings only</span></div></section>
+    <footer><span>UNREALITYVIEW <span class="footer-dot">·</span> INDEPENDENT RESEARCH PROTOTYPE</span><span>No vehicle control. Unaffiliated with Tesla.</span></footer>
   </main>
-  <dialog id="help-dialog"><h2>Keyboard shortcuts</h2><p><kbd>Space</kbd> Play / pause <br><kbd>N</kbd> Next chunk <br><kbd>R</kbd> Reset playback</p><p>Click below the horizon to condition a tap goal. Procedural preview is an illustration; model outputs require a trained checkpoint.</p><button id="close-help">Got it</button></dialog>
+  <dialog id="help-dialog"><h2>Keyboard shortcuts</h2><p><kbd>Space</kbd> Play / pause <br><kbd>N</kbd> Next chunk <br><kbd>R</kbd> Reset playback</p><p>Select a real recording to begin. Style adapters affect video generation only; the planner uses the same frozen vision tokens. Tap goals require a calibrated chase view.</p><button id="close-help">Got it</button></dialog>
 </body>
 </html>

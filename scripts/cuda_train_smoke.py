@@ -1,8 +1,8 @@
 """Exercise the actual CUDA autocast/JVP path before paying for data collection."""
 import torch
-from fsd_reality.device import autocast_for
-from fsd_reality.models.meanflow_dit import ConditionalMeanFlowDiT,DiTConfig
-from fsd_reality.objectives import meanflow_loss
+from unrealityview.device import autocast_for
+from unrealityview.models.meanflow_dit import ConditionalMeanFlowDiT,DiTConfig
+from unrealityview.objectives import meanflow_loss
 
 device=torch.device("cuda")
 model=ConditionalMeanFlowDiT(DiTConfig(hidden_dim=64,depth=4,num_heads=4,latent_shape=(2,4,6))).to(device)

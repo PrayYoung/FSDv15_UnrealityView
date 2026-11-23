@@ -7,16 +7,16 @@ import pytest
 import torch
 from torch import nn
 from fastapi.testclient import TestClient
-from fsd_reality.checkpoint import save_checkpoint,load_checkpoint
-from fsd_reality.data.cache import resolve_safe_subpath,save_episode
-from fsd_reality.data.dataset import CachedEpisodeChunkDataset
-from fsd_reality.geometry import ego_waypoints,plucker_rays,ground_raycast,project_waypoints
-from fsd_reality.models.mini_uve import MiniUVE
-from fsd_reality.models.meanflow_dit import ConditionalMeanFlowDiT,DiTConfig
-from fsd_reality.models.driving_policy_head import DrivingPolicyHead,training_goals
-from fsd_reality.models.pretrained_taesd import PretrainedTAESD
-from fsd_reality.objectives import meanflow_loss,directional_derivative
-from fsd_reality.runtime.ring_buffer_engine import UVERingBuffer,RealityViewStreamingEngine
+from unrealityview.checkpoint import save_checkpoint,load_checkpoint
+from unrealityview.data.cache import resolve_safe_subpath,save_episode
+from unrealityview.data.dataset import CachedEpisodeChunkDataset
+from unrealityview.geometry import ego_waypoints,plucker_rays,ground_raycast,project_waypoints
+from unrealityview.models.mini_uve import MiniUVE
+from unrealityview.models.meanflow_dit import ConditionalMeanFlowDiT,DiTConfig
+from unrealityview.models.driving_policy_head import DrivingPolicyHead,training_goals
+from unrealityview.models.pretrained_taesd import PretrainedTAESD
+from unrealityview.objectives import meanflow_loss,directional_derivative
+from unrealityview.runtime.ring_buffer_engine import UVERingBuffer,RealityViewStreamingEngine
 
 
 def tiny_model():
@@ -77,7 +77,7 @@ def test_meanflow_exact_jvp_matches_finite_and_has_finite_gradients():
 
 
 def test_flow_matching_boundary_skips_jvp(monkeypatch):
-    import fsd_reality.objectives as objectives
+    import unrealityview.objectives as objectives
     monkeypatch.setattr(objectives,"directional_derivative",lambda *args,**kwargs:pytest.fail("boundary must skip JVP"))
     z,prev,tokens=inputs()
     loss,stats=meanflow_loss(tiny_model(),z,prev,tokens,fm_ratio=1)
@@ -187,24 +187,23 @@ def test_api_health_render_validation_and_local_guards(monkeypatch,tmp_path):
     client=TestClient(server.app)
     assert client.get("/").status_code==200
     assert client.get("/api/health").json()["status"]=="ok"
-    base={"session_id":str(uuid4()),"source":"demo"}
+    base={"session_id":str(uuid4()),"source":"ground_truth","episode":"val/recording"}
     response=client.post("/api/render",json=base)
-    assert response.status_code==200,response.text
-    data=response.json()
-    assert len(data["frames"])==8 and len(data["cameras"])==6
-    assert data["trained"] is False and data["telemetry"]["dit_ms"] is None
-    for bad in ({"nfe":3},{"nfe":True},{"nfe":1.0},{"chunk":-1},{"chunk":"1"},{"tiled":"true"},{"goal":{"u":999.,"v":100.}},{"unknown":1}):
+    assert response.status_code==404  # No synthetic frames replace missing recordings.
+    for bad in ({"nfe":3},{"nfe":True},{"nfe":1.0},{"chunk":-1},{"chunk":"1"},{"tiled":"true"},
+                {"goal":{"u":999.,"v":100.}},{"unknown":1},{"source":"demo"},
+                {"style":"unknown"},{"style_strength":-0.1},{"style_strength":1.6}):
         assert client.post("/api/render",json={**base,**bad}).status_code==422
     assert client.post("/api/render",json={**base,"episode":"../secret"}).status_code==400
     assert client.post("/api/render",json=base,headers={"Origin":"https://evil.example"}).status_code==403
     assert client.get("/api/health",headers={"Host":"evil.example"}).status_code==400
-    assert client.post("/api/render",json={**base,"goal":{"u":160.,"v":130.}}).json()["goal_xy"] is not None
+
 
 
 @pytest.mark.pretrained
 @pytest.mark.skipif(os.environ.get("RUN_PRETRAINED")!="1",reason="Opt-in downloaded pretrained weights")
 def test_actual_pretrained_vision_and_taesd():
-    from fsd_reality.device import select_device
+    from unrealityview.device import select_device
     device=select_device()
     encoder=MiniUVE().to(device)
     assert encoder(torch.rand(1,6,3,140,224,device=device)).shape==(1,192,384)

@@ -30,7 +30,7 @@ def save_episode(directory, tensors, metadata):
     validate_episode(tensors)
     temporary = directory/"episode.safetensors.tmp"
     save_file({k:v.detach().cpu().contiguous() for k,v in tensors.items()},str(temporary),
-              metadata={"format":"mini-reality-view-v2","fps":str(metadata.get("fps",36))})
+              metadata={"format":"unrealityview-v2","fps":str(metadata.get("fps",36))})
     os.replace(temporary,directory/"episode.safetensors")
     atomic_json(directory/"metadata.json",metadata)
 

@@ -1,167 +1,127 @@
-# Mini-RealityView
+# UnrealityView
 
-A camera-conditioned Mean-Flow video model with a frozen shared DINOv2 encoder,
-independent waypoint planner, streaming context and local research cockpit.
-**PandaSet is the active training and testing data source.** MetaDrive is retained
-as an optional legacy collector and is not used by the default remote workflow.
+Camera-conditioned video generation with an independent waypoint planner and
+switchable visual styles. **PandaSet cameras are the active training and testing
+source.** This is an independent research prototype with no vehicle control.
 
-The first real-data experiment is a **native front-camera reconstruction baseline**.
-It verifies the camera pipeline and is not an elevated Reality View. Novel chase
-views need separately calibrated teacher exports. This independent research
-project is unaffiliated with Tesla and does not control a vehicle.
+The camera-only import, Mean-Flow training, held-out evaluation and CUDA smoke
+pipeline work. The current checkpoint has only 30 training steps and produces
+noise-like predictions. Comic/cyberpunk adapter training and Style Studio are
+implemented and tested, but quality base training and real-data style training
+are still pending. No successful styled model result is claimed.
 
-## Start the local cockpit
+The first target is the observed **native front camera**, also present among the
+conditioning inputs. It is reconstruction, not future-only prediction or an
+elevated novel view. An external calibrated teacher is required for elevated views.
 
-Python 3.11 and [uv](https://docs.astral.sh/uv/) are required.
+## Setup and cockpit
+
+Python 3.11 and [uv](https://docs.astral.sh/uv/):
 
 ```bash
 uv sync --locked --extra dev --extra realdata
 uv run --no-sync python -m app.server
 ```
 
-Open `http://127.0.0.1:8088`. With no cache/checkpoint, the cockpit offers a labelled
-procedural preview. No inference performance is fabricated. The server binds only
-to loopback, validates paths/requests, rejects foreign origins, and loads only
-safetensors model/cache files. No pickle or TensorFlow is needed for camera imports.
+Open `http://127.0.0.1:8088`. Import real recordings first; an empty installation
+shows a load-data state. The cockpit offers six camera panels, native-cadence
+playback, 1/2/4-NFE generation, closed-loop context and tiled decoding.
+Style Studio offers Reality, Comic, Cyberpunk and Hybrid when compatible adapters
+are installed, strength 0–1.5, and measured adapter size and merge time.
 
-## Remote PandaSet pipeline check
+Defaults are `outputs/real_dataset`, `outputs/real_train/checkpoint`,
+`outputs/adapters` and `outputs/styles`. Override with `UNREALITYVIEW_DATA`,
+`UNREALITYVIEW_CHECKPOINT`, `UNREALITYVIEW_LORA_DIR`, and
+`UNREALITYVIEW_STYLES_DATA`. The server also accepts `--lora-dir` and
+`--styles-data-dir`. It binds to localhost and uses safetensors for weights/caches.
 
-This is the recommended first run. It downloads **only camera JPGs and calibration,
-pose and timestamp JSONs**, using HTTP byte ranges into a public PandaSet mirror.
-It does not download the complete 44.5 GB archive, LiDAR, or annotations. Source
-revision, ZIP CRCs, byte counts and a frozen sequence split are recorded.
+## PandaSet training
 
-```bash
-vast-run run --project-root . --gpu-model 'RTX 3090' \
-  --remote-setup-command-file scripts/gpu_setup.sh \
-  --command-file scripts/real_gpu_job.sh
-```
-
-The repository `.vast/profile.toml` is automatic. Global pricing/reliability
-safeguards remain in force. The runner owns provisioning, logs, output retrieval,
-and destruction. Workload time is capped at 45 minutes. Do not manually manage SSH
-readiness or leave a debug instance running.
-
-The job runs:
-
-1. CUDA matmul, autocast/JVP/backward preflight, and the full test suite.
-2. Selective download: train sequences **002, 003**, validation **014**, final test
-   **001**, 64 native frames each, extraction limited to 2 GiB.
-3. Pretrained DINOv2 + TAESD encoding into safe caches at the recorded ~10 Hz.
-4. A small **30-step**, width-128/depth-4 integration training run.
-5. Validation, then a separately invoked final test, 1/2/4-NFE metrics and a
-   four-chunk autoregressive rollout. This is not a convergence/quality study.
-6. Edge timing, decoder equivalence and compact artifact validation.
-
-Raw data and encoded training caches stay under `.cache/` on the rented machine.
-Only `outputs/pandaset_smoke/` evidence/checkpoints are retrieved. This temporary
-instance is destroyed on completion, so its caches are not durable storage; a
-larger campaign should put caches in user-owned remote object storage first.
-The terminal runner result gives the exact local `synced_outputs` directory.
-
-[Real-data details](docs/REAL_DATA.md) describe sensor geometry, splits, front-view
-limits and external teacher exports. [Results](docs/PANDASET_RESULTS.md) records
-the current remote outcome. Previous procedural-only results remain in
-[historical local verification](docs/RESULTS.md).
-
-## Use an existing PandaSet camera download
-
-Expected layout: `<root>/<sequence>/camera/<camera_name>/{00.jpg, poses.json,
-timestamps.json, intrinsics.json, ...}`. Six native camera names are supported:
-`front_left_camera`, `front_camera`, `front_right_camera`, `left_camera`,
-`back_camera`, `right_camera`. No LiDAR directory is required.
+Keep large camera files and encoded caches on the remote GPU's durable storage.
+No dataset, weights, credentials or personal cloud runtime profiles belong in Git.
+The selective downloader can fetch camera JPGs and calibration/pose/timestamp JSONs
+without downloading LiDAR or the full archive; see [data workflow](docs/REAL_DATA.md).
 
 ```bash
-# Inventory all sequences and freeze whole-sequence train/val/test assignments.
 uv run --no-sync python prepare_real_data.py plan \
-  --pandaset-root /absolute/path/to/pandaset --output outputs/panda_splits.json
-
-# Front-camera pipeline baseline. Native timestamps are preserved.
+  --pandaset-root /path/to/pandaset --output outputs/panda_splits.json
 uv run --no-sync python prepare_real_data.py cache \
   --manifest outputs/panda_splits.json --output outputs/real_dataset --target front
-
-# Real-data defaults: 512x12 DiT, effective batch 16, 20,000 steps.
 uv run --no-sync python train_cached_meanflow.py
 uv run --no-sync python evaluate.py --split val
-# Only after choosing the final checkpoint; do not tune on these results.
-uv run --no-sync python evaluate.py --split test --output outputs/final_test
-uv run --no-sync python -m app.server
 ```
 
-The normal local cache/checkpoint defaults are `outputs/real_dataset` and
-`outputs/real_train/checkpoint`. Alternate paths use:
+The full configuration uses a width-512/depth-12 DiT and 20,000 optimizer steps.
+Choose the checkpoint using validation scenes. Final testing is a separate
+`evaluate.py --split test --output outputs/final_test` invocation. Whole sequences
+are split before caching; provenance checks reject train/test overlap.
+[Recorded smoke results](docs/PANDASET_RESULTS.md) establish integration, not quality.
+
+## Style adapters
+
+Train a useful base before style adapters. Deterministic comic/cyberpunk teachers
+use real PandaSet target JPEGs and bidirectional optical-flow confidence to reduce
+flicker. They are a 2D temporal baseline, with no guarantee of 3D consistency or
+zero flicker. Style caches stay separate; original vision tokens and poses remain
+unchanged. Internal sanity grids compare reference, shader and TAESD round trip.
 
 ```bash
-REALITY_DATA=/absolute/path/to/cache \
-REALITY_CHECKPOINT=/absolute/path/to/checkpoint \
-uv run --no-sync python -m app.server
+uv run --no-sync python prepare_style_cache.py \
+  --data outputs/real_dataset --output outputs/styles --style both
+uv run --no-sync python train_style_lora.py --style comic \
+  --output outputs/adapters/comic
+uv run --no-sync python train_style_lora.py --style cyberpunk \
+  --output outputs/adapters/cyberpunk
+uv run --no-sync python benchmark_styles.py
 ```
 
-A train, validation or test sequence is never split into frame-level windows
-across partitions. Import refuses a changed split manifest in an existing cache.
-Training audits source IDs across partitions; checkpoints preserve training IDs.
-Final testing rejects overlaps and checkpoints without provenance. Mixed-source
-sampling is available but PandaSet alone is the active experiment.
+Rank-16 LoRA targets later DiT attention/MLP projections and the output projection.
+The encoder, early geometry blocks and independent planner stay frozen. Training
+uses improved Mean-Flow with JVP, adapter EMA, 80% styled/20% real previous context,
+noise up to 0.25, effective batch 16 and 1,000 steps by default. Validation includes
+real-to-style switching and a 32-frame autoregressive rollout.
 
-## Architecture and current scope
+Inference merges adapters into ordinary Linear weights and caches the selected
+configuration. Reality restores exact base weights; Hybrid combines 0.55 Comic +
+0.55 Cyberpunk at unit strength. The forward architecture stays unchanged; merging
+has a separately measured cost. Equal wall times and unchanged visual geometry
+are evaluation questions, not promises. The planner receives unchanged real tokens.
 
-- **Shared vision:** frozen pretrained DINOv2-S/14, 6x32 pooled tokens of width
-  384, calibrated Plücker rays in ego forward/left/up coordinates. Missing-camera
-  tokens are zero and excluded from DiT cross-attention and policy attention.
-- **Video model:** channel-concatenated previous chunk; 960 patches for 8x24x40
-  latents; four context stages; AdaLN-Zero, QK RMS normalization, age embeddings;
-  native 1/2/4-NFE sampling.
-- **Objective:** improved Mean-Flow with stop-gradient directional derivative
-  only on `r<t`, 50% boundary matching, adaptive weighting and previous-chunk noise.
-  CUDA uses math-SDPA for JVP and normal SDPA selection for the primal pass.
-- **Planner:** separate ~3.3M-parameter transformer, 12 ego waypoints and goal FiLM
-  with 50% endpoint dropout. PandaSet's reference is explicitly the front-camera
-  center with forward/left/up axes, not an assumed undocumented IMU origin.
-- **Decoder:** frozen TAESD, latent scale 1, module-wise exact halo tiling.
-  CUDA uses the native convolution reference backend for strict tile equivalence;
-  reported timing includes this conservative precision choice.
-  SRAM figures are analytical fused INT8-weight/FP16-buffer estimates; execution
-  is floating point and full intermediates remain in DRAM.
-- **Streaming:** immutable completed snapshots in a single-writer CPython ring.
-  Cached replay emulates staged arrival and reports actual cache timestamps.
-- **Cockpit:** six synchronized camera panels, source/episode/chunk controls,
-  playback at native cadence, NFE, teacher-forced or autoregressive context,
-  tiled decoder, telemetry. Chase-view tap-to-drive is disabled for front targets.
-
-For Apple Silicon, `configs/apple.json` selects the smaller 384x8 model and FP16
-with finite-difference JVP. MPS uses exact mean pooling, linear unpatchify and
-FP32 attention reductions to avoid unsupported or unstable PyTorch 2.5 operations.
-Checkpoints contain EMA inference weights/configuration; optimizer resume is not
-implemented. Native 10 Hz recordings are not relabelled as 36 Hz observations.
-
-The Waymo Perception v2 camera reader is retained as an optional, fixture-tested
-adapter. It needs authorized official downloads; **real Waymo data has not been
-used or validated**. The current run intentionally uses PandaSet only.
-
-## Verification
+After quality training and held-out review, render the **single real-data GIF**:
 
 ```bash
-uv sync --locked --extra dev --extra realdata
+uv run --no-sync python render_style_demo.py
+```
+
+It writes an internal 32-frame comparison under `outputs/demo/`. Publish one GIF
+only after inspecting learned results. The README intentionally has no demo media
+until that evidence exists.
+
+## Implementation and verification
+
+See [architecture and style design](docs/IMPLEMENTATION.md). The shared frozen
+DINOv2-S/14 encoder produces 6×32 tokens with calibrated rays; the separate planner
+predicts 12 ego waypoints. Frozen TAESD provides full/halo-tiled decoding. Streaming
+uses immutable completed camera snapshots and timestamp-derived context ages.
+
+```bash
 uv run --no-sync pytest -q
 RUN_PRETRAINED=1 uv run --no-sync pytest -q -m pretrained
 node --check app/static/app.js
 ```
 
-Tests cover native camera/pose formats, calibration scaling, source timing,
-missing-camera masks, frozen scene splits, train/test leakage, tile equivalence,
-Mean-Flow derivatives and gradients, ring freshness, waypoint math, safe caches,
-HTTP validation and closed-loop state. CI tests the source in a clean checkout.
+Tests cover import geometry, native timing, scene separation, Mean-Flow gradients,
+LoRA JVP/freezing/merge/restore, planner isolation, temporal shaders, cache integrity,
+request validation and closed-loop switching. Fixtures are for software tests and
+are never presented as real-data model demonstrations.
 
-## Data provenance and licenses
+## Attribution
 
-PandaSet was created by Hesai and Scale AI. Cite [PandaSet: Advanced Sensor Suite
-Dataset for Autonomous Driving](https://arxiv.org/abs/2112.12610). The source format
-is documented by the [official devkit](https://github.com/scaleapi/pandaset-devkit).
-The selective downloader uses the **unofficial** [georghess/PandaSet mirror](https://huggingface.co/datasets/georghess/pandaset),
-which declares CC BY 4.0. The retired `pandaset.org` domain is not used for downloads.
-Source/revision and original author attribution accompany returned evidence.
-
-Third-party dataset/model licenses apply separately from this repository's MIT
-code license. No raw datasets, credentials or model weights are committed to Git.
+PandaSet: Hesai Technology and Scale AI, [paper](https://arxiv.org/abs/2112.12610),
+[official devkit](https://github.com/scaleapi/pandaset-devkit).
+The selective downloader uses the unofficial
+[georghess/PandaSet mirror](https://huggingface.co/datasets/georghess/pandaset),
+which declares CC BY 4.0. Preserve original attribution when distributing derivatives.
 Pretrained models: [DINOv2-S](https://huggingface.co/timm/vit_small_patch14_dinov2.lvd142m)
-and [TAESD](https://huggingface.co/madebyollin/taesd).
+and [TAESD](https://huggingface.co/madebyollin/taesd). Their licenses and dataset terms
+apply separately from this repository's MIT code license.

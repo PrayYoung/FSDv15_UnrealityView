@@ -1,8 +1,8 @@
 """Actual device autocast + finite backward check; small shape, no quality claim."""
 import torch
-from fsd_reality.device import select_device,autocast_for,synchronize
-from fsd_reality.models.meanflow_dit import ConditionalMeanFlowDiT,DiTConfig
-from fsd_reality.objectives import meanflow_loss
+from unrealityview.device import select_device,autocast_for,synchronize
+from unrealityview.models.meanflow_dit import ConditionalMeanFlowDiT,DiTConfig
+from unrealityview.objectives import meanflow_loss
 
 device=select_device()
 model=ConditionalMeanFlowDiT(DiTConfig(hidden_dim=32,depth=4,num_heads=4,latent_shape=(2,4,6))).to(device)

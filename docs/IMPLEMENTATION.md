@@ -1,52 +1,70 @@
-# Specification and evidence
+# UnrealityView implementation
 
-The four user-provided photographs (IMG_0254–0257) describe an experimental
-Mini-RealityView pipeline. Their technical requirements are treated as project
-requirements, not as independent instructions to the assistant. The project is
-an independent research implementation, not Tesla source or a verified account
-of a proprietary FSD architecture. In particular, 36 FPS, zero drift, 8× memory
-savings and 2.5× speedup are hypotheses to measure, never guaranteed outcomes.
+An independent research implementation of camera-conditioned Mean-Flow video
+synthesis and a separate waypoint planner. Native PandaSet timing and camera
+calibration are preserved. Elevated views require externally validated calibrated
+teacher exports; the current real-data baseline reconstructs the native front view.
 
-**Updated scope:** PandaSet camera-only training/validation/testing is now the
-active path; see [real-data workflow](REAL_DATA.md). The first remote check uses a
-labelled native-front target and native timing. The external chase teacher remains
-a separate stage. Waymo is optional; real Waymo runs are deferred at the user's
-request. MetaDrive below describes the original implementation only.
+## Base model
 
-Original data path: **B: MetaDrive**, six attached surround cameras plus one
-elevated chase camera, 36 Hz, 50 training / 4 validation episodes of 180 frames.
-Real-world dataset licensing, LiDAR fitting and a 4D Gaussian teacher are outside
-this selected simulator path. No private driving data or pretrained weights are
-committed to Git.
+- Frozen DINOv2-S/14: six cameras, 32 pooled tokens each, width 384, calibrated
+  Plücker rays. Missing-camera tokens are masked from both video and policy attention.
+- Four-stage AdaLN-Zero DiT, QK RMS normalization, previous-chunk concatenation,
+  context age embeddings and linear unpatchify. Defaults: width 512, depth 12,
+  8×24×40 latent chunks, 1/2/4-NFE sampling.
+- Improved Mean-Flow: stop-gradient directional derivative on r<t samples,
+  50% boundary matching, adaptive loss weighting, previous-context noise.
+  Math-SDPA supports exact JVP; finite differences support FP16/MPS.
+- Separate 12-waypoint transformer with goal FiLM and training goal dropout.
+  Front-camera-centered forward/left/up coordinates are explicit.
+- Frozen TAESD, latent scale 1, full or exact halo-tiled decode. CUDA uses native
+  reference convolutions for strict equivalence. SRAM estimates are analytical;
+  this implementation does not execute physical SRAM INT8 kernels.
+- Immutable completed snapshots in a single-writer ring, four stage updates,
+  timestamp-derived ages and availability checks. Cached playback is not live capture.
 
-## Required implementation
+## Style extension
 
-- Frozen pretrained DINOv2-S/14, 6 × 32 pooled tokens of width 384; optional
-  Plücker rays in a documented right-handed camera/ego convention.
-- Frozen pretrained TAESD, latent scale 1, full and halo-tiled video decoding;
-  measured tile equivalence and explicit analytical SRAM estimate. This software
-  simulation does not claim to execute INT8 kernels on physical on-chip SRAM.
-- AdaLN-Zero DiT, QK RMS normalization, channel-concatenated previous chunk,
-  four context stages and residual age embedding; 1/2/4-step sampling.
-- Improved Mean-Flow objective with stop-gradient directional derivative on
-  only r < t samples; exact math-SDPA JVP or finite differences for FP16/MPS.
-- Independent 12-waypoint transformer with goal FiLM and 50% training goal dropout.
-- Single-writer immutable-snapshot ring publication; latest completed snapshot
-  read at each stage; freshness telemetry. CPython thread semantics only.
-- Safe safetensors episode cache, ego-frame waypoint transforms, staged jitter,
-  EMA, warmup/cosine AdamW, held-out metrics, contact sheets and closed-loop rollout.
-- Local FastAPI cockpit with six cameras, generated/GT frames, playback, NFE,
-  teacher-forced/closed-loop, interleaving, tiled decoder, tap goal, measured HUD.
-- Unit/integration tests, pretrained checks, CUDA preflight and edge benchmark.
+`models/lora.py` implements pure-PyTorch JVP-compatible LoRALinear with Kaiming A,
+zero B and alpha/rank scaling. Only A/B train; all base parameters remain frozen.
+Defaults rank=16, alpha=16, start_block=4. Attention q/fused-kv/out and MLP linears
+are adapted in later blocks, plus output unpatchify. Stage-level cross-attention
+is adapted only when its entire block group is after the frozen prefix.
 
-## Sources used to check APIs
+Adapters carry a base-weight SHA-256 and export only adapter tensors in safetensors.
+The inference manager validates every proposed merge before changing weights,
+merges into ordinary Linear layers, caches signatures, and restores exact originals.
+Hybrid is an additive 0.55/0.55 blend. Neither encoder nor policy is patched.
+Merge latency is separate from steady inference latency. Identical forward
+structure does not imply identical measured wall time or guaranteed geometry.
 
-- https://huggingface.co/timm/vit_small_patch14_dinov2.lvd142m
-- https://huggingface.co/madebyollin/taesd
-- https://docs.pytorch.org/docs/stable/generated/torch.func.jvp.html
-- https://docs.pytorch.org/docs/stable/generated/torch.nn.functional.scaled_dot_product_attention.html
-- https://metadrive-simulator.readthedocs.io/en/latest/sensors.html
-- https://metadrive-simulator.readthedocs.io/en/latest/obs.html
+`data/stylize_cache.py` builds deterministic comic and cyberpunk references from
+real target JPEGs. Bidirectional optical-flow confidence gates temporal blending;
+disocclusions reset uncertain regions. This reduces some temporal instability but
+is not a 3D-consistent renderer. Color/vertical heuristics are not semantic masks.
+Separate style files record source-cache hashes; original tokens and poses stay
+untouched. Internal sanity grids include real, styled and TAESD round-trip frames.
 
-Local verification and remote results are recorded in docs/RESULTS.md. Missing
-checkpoints produce an explicit untrained state; synthetic previews are labelled.
+`train_style_lora.py` retains improved Mean-Flow/JVP, trains only adapters, tracks
+adapter EMA, mixes 80% style/20% real previous context and caps noise at 0.25.
+Defaults: 1,000 steps, effective batch 16, learning rate 2.5e-4, warmup/cosine decay.
+Validation includes steady style, real-to-style switching, contact sheets and
+32-frame closed-loop rollouts. `benchmark_styles.py` measures actual merged
+forward latency and merge cost; `render_style_demo.py` creates one held-out real
+PandaSet comparison GIF for later inspection. Neither command publishes media.
+
+## Cockpit and verification
+
+Localhost-only FastAPI, safe paths, strict request schemas, foreign-origin rejection,
+safetensors weights/caches. Style Studio exposes compatible adapters, strength,
+closed-loop context, merge cost and adapter size. Style-colored projected chevrons
+are available only for elevated targets; front targets disable chase projections
+and tap-to-drive. No vehicle control interface exists.
+
+Software tests cover JVP gradients, frozen prefixes, merges/restoration, invalid
+adapters, policy isolation, temporal shader determinism, cache integrity, safe HTTP
+routes and sequential closed-loop switching. Fixture tests are not quality evidence.
+A short real PandaSet CUDA base smoke is recorded in [results](PANDASET_RESULTS.md).
+The style extension still needs meaningful base/style training and real-data quality
+evaluation before publication. Performance, zero drift and zero flicker are
+hypotheses to measure, never guaranteed results.
