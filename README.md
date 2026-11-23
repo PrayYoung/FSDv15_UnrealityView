@@ -5,7 +5,9 @@ switchable visual styles. **PandaSet cameras are the active training and testing
 source.** This is an independent research prototype with no vehicle control.
 
 The camera-only import, Mean-Flow training, held-out evaluation and CUDA smoke
-pipeline work. Only short smoke checkpoints exist, and predictions remain noise-like.
+pipeline work. A real PandaSet 5,000-step pilot completed, but failed the quality
+gate: final one-step PSNR was 10.02 dB against a 15 dB requirement, with
+texture-like prediction artifacts. See the [results, diagnosis and proposed changes](docs/results/pandaset-pilot-5000/README.md).
 Comic/cyberpunk adapters, real-data stop/resume and Style Studio are implemented
 and tested, but quality base and style training are still pending. No successful styled model result is claimed.
 
@@ -36,7 +38,9 @@ Defaults are `outputs/real_dataset`, `outputs/real_train/checkpoint`,
 
 ## PandaSet training
 
-The first quality campaign follows the [5,000-step pilot plan](docs/TRAINING_PLAN.md).
+The first quality campaign completed the [5,000-step pilot plan](docs/TRAINING_PLAN.md).
+[Its negative result and next diagnostic steps](docs/results/pandaset-pilot-5000/README.md)
+are recorded without claiming a successful demo.
 
 Keep large camera files and encoded caches on the remote GPU's durable storage.
 No dataset, weights, credentials or personal cloud runtime profiles belong in Git.

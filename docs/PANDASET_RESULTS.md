@@ -1,5 +1,9 @@
 # PandaSet pipeline verification
 
+This page preserves the earlier 30-step smoke baseline. The newer full-width
+5,000-step pilot completed but failed its quality gate; see
+[results, diagnosis and proposed changes](results/pandaset-pilot-5000/README.md).
+
 A camera-only CUDA smoke run completed on an RTX 3090 with PyTorch 2.5.1/CUDA 12.4.
 This report contains aggregate technical evidence only. The model is a native-front
 reconstruction baseline; 30 optimizer steps leave predictions noise-like.
