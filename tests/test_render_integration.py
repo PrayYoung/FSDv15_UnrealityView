@@ -42,3 +42,12 @@ def test_model_and_ground_truth_routes_and_closed_loop_state(tmp_path,monkeypatc
     assert second.status_code==200,second.text
     assert client.post("/api/render",json={**closed,"chunk":3,"nfe":2}).status_code==409
     assert client.post("/api/render",json={**base,"chunk":5}).status_code==422
+    # A real-data front baseline must preserve native cadence and never apply
+    # the elevated-camera raycast or projected chase waypoints to front images.
+    from fsd_reality.data.cache import atomic_json
+    atomic_json(directory/"metadata.json",{"frames":32,"source":"pandaset","fps":10.,"target_view":"native_front"})
+    native=client.post("/api/render",json=base)
+    assert native.status_code==200
+    assert native.json()["fps"]==10 and native.json()["target_view"]=="native_front"
+    assert native.json()["projected_waypoints"]==[]
+    assert client.post("/api/render",json={**base,"goal":{"u":180.,"v":110.}}).status_code==422

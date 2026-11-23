@@ -118,6 +118,8 @@ sampling is available but PandaSet alone is the active experiment.
   with 50% endpoint dropout. PandaSet's reference is explicitly the front-camera
   center with forward/left/up axes, not an assumed undocumented IMU origin.
 - **Decoder:** frozen TAESD, latent scale 1, module-wise exact halo tiling.
+  CUDA uses the native convolution reference backend for strict tile equivalence;
+  reported timing includes this conservative precision choice.
   SRAM figures are analytical fused INT8-weight/FP16-buffer estimates; execution
   is floating point and full intermediates remain in DRAM.
 - **Streaming:** immutable completed snapshots in a single-writer CPython ring.

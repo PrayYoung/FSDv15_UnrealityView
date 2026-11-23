@@ -1,0 +1,1 @@
+{"python": "3.11.9 (main, Apr 19 2024, 16:48:06) [GCC 11.2.0]", "torch": "2.5.1+cu124", "cuda": "12.4", "device": "NVIDIA GeForce RTX 3090", "bf16": true, "status": "CUDA_PREFLIGHT_OK"}

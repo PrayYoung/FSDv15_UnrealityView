@@ -10,13 +10,14 @@ LATENT_SCALE = 1.0
 def precise_convolutions(function):
     """FP32 convolution must not silently become TF32 on CUDA.
 
-    Different tile shapes can select different TF32 cuDNN algorithms. Their
-    accumulated errors violate the full-vs-tiled FP32 equivalence contract.
-    This does not change explicit FP16/BF16 autocast execution.
+    Different tile shapes can select different TF32 cuDNN algorithms. Use the
+    native convolution reference backend on CUDA for this exactness prototype.
+    Explicit FP16/BF16 autocast is retained, and the outer flags are restored.
+    Benchmark results include this conservative backend choice.
     """
     @wraps(function)
     def wrapped(self,tensor,*args,**kwargs):
-        context=torch.backends.cudnn.flags(allow_tf32=False) if tensor.device.type=="cuda" else nullcontext()
+        context=torch.backends.cudnn.flags(enabled=False,allow_tf32=False) if tensor.device.type=="cuda" else nullcontext()
         with context:return function(self,tensor,*args,**kwargs)
     return wrapped
 
