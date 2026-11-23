@@ -85,6 +85,21 @@ reading, restricts extraction paths, bounds single-member size and total extract
 bytes, and truncates image/pose/timestamp arrays consistently to the requested
 frame count. It never invokes code from the downloaded dataset.
 
+Downloads use four independent sequence workers by default (`--workers 1–8`),
+each with its own HTTP/ZIP seek cursor. Per-sequence ledgers checkpoint validated
+members every 32 files, with SHA-256 hashes of the actual saved bytes. An interrupted
+fetch reuses only matching files and pins the original mirror revision and scene
+plan. `--no-resume` forces a re-download of that same plan; changed frame counts or
+scene assignments require a fresh destination. The aggregate source-byte budget
+is checked before extraction, and a complete manifest is published only after all
+sequences succeed. No LiDAR or pickle entries are accepted.
+
+A small live transport probe (four scenes, four frames per camera, 168 members,
+18.9 MiB of source data) measured 130.0 seconds with one worker versus 31.5 seconds
+with four, a 4.1× speedup on that connection. This is a downloader microbenchmark,
+not a promise for another host or the full dataset. Running job snapshots are not
+hot-patched; the optimization applies to new downloads.
+
 Native files: `.cache/pandaset_native/`. Encoded cache: `.cache/real_dataset/`.
 Evidence: `outputs/pandaset_smoke/`. The runner synchronizes only outputs by
 configuration. Large data stays on the GPU host until the runner destroys it;
