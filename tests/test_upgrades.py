@@ -118,8 +118,11 @@ def test_base_trainer_resume_matches_uninterrupted_and_keeps_best(tmp_path,monke
     path=tmp_path/'config.json';path.write_text(json.dumps(config))
     monkeypatch.setattr(trainer,'DrivingPolicyHead',lambda:DrivingPolicyHead(hidden_dim=16,depth=1,num_heads=4))
     monkeypatch.setattr(trainer,'PretrainedTAESD',torch.nn.Identity)
-    monkeypatch.setattr(trainer,'evaluate_models',lambda *a,**k:{'nfe':{'1':{'psnr_db':10.}}})
-    args=SimpleNamespace(config=path,steps=None,batch_size=None,device='cpu',output=tmp_path/'full',data=data)
+    evaluated=[]
+    def evaluate_fixture(*a,**k):
+        evaluated.append(a[5].name);return {'nfe':{'1':{'psnr_db':10.}}}
+    monkeypatch.setattr(trainer,'evaluate_models',evaluate_fixture)
+    args=SimpleNamespace(config=path,steps=None,batch_size=None,device='cpu',output=tmp_path/'full',data=data,evaluate_initial=True)
     trainer.train(args)
     expected,policy,_=load_checkpoint(args.output/'checkpoint')
     args.output=tmp_path/'resumed';args.stop_after=1;trainer.train(args)
@@ -127,7 +130,9 @@ def test_base_trainer_resume_matches_uninterrupted_and_keeps_best(tmp_path,monke
     actual,actual_policy,config=load_checkpoint(args.output/'checkpoint')
     assert config['step']==2 and model_fingerprint(actual)==model_fingerprint(expected)
     assert model_fingerprint(actual_policy)==model_fingerprint(policy)
-    assert json.loads((args.output/'checkpoint_best/config.json').read_text())['step']==1
+    best=json.loads((args.output/'checkpoint_best/config.json').read_text())
+    assert best['step']==1 and best['target_views']==['elevated_chase']
+    assert evaluated.count('eval_000000')==2  # Fresh runs only; never rerun baseline on resume.
 
 
 def test_server_cli_paths_and_configured_origin(tmp_path,monkeypatch):

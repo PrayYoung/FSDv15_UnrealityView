@@ -36,6 +36,8 @@ Defaults are `outputs/real_dataset`, `outputs/real_train/checkpoint`,
 
 ## PandaSet training
 
+The first quality campaign follows the [5,000-step pilot plan](docs/TRAINING_PLAN.md).
+
 Keep large camera files and encoded caches on the remote GPU's durable storage.
 No dataset, weights, credentials or personal cloud runtime profiles belong in Git.
 The selective downloader can fetch camera JPGs and calibration/pose/timestamp JSONs

@@ -69,6 +69,8 @@ def train(args):
         start_step=state["step"];best_psnr=state["best_psnr"]
     if start_step>=config["steps"]:raise ValueError("Resume checkpoint already reached the configured total steps")
     iterator=iter(loader)
+    if getattr(args,"evaluate_initial",False) and not resume:
+        evaluate_models(ema_model,ema_policy,decoder,validation,device,output/"eval_000000",config["eval_items"])
     start=time.monotonic()
     metrics_file=output/"train_metrics.jsonl"
     stop_at=min(config["steps"],getattr(args,"stop_after",None) or config["steps"])
@@ -121,7 +123,8 @@ def train(args):
                 best_psnr=score
                 save_checkpoint(output/"checkpoint_best",ema_model,ema_policy,step,
                     {"training_config":config,"weights":"EMA","data_source":data_source,"data_provenance":provenance,
-                     "validation_psnr_db":score})
+                     "validation_psnr_db":score,
+                     "target_views":sorted(set(m.get("target_view","elevated_chase") for m in train_data.metadata))})
             save_training_state(output/"checkpoint",dict(step=step,config=config,data_fingerprints=fingerprints,
                 model=model.state_dict(),policy=policy.state_dict(),ema_model=ema_model.state_dict(),
                 ema_policy=ema_policy.state_dict(),optimizer=optimizer.state_dict(),scaler=scaler.state_dict(),
@@ -141,6 +144,7 @@ def main():
     p.add_argument("--output",default="outputs/real_train")
     p.add_argument("--device",default="auto")
     p.add_argument("--stop-after",type=int,help="Stop safely at this optimizer step without changing the planned schedule")
+    p.add_argument("--evaluate-initial",action="store_true",help="Record a fixed-noise validation baseline before training")
     p.add_argument("--resume",help="Safe training-state checkpoint directory; retain the original total-step schedule")
     p.add_argument("--steps",type=int)
     p.add_argument("--batch-size",type=int)
