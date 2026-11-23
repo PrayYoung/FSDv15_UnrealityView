@@ -1,8 +1,24 @@
 """TAESD wrapper. INT8 SRAM figures are analytical, execution remains floating point."""
 import torch
 from torch import nn
+from contextlib import nullcontext
+from functools import wraps
 
 LATENT_SCALE = 1.0
+
+
+def precise_convolutions(function):
+    """FP32 convolution must not silently become TF32 on CUDA.
+
+    Different tile shapes can select different TF32 cuDNN algorithms. Their
+    accumulated errors violate the full-vs-tiled FP32 equivalence contract.
+    This does not change explicit FP16/BF16 autocast execution.
+    """
+    @wraps(function)
+    def wrapped(self,tensor,*args,**kwargs):
+        context=torch.backends.cudnn.flags(allow_tf32=False) if tensor.device.type=="cuda" else nullcontext()
+        with context:return function(self,tensor,*args,**kwargs)
+    return wrapped
 
 
 class PretrainedTAESD(nn.Module):
@@ -20,6 +36,7 @@ class PretrainedTAESD(nn.Module):
         return self
 
     @torch.no_grad()
+    @precise_convolutions
     def encode(self, video):
         if video.ndim != 5 or video.shape[1] != 3:
             raise ValueError("video must be B,3,T,H,W in [-1,1]")
@@ -30,6 +47,7 @@ class PretrainedTAESD(nn.Module):
         return latents.reshape(b,t,4,*latents.shape[-2:]).permute(0,2,1,3,4).contiguous()
 
     @torch.no_grad()
+    @precise_convolutions
     def decode(self, z):
         if z.ndim != 5 or z.shape[1] != 4:
             raise ValueError("latents must be B,4,T,H,W")
@@ -39,6 +57,7 @@ class PretrainedTAESD(nn.Module):
         return pixels.reshape(b,t,3,h*8,w*8).permute(0,2,1,3,4).contiguous()
 
     @torch.no_grad()
+    @precise_convolutions
     def decode_tiled(self, z, latent_tile=16, latent_halo=8):
         if latent_tile < 1 or latent_halo < 0:
             raise ValueError("tile must be positive and halo nonnegative")

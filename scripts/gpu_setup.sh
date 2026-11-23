@@ -5,4 +5,4 @@ if ! command -v uv >/dev/null 2>&1; then
   sh /tmp/mini-reality-uv-install.sh
 fi
 export PATH="$HOME/.local/bin:$PATH"
-uv sync --locked --extra dev --extra realdata
+timeout --signal=TERM --kill-after=30s 1200 uv sync --locked --extra dev --extra realdata

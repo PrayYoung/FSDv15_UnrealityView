@@ -7,7 +7,13 @@ an independent research implementation, not Tesla source or a verified account
 of a proprietary FSD architecture. In particular, 36 FPS, zero drift, 8× memory
 savings and 2.5× speedup are hypotheses to measure, never guaranteed outcomes.
 
-Selected data path: **B: MetaDrive**, six attached surround cameras plus one
+**Updated scope:** PandaSet camera-only training/validation/testing is now the
+active path; see [real-data workflow](REAL_DATA.md). The first remote check uses a
+labelled native-front target and native timing. The external chase teacher remains
+a separate stage. Waymo is optional; real Waymo runs are deferred at the user's
+request. MetaDrive below describes the original implementation only.
+
+Original data path: **B: MetaDrive**, six attached surround cameras plus one
 elevated chase camera, 36 Hz, 50 training / 4 validation episodes of 180 frames.
 Real-world dataset licensing, LiDAR fitting and a 4D Gaussian teacher are outside
 this selected simulator path. No private driving data or pretrained weights are
