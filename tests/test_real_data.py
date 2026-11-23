@@ -10,6 +10,7 @@ from fsd_reality.data.real_world import PandaSetSequence,WaymoSequence,PANDA_CAM
 from fsd_reality.data.splits import stable_split,validate_split_manifest,audit_cache_splits,assert_unseen_test
 from fsd_reality.data.cache import atomic_json
 from fsd_reality.data.dataset import CachedEpisodeChunkDataset
+from fsd_reality.data.dataset import stage_context
 from fsd_reality.models.mini_uve import MiniUVE
 from fsd_reality.models.blocks import Attention
 from prepare_real_data import cache_manifest
@@ -127,3 +128,14 @@ def test_missing_camera_zero_tokens_and_attention_mask():
     changed=tokens.clone();changed[:,128:160]=10000
     torch.testing.assert_close(before,attn(x,changed,key_mask=valid))
     with pytest.raises(ValueError):encoder(torch.rand(1,6,3,140,224),camera_mask=torch.zeros_like(mask))
+
+
+def test_camera_bundle_completion_prevents_future_peeking():
+    times=torch.arange(30,dtype=torch.float64)/10
+    episode={"uve_tokens":torch.zeros(30,192,384),"timestamps":times,
+             "camera_timestamps":times[:,None].expand(-1,6).clone()}
+    episode["camera_timestamps"][:,3]+=.05
+    ids,ages=stage_context(episode,8,fps=10,jitter=torch.ones(4,dtype=torch.long))
+    assert ids.tolist()==[7,9,11,13]
+    torch.testing.assert_close(ages,torch.full((4,),.05))
+    assert (episode["camera_timestamps"][ids].max(1).values<=times[8+torch.tensor([0,2,4,6])]).all()

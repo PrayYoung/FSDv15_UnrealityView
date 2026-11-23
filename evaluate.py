@@ -5,7 +5,7 @@ from pathlib import Path
 import numpy as np
 import torch
 from fsd_reality.checkpoint import load_checkpoint
-from fsd_reality.data.dataset import CachedEpisodeChunkDataset
+from fsd_reality.data.dataset import CachedEpisodeChunkDataset,stage_context
 from fsd_reality.data.cache import atomic_json
 from fsd_reality.data.splits import assert_unseen_test
 from fsd_reality.device import select_device,autocast_for
@@ -85,10 +85,11 @@ def evaluate_models(model, policy, decoder, dataset, device, output, max_items=8
     gen=torch.Generator(device=device).manual_seed(seed+10000)
     for chunk in range(4):
         start=8+chunk*8
-        ids=(start+torch.tensor([-1,1,3,5])).clamp(max=len(ep["uve_tokens"])-1)
+        ids,rollout_ages=stage_context(ep,start,float(dataset.metadata[0].get("fps",36)))
         context=ep["uve_tokens"][ids][None].float().to(device)
         with autocast_for(device):
-            previous=model.sample_chunk(previous,context,1,noise=torch.randn(previous.shape,device=device,generator=gen))
+            previous=model.sample_chunk(previous,context,1,stage_ages=rollout_ages[None].to(device),
+                                        noise=torch.randn(previous.shape,device=device,generator=gen))
         pixels=decoder.decode(previous.float())
         videos.append(pixels[0])
         gt=ep["chase_latents"][start:start+8].permute(1,0,2,3)[None].float().to(device)

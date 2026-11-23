@@ -175,6 +175,7 @@ def render(req:RenderRequest):
         target_view=metadata.get("target_view","elevated_chase")
         camera_names=metadata.get("camera_names",("front_left","front","front_right","rear_left","rear","rear_right"))
         times=episode.get("timestamps",torch.arange(len(episode["uve_tokens"]),dtype=torch.float64)/fps)
+        completed=episode["camera_timestamps"].max(1).values if "camera_timestamps" in episode else times
         available=episode.get("camera_mask",torch.ones(len(times),6,dtype=torch.bool))[start].tolist()
         if req.goal is not None and target_view!="elevated_chase":
             raise HTTPException(422,"Tap-to-drive raycasting requires an elevated chase target; unavailable in the native-front baseline")
@@ -199,17 +200,19 @@ def render(req:RenderRequest):
                 raise HTTPException(409,"Closed-loop playback must begin at chunk 1 and advance sequentially. Reset playback.")
             previous=old[2].to(device)
         ring=UVERingBuffer()
-        first=start-1
-        ring.publish(episode["uve_tokens"][first][None].float().to(device),ts=float(times[first]),frame_id=first)
+        first=min(start-1,int(torch.searchsorted(completed,times[start],right=True))-1)
+        ring.publish(episode["uve_tokens"][first][None].float().to(device),ts=float(completed[first]),frame_id=first)
         engine=RealityViewStreamingEngine(model,ring)
         stage_current=[float(times[start])]
         newest_frame=[first]
         def stage_hook(stage):
-            frame=max(newest_frame[0],min(start+stage*2-1,len(episode["uve_tokens"])-1))
+            anchor=min(start+stage*2,len(times)-1)
+            latest=int(torch.searchsorted(completed,times[anchor],right=True))-1
+            frame=max(newest_frame[0],min(start+stage*2-1,latest))
             newest_frame[0]=frame
             stage_current[0]=max(stage_current[0],float(times[min(start+stage*2,len(times)-1)]))
             if req.interleaving:
-                ring.publish(episode["uve_tokens"][frame][None].float().to(device),ts=float(times[frame]),frame_id=frame)
+                ring.publish(episode["uve_tokens"][frame][None].float().to(device),ts=float(completed[frame]),frame_id=frame)
         generator=torch.Generator(device=device).manual_seed(req.seed+req.chunk)
         noise=torch.randn(previous.shape,device=device,generator=generator)
         initial_tokens=episode["uve_tokens"][first][None].float().to(device)

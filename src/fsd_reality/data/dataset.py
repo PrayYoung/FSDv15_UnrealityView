@@ -7,6 +7,21 @@ from .cache import load_episode
 from .splits import audit_cache_splits
 
 
+def stage_context(episode,start,fps=36,jitter=None):
+    count=len(episode["uve_tokens"])
+    times=episode.get("timestamps",torch.arange(count,dtype=torch.float64)/fps)
+    complete=episode["camera_timestamps"].max(1).values if "camera_timestamps" in episode else times
+    jitter=torch.zeros(4,dtype=torch.long) if jitter is None else jitter
+    anchors=start+torch.tensor([0,2,4,6])
+    requested=(start+torch.tensor([-1,1,3,5])+jitter).clamp(0,count-1)
+    # A six-camera snapshot cannot be used until its LAST camera was captured.
+    # This also prevents +1 jitter from exposing cameras recorded after an anchor.
+    latest=torch.searchsorted(complete.contiguous(),times[anchors],right=True)-1
+    if (latest<0).any():raise ValueError("No completed camera snapshot at stage anchor")
+    ids=torch.minimum(requested,latest)
+    return ids,(times[anchors]-complete[ids]).float()
+
+
 class CachedEpisodeChunkDataset(Dataset):
     def __init__(self, root, split="train", chunk_size=8, jitter=True, seed=42):
         self.root = Path(root)
@@ -30,14 +45,12 @@ class CachedEpisodeChunkDataset(Dataset):
         ep,start = self.index[index]
         e = self.episodes[ep]
         jitter = torch.randint(-1,2,(4,)) if self.jitter else torch.zeros(4,dtype=torch.long)
-        ids = (start+torch.tensor([-1,1,3,5])+jitter).clamp(0,len(e["uve_tokens"])-1)
-        stage_times = start+torch.tensor([0,2,4,6])
         fps=float(self.metadata[ep].get("fps",36))
-        timestamps=e.get("timestamps",torch.arange(len(e["uve_tokens"]),dtype=torch.float64)/fps)
+        ids,ages=stage_context(e,start,fps,jitter)
         return {"z_prev":e["chase_latents"][start-self.chunk_size:start].permute(1,0,2,3).float(),
                 "z0":e["chase_latents"][start:start+self.chunk_size].permute(1,0,2,3).float(),
                 "uve_tokens":e["uve_tokens"][ids].float(),
-                "stage_ages":(timestamps[stage_times]-timestamps[ids]).float(),
+                "stage_ages":ages,
                 "waypoints":ego_waypoints(e["ego_states"].float(),start),
                 "episode":ep,"start":start,"stage_frames":ids,"fps":fps,
                 "source":self.metadata[ep].get("source","unknown"),
