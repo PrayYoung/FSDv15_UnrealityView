@@ -5,13 +5,15 @@ import torch.nn.functional as F
 
 
 class TimeEmbed(nn.Module):
-    def __init__(self, dim):
+    def __init__(self, dim, scale=10.0):
         super().__init__()
+        self.scale = float(scale)
+        if not math.isfinite(self.scale) or self.scale <= 0:raise ValueError("Time scale must be finite and positive")
         self.net = nn.Sequential(nn.Linear(64,dim),nn.SiLU(),nn.Linear(dim,dim))
 
     def forward(self, t):
         freq = torch.exp(-math.log(10000)*torch.arange(32,device=t.device,dtype=torch.float32)/31)
-        phase = t.float().reshape(-1,1)*freq[None]*1000
+        phase = t.float().reshape(-1,1)*freq[None]*self.scale
         return self.net(torch.cat((phase.cos(),phase.sin()),-1).to(self.net[0].weight.dtype))
 
 

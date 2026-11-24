@@ -25,6 +25,7 @@ def evaluate_models(model, policy, decoder, dataset, device, output, max_items=8
     model.eval();policy.eval()
     output=Path(output);output.mkdir(parents=True,exist_ok=True)
     results={str(n):[] for n in (1,2,4)}
+    baselines={"taesd_roundtrip":[],"prev_chunk_copy":[]}
     from collections import defaultdict,deque
     groups=defaultdict(deque)
     for index,(episode,_) in enumerate(dataset.index):groups[dataset.metadata[episode].get("source","unknown")].append(index)
@@ -45,6 +46,9 @@ def evaluate_models(model, policy, decoder, dataset, device, output, max_items=8
         arrays=[np.array(Image.open(raw/f"{item['start']+j:05d}.jpg").convert("RGB")) for j in range(8)]
         truth=torch.from_numpy(np.stack(arrays)).permute(3,0,1,2)[None].to(device).float()/127.5-1
         reconstruction=decoder.decode(target)
+        baselines["taesd_roundtrip"].append(pixel_metrics(reconstruction,truth))
+        baselines["prev_chunk_copy"].append({**pixel_metrics(decoder.decode(previous),truth),
+            "latent_l1":(previous-target).abs().mean().item()})
         gen=torch.Generator(device=device).manual_seed(seed+i)
         noise=torch.randn(previous.shape,device=device,generator=gen)
         predictions={}
@@ -77,6 +81,9 @@ def evaluate_models(model, policy, decoder, dataset, device, output, max_items=8
             "by_dataset":by_source,"target_views":sorted(set(m.get("target_view","elevated_chase") for m in dataset.metadata)),
             "pixel_target":"cached reference JPEG (native_front baseline or declared chase teacher); pixels [-1,1]",
             "note":"Offline video rollout; not a vehicle-control or safety benchmark"}
+    report.update({name:{key:float(np.mean([row[key] for row in rows])) for key in rows[0]}
+                   for name,rows in baselines.items()})
+    report["baseline_note"]="TAESD round trip is an empirical codec reference, not a mathematical PSNR upper bound"
     atomic_json(output/"metrics.json",report)
     # Four consecutive 8-frame chunks, never reseeding previous with GT.
     ep=dataset.episodes[0]

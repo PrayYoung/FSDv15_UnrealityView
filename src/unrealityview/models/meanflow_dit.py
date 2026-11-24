@@ -16,6 +16,7 @@ class DiTConfig:
     context_dim: int = 384
     stages: int = 4
     cross_attention: str = "block"
+    time_scale: float = 10.0
 
     def __post_init__(self):
         if self.cross_attention not in ("block","stage"):raise ValueError("Unknown cross-attention architecture")
@@ -37,15 +38,15 @@ class ConditionalMeanFlowDiT(nn.Module):
         self.grid = tuple(s//p for s,p in zip(c.latent_shape,c.patch_size))
         self.patch = nn.Conv3d(c.latent_channels*2,c.hidden_dim,c.patch_size,c.patch_size)
         self.position = nn.Parameter(torch.randn(1,self.grid[0]*self.grid[1]*self.grid[2],c.hidden_dim)*.02)
-        self.time = TimeEmbed(c.hidden_dim)
-        self.interval = TimeEmbed(c.hidden_dim)
+        self.time = TimeEmbed(c.hidden_dim,scale=c.time_scale)
+        self.interval = TimeEmbed(c.hidden_dim,scale=c.time_scale)
         self.blocks = nn.ModuleList([AdaLNBlock(c.hidden_dim,c.num_heads,
                              c.context_dim if c.cross_attention=="block" else None) for _ in range(c.depth)])
         if c.cross_attention=="block":
-            self.age_embed=TimeEmbed(c.context_dim)
+            self.age_embed=TimeEmbed(c.context_dim,scale=c.time_scale)
         else:
             # Version-1 checkpoints remain readable with their original architecture.
-            self.age = TimeEmbed(c.hidden_dim)
+            self.age = TimeEmbed(c.hidden_dim,scale=c.time_scale)
             self.cross = nn.ModuleList([Attention(c.hidden_dim,c.num_heads,c.context_dim) for _ in range(c.stages)])
             self.cross_norm = nn.ModuleList([nn.LayerNorm(c.hidden_dim) for _ in range(c.stages)])
         self.final_norm = nn.LayerNorm(c.hidden_dim,elementwise_affine=False)

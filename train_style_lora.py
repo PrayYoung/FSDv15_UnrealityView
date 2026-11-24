@@ -1,3 +1,4 @@
+from unrealityview.styles import validate_style_slug
 """Train only video-style adapters. A trained base is needed for meaningful output."""
 import argparse
 import json
@@ -133,7 +134,7 @@ def train(args):
             fields={k:item[k].to(device,non_blocking=device.type=="cuda") for k in ("z0","z_prev","uve_tokens","stage_ages")}
             with autocast_for(device):
                 loss,_=meanflow_loss(model,fields["z0"],fields["z_prev"],fields["uve_tokens"],fields["stage_ages"],
-                                    fm_ratio=.5,prev_chunk_noise_std_max=.25,jvp_method="auto")
+                                    prev_chunk_noise_std_max=.25,jvp_method="auto")
             if not torch.isfinite(loss):raise RuntimeError("Nonfinite adapter loss")
             scaler.scale(loss/args.grad_accum).backward();loss_sum+=float(loss.detach())/args.grad_accum
         scaler.unscale_(optimizer);norm=torch.nn.utils.clip_grad_norm_(params,1.)
@@ -173,7 +174,7 @@ def train(args):
 def main():
     p=argparse.ArgumentParser(description=__doc__)
     p.add_argument("--base",default="outputs/real_train/checkpoint");p.add_argument("--data",default="outputs/real_dataset")
-    p.add_argument("--styles-data",default="outputs/styles");p.add_argument("--style",choices=("comic","cyberpunk"),required=True)
+    p.add_argument("--styles-data",default="outputs/styles");p.add_argument("--style",type=validate_style_slug,required=True)
     p.add_argument("--output",required=True);p.add_argument("--device",default="auto")
     p.add_argument("--steps",type=int,default=1000);p.add_argument("--batch-size",type=int,default=8);p.add_argument("--grad-accum",type=int,default=2)
     p.add_argument("--rank",type=int,default=16);p.add_argument("--alpha",type=float,default=16.);p.add_argument("--start-block",type=int,default=0)

@@ -64,6 +64,9 @@ Choose the checkpoint using validation scenes. Final testing is a separate
 are split before caching; provenance checks reject train/test overlap.
 [Recorded smoke results](docs/PANDASET_RESULTS.md) establish integration, not quality.
 
+See [v2 fixes and the gated verification protocol](docs/MEANFLOW_V2.md) for the
+implemented stability changes. A successful v2 quality result is not yet claimed.
+
 ## Scaling and resuming
 
 The selective fetcher accepts `--train-count`, `--val-count`, `--test-count`,

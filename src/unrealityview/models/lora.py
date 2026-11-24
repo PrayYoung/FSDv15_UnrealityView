@@ -1,3 +1,4 @@
+from unrealityview.styles import validate_style_slug
 """Small trainable adapters; inference merges deltas into ordinary Linear layers.
 
 Merging has a measurable one-off cost. The merged forward has no additional
@@ -103,7 +104,7 @@ def extract_lora_state_dict(dit):
 
 
 def save_lora(path,dit,style,step,state=None):
-    if style not in ("comic","cyberpunk"):raise ValueError("Unsupported trained style")
+    validate_style_slug(style)
     path=Path(path);path.parent.mkdir(parents=True,exist_ok=True)
     state=extract_lora_state_dict(dit) if state is None else state
     metadata={"format":"unrealityview-lora-v1","style":style,"step":str(step),

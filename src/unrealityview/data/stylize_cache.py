@@ -1,3 +1,4 @@
+from unrealityview.styles import validate_style_slug
 """Deterministic color/ink teachers with optical-flow-based temporal stabilization.
 
 This is a 2D real-video baseline, not a 3D-consistent stylized Gaussian teacher.
@@ -154,7 +155,8 @@ def build_style_cache(base_root,output,styles=STYLES,device="auto",decoder=None)
 
 class StylizedChunkDataset(Dataset):
     def __init__(self,base_root,style_root,style,split="train",real_previous_ratio=.2):
-        if style not in STYLES or not 0<=real_previous_ratio<=1:raise ValueError("Invalid style dataset configuration")
+        validate_style_slug(style)
+        if not 0<=real_previous_ratio<=1:raise ValueError("Invalid style dataset configuration")
         self.base=CachedEpisodeChunkDataset(base_root,split,jitter=split=="train")
         self.real_previous_ratio=real_previous_ratio;self.styles=[];self.directories=[]
         for path,episode in zip(self.base.paths,self.base.episodes):
@@ -176,3 +178,70 @@ class StylizedChunkDataset(Dataset):
         if not use_real:item["z_prev"]=z[start-8:start].permute(1,0,2,3).float()
         item["previous_is_real"]=use_real
         return item
+
+
+@torch.no_grad()
+def import_teacher(base_root,teacher_root,output,style,device='auto',decoder=None):
+    """Import offline RGB renders, never execute a generative model or OpenCV.
+
+    Each teacher episode supplies metadata.json with base_sha256 and frames,
+    plus exactly 00000.png..N-1.png. The fingerprint binds the exported renders
+    to an immutable base tensor file; no pickle format is accepted.
+    """
+    validate_style_slug(style)
+    base_root=Path(base_root).resolve();teacher_root=Path(teacher_root).resolve();output=Path(output).resolve()
+    if output==base_root or base_root in output.parents or output==teacher_root or teacher_root in output.parents:
+        raise ValueError('Keep imported outputs separate from base and teacher inputs')
+    plans=[]
+    for split in ('train','val','test'):
+        if not any((base_root/split).glob('*/episode.safetensors')):continue
+        data=CachedEpisodeChunkDataset(base_root,split,jitter=False)
+        for path,episode,meta in zip(data.paths,data.episodes,data.metadata):
+            source=teacher_root/split/path.parent.name
+            if teacher_root not in source.resolve().parents:raise ValueError('Teacher episode escapes input root')
+            expected=hashlib.sha256(path.read_bytes()).hexdigest()
+            declaration=json.loads((source/'metadata.json').read_text())
+            count=len(episode['chase_latents'])
+            if declaration.get('base_sha256')!=expected or declaration.get('frames')!=count:
+                raise ValueError('Teacher frame count or base fingerprint mismatch')
+            frames=[source/f'{i:05d}.png' for i in range(count)]
+            if set(source.glob('*.png'))!=set(frames):raise ValueError('Teacher PNG inventory mismatch')
+            with Image.open(path.parent/'raw/chase/00000.jpg') as image:size=image.size
+            for frame in frames:
+                if source.resolve() not in frame.resolve().parents:raise ValueError('Teacher frame escapes episode directory')
+                with Image.open(frame) as image:
+                    if image.mode!='RGB' or image.size!=size:raise ValueError('Teacher requires aligned RGB frames at target dimensions')
+                    image.verify()
+            plans.append((split,path,meta,expected,frames,size,declaration))
+    if not plans:raise ValueError('No base episodes to import')
+    device=select_device(device);decoder=PretrainedTAESD().to(device) if decoder is None else decoder
+    # All episodes are validated before any output is published.
+    for split,path,meta,expected,frames,size,declaration in plans:
+        import shutil
+        directory=output/style/split/path.parent.name;directory.mkdir(parents=True,exist_ok=True)
+        (directory/'frames').mkdir(exist_ok=True);latents=[];samples=[];hashes=[]
+        for i,frame in enumerate(frames):
+            with Image.open(frame) as image:styled=image.copy()
+            tensor=torch.from_numpy(np.array(styled)).permute(2,0,1)[None,:,None].float().to(device)/127.5-1
+            z=decoder.encode(tensor);latents.append(z[0,:,0].half().cpu())
+            shutil.copyfile(frame,directory/'frames'/frame.name)
+            hashes.append(hashlib.sha256(frame.read_bytes()).hexdigest())
+            if i in (0,len(frames)//2,len(frames)-1):
+                with Image.open(path.parent/'raw/chase'/f'{i:05d}.jpg') as image:base=image.convert('RGB')
+                rgb=decoder.decode(z.float())[0,:,0].float().cpu().clamp(-1,1)
+                decoded=Image.fromarray(np.rint((rgb.permute(1,2,0).numpy()+1)*127.5).astype(np.uint8))
+                samples.append((base,styled,decoded))
+        stacked=torch.stack(latents).contiguous()
+        if not torch.isfinite(stacked).all():raise ValueError('Nonfinite teacher encoding')
+        temporary=directory/'style.safetensors.tmp'
+        save_file({'style_latents':stacked},str(temporary),metadata={'format':'unrealityview-style-cache-v1'})
+        temporary.replace(directory/'style.safetensors')
+        atomic_json(directory/'metadata.json',dict(style=style,source_id=meta.get('source_id'),split=split,
+            base_sha256=expected,frames=len(frames),teacher='external RGB teacher import',
+            teacher_frame_sha256=hashes,target_view=meta.get('target_view'),fps=meta.get('fps'),
+            limitation='External appearance renders; temporal and geometric consistency require review'))
+        w,h=size;grid=Image.new('RGB',(len(samples)*w,3*(h+24)),'#111820');draw=ImageDraw.Draw(grid)
+        for col,sample in enumerate(samples):
+            for row,(label,image) in enumerate(zip(('Real reference','External teacher','TAESD round trip'),sample)):
+                y=row*(h+24);draw.text((col*w+7,y+6),label,fill='white');grid.paste(image,(col*w,y+24))
+        grid.save(directory/'sanity.png')

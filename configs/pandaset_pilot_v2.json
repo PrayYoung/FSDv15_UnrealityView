@@ -1,0 +1,27 @@
+{
+  "dit": {
+    "hidden_dim": 512,
+    "depth": 12,
+    "num_heads": 8,
+    "cross_attention": "block",
+    "time_scale": 10.0
+  },
+  "steps": 20000,
+  "batch_size": 16,
+  "grad_accum": 1,
+  "learning_rate": 0.0003,
+  "warmup_steps": 500,
+  "ema_decay": 0.995,
+  "eval_every": 500,
+  "eval_items": 40,
+  "seed": 42,
+  "jvp_method": "auto",
+  "policy_weight": 0.0,
+  "balance_sources": true,
+  "fm_ratio": 0.75,
+  "adaptive_p": 1.0,
+  "adaptive_c": 0.01,
+  "time_sampling": "logit_normal",
+  "jvp_warmup_steps": 300,
+  "eval_raw_comparison": true
+}

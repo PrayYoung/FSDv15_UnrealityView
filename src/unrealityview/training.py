@@ -106,3 +106,25 @@ def cache_fingerprint(dataset):
         digest.update(hashlib.sha256(path.read_bytes()).digest())
         digest.update(path.with_name('metadata.json').read_bytes())
     return digest.hexdigest()
+
+
+def clip_training_gradients(model, policy, max_norm=1.):
+    """Independent heads must not rescale each other's updates."""
+    dit=torch.nn.utils.clip_grad_norm_(model.parameters(),max_norm)
+    planner=torch.nn.utils.clip_grad_norm_(policy.parameters(),max_norm)
+    if not torch.isfinite(dit) or not torch.isfinite(planner):
+        raise RuntimeError('Nonfinite gradients')
+    return dict(dit_grad_norm=float(dit),policy_grad_norm=float(planner),
+                dit_clipped=bool(dit>max_norm),policy_clipped=bool(planner>max_norm))
+
+
+def initialize_weights(model,policy,directory):
+    """Weight transfer only; caller creates fresh optimizer, EMA, sampler and RNG."""
+    from .checkpoint import load_checkpoint
+    source,source_policy,config=load_checkpoint(directory,'cpu')
+    before=source.config.to_dict();after=model.config.to_dict()
+    if {k:v for k,v in before.items() if k!='time_scale'}!={k:v for k,v in after.items() if k!='time_scale'}:
+        raise ValueError('Warm-start architecture mismatch')
+    model.load_state_dict(source.state_dict(),strict=True)
+    policy.load_state_dict(source_policy.state_dict(),strict=True)
+    return dict(source_step=config['step'],source_time_scale=before['time_scale'],target_time_scale=after['time_scale'])
