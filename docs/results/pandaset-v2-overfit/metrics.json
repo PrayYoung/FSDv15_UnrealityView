@@ -1,0 +1,377 @@
+{
+  "source_commit": "d7219904a422db56d1d2cce626541ed73d82dae3",
+  "transport_source_commit": "9971f7f",
+  "gpu": "RTX 3090",
+  "approx_rental_cost_usd": 0.0696,
+  "provisioning_seconds": 266,
+  "setup_seconds": 192,
+  "workload_seconds": 452,
+  "instance_destroyed": true,
+  "train_source_id": "pandaset/040",
+  "validation_source_id": "pandaset/056",
+  "training_window_start": 8,
+  "steps_per_control": 500,
+  "planned_full_pilot_started": false,
+  "controls": {
+    "meanflow": {
+      "training": {
+        "status": "completed",
+        "steps": 500,
+        "planned_steps": 500,
+        "seconds": 267.42209718795493,
+        "last_training_metrics": {
+          "step": 500,
+          "loss": 0.3907249867916107,
+          "flow_loss": 0.3907249867916107,
+          "policy_loss": 0.0,
+          "flow_mse": 0.009677616721155646,
+          "boundary_mse": 0.010889217829816535,
+          "interior_mse": 0.004427345250291791,
+          "du_dt_rms": 0.24726120435306434,
+          "target_rms": 1.259616180829388,
+          "pred_rms": 1.253163991373553,
+          "interior_samples": 3.0,
+          "jvp_weight": 1.0,
+          "dit_grad_norm": 1.5629308223724365,
+          "policy_grad_norm": 0.0,
+          "dit_clipped": true,
+          "policy_clipped": false,
+          "jvp_backend": "exact",
+          "precision": "torch.bfloat16",
+          "lr": 0.0,
+          "elapsed_sec": 261.3809396609431
+        },
+        "parameters_dit": 78511392,
+        "parameters_policy": 3280036
+      },
+      "overfit": {
+        "split": "train",
+        "dataset_source": "PandaSet camera-only",
+        "samples": 1,
+        "seed": 917,
+        "nfe": {
+          "1": {
+            "psnr_db": 30.75505956921003,
+            "pixel_l1": 0.039754558354616165,
+            "latent_l1": 0.03599531576037407,
+            "waypoint_l1_m": 8.516439437866211
+          },
+          "2": {
+            "psnr_db": 30.957193610261413,
+            "pixel_l1": 0.03871358186006546,
+            "latent_l1": 0.020386729389429092,
+            "waypoint_l1_m": 8.516439437866211
+          },
+          "4": {
+            "psnr_db": 31.03061807786508,
+            "pixel_l1": 0.038309235125780106,
+            "latent_l1": 0.01776072382926941,
+            "waypoint_l1_m": 8.516439437866211
+          }
+        },
+        "by_dataset": {
+          "pandaset": {
+            "1": {
+              "psnr_db": 30.75505956921003,
+              "pixel_l1": 0.039754558354616165,
+              "latent_l1": 0.03599531576037407,
+              "waypoint_l1_m": 8.516439437866211
+            },
+            "2": {
+              "psnr_db": 30.957193610261413,
+              "pixel_l1": 0.03871358186006546,
+              "latent_l1": 0.020386729389429092,
+              "waypoint_l1_m": 8.516439437866211
+            },
+            "4": {
+              "psnr_db": 31.03061807786508,
+              "pixel_l1": 0.038309235125780106,
+              "latent_l1": 0.01776072382926941,
+              "waypoint_l1_m": 8.516439437866211
+            }
+          }
+        },
+        "target_views": [
+          "native_front"
+        ],
+        "pixel_target": "cached reference JPEG (native_front baseline or declared chase teacher); pixels [-1,1]",
+        "note": "Offline video rollout; not a vehicle-control or safety benchmark",
+        "taesd_roundtrip": {
+          "psnr_db": 31.052394058865403,
+          "pixel_l1": 0.038640398532152176
+        },
+        "prev_chunk_copy": {
+          "psnr_db": 18.680652932210997,
+          "pixel_l1": 0.1382163166999817,
+          "latent_l1": 0.5197369456291199
+        },
+        "baseline_note": "TAESD round trip is an empirical codec reference, not a mathematical PSNR upper bound"
+      },
+      "validation": {
+        "split": "val",
+        "dataset_source": "PandaSet camera-only",
+        "samples": 1,
+        "seed": 917,
+        "nfe": {
+          "1": {
+            "psnr_db": 18.79573298032136,
+            "pixel_l1": 0.15313033759593964,
+            "latent_l1": 0.5342600345611572,
+            "waypoint_l1_m": 8.935046195983887
+          },
+          "2": {
+            "psnr_db": 19.064560657800513,
+            "pixel_l1": 0.14818131923675537,
+            "latent_l1": 0.5232466459274292,
+            "waypoint_l1_m": 8.935046195983887
+          },
+          "4": {
+            "psnr_db": 19.186430131516662,
+            "pixel_l1": 0.1461111307144165,
+            "latent_l1": 0.5171191692352295,
+            "waypoint_l1_m": 8.935046195983887
+          }
+        },
+        "by_dataset": {
+          "pandaset": {
+            "1": {
+              "psnr_db": 18.79573298032136,
+              "pixel_l1": 0.15313033759593964,
+              "latent_l1": 0.5342600345611572,
+              "waypoint_l1_m": 8.935046195983887
+            },
+            "2": {
+              "psnr_db": 19.064560657800513,
+              "pixel_l1": 0.14818131923675537,
+              "latent_l1": 0.5232466459274292,
+              "waypoint_l1_m": 8.935046195983887
+            },
+            "4": {
+              "psnr_db": 19.186430131516662,
+              "pixel_l1": 0.1461111307144165,
+              "latent_l1": 0.5171191692352295,
+              "waypoint_l1_m": 8.935046195983887
+            }
+          }
+        },
+        "target_views": [
+          "native_front"
+        ],
+        "pixel_target": "cached reference JPEG (native_front baseline or declared chase teacher); pixels [-1,1]",
+        "note": "Offline video rollout; not a vehicle-control or safety benchmark",
+        "taesd_roundtrip": {
+          "psnr_db": 30.998956326385034,
+          "pixel_l1": 0.04010270535945892
+        },
+        "prev_chunk_copy": {
+          "psnr_db": 19.595467356131373,
+          "pixel_l1": 0.11977556347846985,
+          "latent_l1": 0.5039903521537781
+        },
+        "baseline_note": "TAESD round trip is an empirical codec reference, not a mathematical PSNR upper bound"
+      },
+      "rollout": {
+        "chunks": [
+          {
+            "chunk": 0,
+            "latent_l1": 0.03679313510656357
+          },
+          {
+            "chunk": 1,
+            "latent_l1": 0.4931502938270569
+          },
+          {
+            "chunk": 2,
+            "latent_l1": 0.5548829436302185
+          },
+          {
+            "chunk": 3,
+            "latent_l1": 0.5945895910263062
+          }
+        ],
+        "zero_drift_verified": false,
+        "note": "Drift is reported; no zero-drift assertion"
+      }
+    },
+    "boundary": {
+      "training": {
+        "status": "completed",
+        "steps": 500,
+        "planned_steps": 500,
+        "seconds": 153.9539502200205,
+        "last_training_metrics": {
+          "step": 500,
+          "loss": 0.38702189922332764,
+          "flow_loss": 0.38702189922332764,
+          "policy_loss": 0.0,
+          "flow_mse": 0.009150734252696621,
+          "boundary_mse": 0.009150734252696621,
+          "interior_mse": 0.0,
+          "du_dt_rms": 0.0,
+          "target_rms": 1.2591497297020566,
+          "pred_rms": 1.2538937432654855,
+          "interior_samples": 0.0,
+          "jvp_weight": 1.0,
+          "dit_grad_norm": 1.8862313032150269,
+          "policy_grad_norm": 0.0,
+          "dit_clipped": true,
+          "policy_clipped": false,
+          "jvp_backend": "skipped",
+          "precision": "torch.bfloat16",
+          "lr": 0.0,
+          "elapsed_sec": 147.1038682020735
+        },
+        "parameters_dit": 78511392,
+        "parameters_policy": 3280036
+      },
+      "overfit": {
+        "split": "train",
+        "dataset_source": "PandaSet camera-only",
+        "samples": 1,
+        "seed": 917,
+        "nfe": {
+          "1": {
+            "psnr_db": 30.06996559415387,
+            "pixel_l1": 0.04424420744180679,
+            "latent_l1": 0.07082623988389969,
+            "waypoint_l1_m": 8.516439437866211
+          },
+          "2": {
+            "psnr_db": 31.068464498608105,
+            "pixel_l1": 0.037999216467142105,
+            "latent_l1": 0.04512100666761398,
+            "waypoint_l1_m": 8.516439437866211
+          },
+          "4": {
+            "psnr_db": 31.128256076230706,
+            "pixel_l1": 0.03764847293496132,
+            "latent_l1": 0.02866663597524166,
+            "waypoint_l1_m": 8.516439437866211
+          }
+        },
+        "by_dataset": {
+          "pandaset": {
+            "1": {
+              "psnr_db": 30.06996559415387,
+              "pixel_l1": 0.04424420744180679,
+              "latent_l1": 0.07082623988389969,
+              "waypoint_l1_m": 8.516439437866211
+            },
+            "2": {
+              "psnr_db": 31.068464498608105,
+              "pixel_l1": 0.037999216467142105,
+              "latent_l1": 0.04512100666761398,
+              "waypoint_l1_m": 8.516439437866211
+            },
+            "4": {
+              "psnr_db": 31.128256076230706,
+              "pixel_l1": 0.03764847293496132,
+              "latent_l1": 0.02866663597524166,
+              "waypoint_l1_m": 8.516439437866211
+            }
+          }
+        },
+        "target_views": [
+          "native_front"
+        ],
+        "pixel_target": "cached reference JPEG (native_front baseline or declared chase teacher); pixels [-1,1]",
+        "note": "Offline video rollout; not a vehicle-control or safety benchmark",
+        "taesd_roundtrip": {
+          "psnr_db": 31.052394058865403,
+          "pixel_l1": 0.038640398532152176
+        },
+        "prev_chunk_copy": {
+          "psnr_db": 18.680652932210997,
+          "pixel_l1": 0.1382163166999817,
+          "latent_l1": 0.5197369456291199
+        },
+        "baseline_note": "TAESD round trip is an empirical codec reference, not a mathematical PSNR upper bound"
+      },
+      "validation": {
+        "split": "val",
+        "dataset_source": "PandaSet camera-only",
+        "samples": 1,
+        "seed": 917,
+        "nfe": {
+          "1": {
+            "psnr_db": 18.948555849159348,
+            "pixel_l1": 0.1509232521057129,
+            "latent_l1": 0.5354917049407959,
+            "waypoint_l1_m": 8.935046195983887
+          },
+          "2": {
+            "psnr_db": 19.297527014240416,
+            "pixel_l1": 0.1441977173089981,
+            "latent_l1": 0.5174475908279419,
+            "waypoint_l1_m": 8.935046195983887
+          },
+          "4": {
+            "psnr_db": 19.273886610020906,
+            "pixel_l1": 0.14464512467384338,
+            "latent_l1": 0.5143917202949524,
+            "waypoint_l1_m": 8.935046195983887
+          }
+        },
+        "by_dataset": {
+          "pandaset": {
+            "1": {
+              "psnr_db": 18.948555849159348,
+              "pixel_l1": 0.1509232521057129,
+              "latent_l1": 0.5354917049407959,
+              "waypoint_l1_m": 8.935046195983887
+            },
+            "2": {
+              "psnr_db": 19.297527014240416,
+              "pixel_l1": 0.1441977173089981,
+              "latent_l1": 0.5174475908279419,
+              "waypoint_l1_m": 8.935046195983887
+            },
+            "4": {
+              "psnr_db": 19.273886610020906,
+              "pixel_l1": 0.14464512467384338,
+              "latent_l1": 0.5143917202949524,
+              "waypoint_l1_m": 8.935046195983887
+            }
+          }
+        },
+        "target_views": [
+          "native_front"
+        ],
+        "pixel_target": "cached reference JPEG (native_front baseline or declared chase teacher); pixels [-1,1]",
+        "note": "Offline video rollout; not a vehicle-control or safety benchmark",
+        "taesd_roundtrip": {
+          "psnr_db": 30.998956326385034,
+          "pixel_l1": 0.04010270535945892
+        },
+        "prev_chunk_copy": {
+          "psnr_db": 19.595467356131373,
+          "pixel_l1": 0.11977556347846985,
+          "latent_l1": 0.5039903521537781
+        },
+        "baseline_note": "TAESD round trip is an empirical codec reference, not a mathematical PSNR upper bound"
+      },
+      "rollout": {
+        "chunks": [
+          {
+            "chunk": 0,
+            "latent_l1": 0.07195872068405151
+          },
+          {
+            "chunk": 1,
+            "latent_l1": 0.49597424268722534
+          },
+          {
+            "chunk": 2,
+            "latent_l1": 0.5584574937820435
+          },
+          {
+            "chunk": 3,
+            "latent_l1": 0.5960897207260132
+          }
+        ],
+        "zero_drift_verified": false,
+        "note": "Drift is reported; no zero-drift assertion"
+      }
+    }
+  }
+}

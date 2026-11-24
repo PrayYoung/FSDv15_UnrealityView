@@ -6,7 +6,7 @@ export PATH="$HOME/.local/bin:$PATH"
 bash tools/chase_3dgs/check_build_env.sh
 if [ "$(id -u)" = 0 ] && command -v apt-get >/dev/null; then
   timeout 600 apt-get update -qq
-  DEBIAN_FRONTEND=noninteractive timeout 600 apt-get install -y -qq build-essential libgl1-mesa-dev libegl1-mesa-dev
+  DEBIAN_FRONTEND=noninteractive timeout 600 apt-get install -y -qq build-essential git libgl1-mesa-dev libegl1-mesa-dev
 fi
 uv venv --python 3.10 .drivestudio-venv
 PY="$ROOT/.drivestudio-venv/bin/python"

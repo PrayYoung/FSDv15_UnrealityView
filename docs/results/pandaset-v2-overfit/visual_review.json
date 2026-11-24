@@ -1,0 +1,6 @@
+{
+  "visual_review_passed": true,
+  "report_sha256": "7b7f41bcb31383f1cf0bf279d1cde2cac92ba08dec3df0df50fd050fee8e80c8",
+  "scope": "Single fixed-window overfit proof only",
+  "findings": "Road, buildings and parked vehicles recognizable in one-step frames; no cyan/black texture swirls. Later closed-loop chunks blur. Not a generalization or final-demo pass."
+}

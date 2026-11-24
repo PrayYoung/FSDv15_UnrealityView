@@ -1,0 +1,198 @@
+{
+  "gate_policy": "overfit-v2-review-2",
+  "numeric_gate_passed": true,
+  "meanflow_quality_passed": true,
+  "boundary_control_passed": true,
+  "derivative_passed": true,
+  "visual_review_required": true,
+  "full_pilot_authorized_by_gate": false,
+  "results": {
+    "meanflow": {
+      "curve": [
+        {
+          "step": 0,
+          "psnr": 8.612081819598128
+        },
+        {
+          "step": 100,
+          "psnr": 23.475378121522343
+        },
+        {
+          "step": 200,
+          "psnr": 29.789532185550097
+        },
+        {
+          "step": 300,
+          "psnr": 30.74436535217604
+        },
+        {
+          "step": 400,
+          "psnr": 30.791194472908824
+        },
+        {
+          "step": 500,
+          "psnr": 30.75505956921003
+        }
+      ],
+      "curves_by_nfe": {
+        "1": [
+          {
+            "step": 0,
+            "psnr": 8.612081819598128
+          },
+          {
+            "step": 100,
+            "psnr": 23.475378121522343
+          },
+          {
+            "step": 200,
+            "psnr": 29.789532185550097
+          },
+          {
+            "step": 300,
+            "psnr": 30.74436535217604
+          },
+          {
+            "step": 400,
+            "psnr": 30.791194472908824
+          },
+          {
+            "step": 500,
+            "psnr": 30.75505956921003
+          }
+        ],
+        "4": [
+          {
+            "step": 0,
+            "psnr": 8.612081819598128
+          },
+          {
+            "step": 100,
+            "psnr": 23.404543194918475
+          },
+          {
+            "step": 200,
+            "psnr": 30.565861417573647
+          },
+          {
+            "step": 300,
+            "psnr": 30.979295634216722
+          },
+          {
+            "step": 400,
+            "psnr": 31.001114695862523
+          },
+          {
+            "step": 500,
+            "psnr": 31.03061807786508
+          }
+        ]
+      },
+      "nfe_key": "1",
+      "complete": true,
+      "finite": true,
+      "tolerance_db": 0.5,
+      "max_drawdown_db": 0.036134903698794574,
+      "final_psnr_pass": true,
+      "monotonic_psnr_pass": true,
+      "peak_regression_pass": true,
+      "bounded_weighted_loss_pass": true,
+      "du_dt_rms_median": 0.34362359416774885,
+      "du_dt_rms_max": 3.662396737127437
+    },
+    "boundary": {
+      "curve": [
+        {
+          "step": 0,
+          "psnr": 8.612081819598128
+        },
+        {
+          "step": 100,
+          "psnr": 23.62683883216945
+        },
+        {
+          "step": 200,
+          "psnr": 30.527291715276693
+        },
+        {
+          "step": 300,
+          "psnr": 30.996416158724337
+        },
+        {
+          "step": 400,
+          "psnr": 31.09583905509843
+        },
+        {
+          "step": 500,
+          "psnr": 31.128256076230706
+        }
+      ],
+      "curves_by_nfe": {
+        "1": [
+          {
+            "step": 0,
+            "psnr": 8.612081819598128
+          },
+          {
+            "step": 100,
+            "psnr": 23.123870539555913
+          },
+          {
+            "step": 200,
+            "psnr": 28.35653879783454
+          },
+          {
+            "step": 300,
+            "psnr": 29.666337520665106
+          },
+          {
+            "step": 400,
+            "psnr": 30.041470623229564
+          },
+          {
+            "step": 500,
+            "psnr": 30.06996559415387
+          }
+        ],
+        "4": [
+          {
+            "step": 0,
+            "psnr": 8.612081819598128
+          },
+          {
+            "step": 100,
+            "psnr": 23.62683883216945
+          },
+          {
+            "step": 200,
+            "psnr": 30.527291715276693
+          },
+          {
+            "step": 300,
+            "psnr": 30.996416158724337
+          },
+          {
+            "step": 400,
+            "psnr": 31.09583905509843
+          },
+          {
+            "step": 500,
+            "psnr": 31.128256076230706
+          }
+        ]
+      },
+      "nfe_key": "4",
+      "complete": true,
+      "finite": true,
+      "tolerance_db": 0.5,
+      "max_drawdown_db": 0.0,
+      "final_psnr_pass": true,
+      "monotonic_psnr_pass": true,
+      "peak_regression_pass": true,
+      "bounded_weighted_loss_pass": true,
+      "du_dt_rms_median": null,
+      "du_dt_rms_max": null
+    }
+  },
+  "note": "Boundary 4-NFE is a diagnostic control, not evidence of one-step quality; manual geometry review still required"
+}
