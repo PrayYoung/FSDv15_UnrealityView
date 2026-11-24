@@ -22,3 +22,5 @@ uv-cache/
 *.log
 *.xml
 
+/.drivestudio-venv/
+/.download-venv/

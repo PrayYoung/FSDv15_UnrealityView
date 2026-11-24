@@ -36,6 +36,9 @@ Defaults are `outputs/real_dataset`, `outputs/real_train/checkpoint`,
 `UNREALITYVIEW_STYLES_DATA`. The server accepts `--data`, `--checkpoint`, `--port`, `--lora-dir` and
 `--styles-data-dir`; origin checks follow the configured localhost port. It binds to localhost and uses safetensors for weights/caches.
 
+See the [gated pipeline roadmap](docs/PIPELINE_ROADMAP.md) for the isolated dynamic
+3DGS flying-camera adapter, SSH recovery, stage scripts and verification limits.
+
 ## PandaSet training
 
 The first quality campaign completed the [5,000-step pilot plan](docs/TRAINING_PLAN.md).

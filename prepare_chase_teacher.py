@@ -1,4 +1,7 @@
-"""Experimental camera-only static 3DGS teacher; per-scene fitting, no LiDAR.
+"""Legacy experimental camera-only static 3DGS teacher; no LiDAR.
+
+For dynamic moving-traffic reconstruction use the isolated tools/chase_3dgs/
+DriveStudio adapter. Neither path is a validated quality result by itself.
 
 Uses calibrated SIFT triangulation to initialize gsplat. Dynamic objects and unseen
 surfaces are not reconstructed reliably. Native timestamps are preserved. Quality

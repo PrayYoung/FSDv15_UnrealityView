@@ -1,0 +1,10 @@
+{
+  "drivestudio": {"url": "https://github.com/ziyc/drivestudio.git", "commit": "e59bda4fa681f829dbb1d65f0de582b0f633c450"},
+  "pandaset": {"url": "https://github.com/ziyc/pandaset-devkit.git", "commit": "0c10f2b03bc00b9c77950f86e478e271edba2c00"},
+  "gsplat": {"url": "https://github.com/nerfstudio-project/gsplat.git", "commit": "507f26e118afb78ef0224ad5e0d0701f1b973853"},
+  "pytorch3d": {"url": "https://github.com/facebookresearch/pytorch3d.git", "commit": "33824be3cbc87a7dd1db0f6a9a9de9ac81b2d0ba"},
+  "nvdiffrast": {"url": "https://github.com/NVlabs/nvdiffrast.git", "commit": "729261dc64c4241ea36efda84fbf532cc8b425b8"},
+  "difix": {"url": "https://github.com/nv-tlabs/Difix3D.git", "commit": "c76edc595586e16732c91ddee82f3a6d83a8a9cc"},
+  "sky_model": {"repo": "nvidia/segformer-b5-finetuned-cityscapes-1024-1024", "revision": "2c6f153e4c23c229e2fa2b188eb250607e030cd8"},
+  "difix_model": {"repo": "nvidia/difix_ref", "revision": "d4830559772a5795c9d136302c5b197d6418d3fb"}
+}
