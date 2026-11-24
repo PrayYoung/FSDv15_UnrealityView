@@ -52,3 +52,9 @@ remote_exit_code = ssh_run_script(
     assert path.read_text()==first and 'TCPKeepAlive=yes' in first
     assert path.with_suffix('.before-detached.py').exists()
     assert path.with_name('vast_detached.py').exists()
+
+
+def test_worker_never_starts_fails_promptly(tmp_path):
+    responses=iter(['','STARTING']);times=iter([0,0,0,0,0,61,61])
+    with pytest.raises(DetachedTransportError,match='startup grace'):
+        run_detached(['ssh'],'body','/job',tmp_path/'log',execute=lambda *a,**k:SimpleNamespace(returncode=0,stdout=next(responses)),sleep=lambda _:None,clock=lambda:next(times))

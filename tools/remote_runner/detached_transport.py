@@ -31,6 +31,7 @@ printf '%s\\n' "$rc" >exit_code.tmp
 mv exit_code.tmp exit_code
 '''
     launch=f'''set -euo pipefail
+for tool in flock nohup setsid timeout; do command -v "$tool" >/dev/null; done
 mkdir -p {q}
 cd {q}
 exec 9>launch.lock
@@ -62,7 +63,7 @@ def run_detached(ssh_argv,script,workdir,log_path,*,timeout_seconds=21600,
     """
     token=hashlib.sha256((script+'\n'+Path(log_path).name).encode()).hexdigest()[:24]
     root,launch,status=worker_scripts(script,workdir,token,timeout_seconds)
-    started=clock();last_success=started;launched=False
+    started=clock();last_success=started;launched=False;acknowledged_at=None
     def invoke(payload):
         try:
             return execute([*ssh_argv,'bash','-s'],input=payload,text=True,capture_output=True,
@@ -78,7 +79,7 @@ def run_detached(ssh_argv,script,workdir,log_path,*,timeout_seconds=21600,
             sleep(poll_seconds);continue
         last_success=clock()
         if not launched:
-            launched=True;sleep(poll_seconds);continue
+            launched=True;acknowledged_at=clock();sleep(poll_seconds);continue
         state=result.stdout.strip()
         if state.startswith('EXIT:'):
             try:code=int(state.split(':',1)[1])
@@ -92,6 +93,8 @@ def run_detached(ssh_argv,script,workdir,log_path,*,timeout_seconds=21600,
             path=Path(log_path);path.parent.mkdir(parents=True,exist_ok=True)
             with path.open('a') as stream:stream.write(logs.stdout)
             return code
+        if state=='STARTING' and clock()-acknowledged_at>60:
+            raise DetachedTransportError('Detached worker failed to start within startup grace period')
         if state=='LOST':raise DetachedTransportError('Remote worker disappeared without a recorded exit code')
         if state not in ('STARTING','RUNNING'):raise DetachedTransportError('Unexpected remote worker state')
         sleep(poll_seconds)

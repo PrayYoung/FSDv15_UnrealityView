@@ -12,8 +12,10 @@ CPU tests verify coordinate geometry, safe extraction, manifest acceptance by th
 core teacher cache importer, and stage gates. They do **not** establish successful
 DriveStudio compilation, sharp moving cars, reconstructed distant buildings, or
 Difix quality on a GPU. Those remain gated experiments, not completed results.
-Stage 1A has been submitted through the corrected detached global runner; its run
-identity and recovery paths are private, outside Git. No Stage 2 batch is running.
+Stage 1A completed through the detached runner and passed its one-window gate at
+30.76 dB 1-NFE; see the [reviewed result](results/pandaset-v2-overfit/README.md).
+Its separate validation window scored below the copy baseline. Run identity and
+recovery paths are private, outside Git. No Stage 2 batch is running.
 
 [Mean-Flow v2 changes](MEANFLOW_V2.md) and the
 [failed original pilot](results/pandaset-pilot-5000/README.md) remain documented.
