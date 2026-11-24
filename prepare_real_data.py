@@ -6,7 +6,7 @@ from pathlib import Path
 import numpy as np
 from PIL import Image,ImageDraw
 import torch
-from unrealityview.data.cache import atomic_json,save_episode,resolve_safe_subpath,load_episode
+from unrealityview.data.cache import episode_grid,atomic_json,save_episode,resolve_safe_subpath,load_episode
 from unrealityview.data.real_world import CAMERA_SLOTS,PandaSetSequence,WaymoSequence
 from unrealityview.data.splits import stable_split,validate_split_manifest
 from unrealityview.device import select_device,autocast_for
@@ -51,7 +51,7 @@ def target_frame(targets,entry,index,timestamp):
 
 
 @torch.no_grad()
-def cache_manifest(manifest,output,device="auto",max_frames=None,target="front",targets=None,encoder=None,decoder=None,reuse_existing=False):
+def cache_manifest(manifest,output,device="auto",max_frames=None,target="front",targets=None,encoder=None,decoder=None,reuse_existing=False,uve_grid=(4,8)):
     manifest=validate_split_manifest(manifest)
     output=Path(output);output.mkdir(parents=True,exist_ok=True)
     if (output/"split_manifest.json").exists():
@@ -59,13 +59,17 @@ def cache_manifest(manifest,output,device="auto",max_frames=None,target="front",
         if prior!=manifest:raise ValueError("Output already has a different frozen split manifest; use a new output")
     atomic_json(output/"split_manifest.json",manifest)
     device=select_device(device)
-    encoder=MiniUVE().to(device).eval() if encoder is None else encoder
+    encoder=MiniUVE(token_grid=uve_grid).to(device).eval() if encoder is None else encoder
     decoder=PretrainedTAESD().to(device).eval() if decoder is None else decoder
     provenance=hashlib.sha256(json.dumps(manifest,sort_keys=True).encode()).hexdigest()
     names={"pandaset":"PandaSet","waymo":"Waymo Perception v2"}
     source=" + ".join(names[k] for k in sorted({e["dataset"] for e in manifest["sequences"]}))+" camera-only"
+    desired_grid=tuple(getattr(encoder,"token_grid",(4,8)))
+    if (output/'manifest.json').exists():
+        prior=json.loads((output/'manifest.json').read_text())
+        if tuple(prior.get('uve_grid',(4,8)))!=desired_grid:raise ValueError('Existing manifest UVE grid mismatch; use a new output')
     atomic_json(output/"manifest.json",dict(source=source,target_view="native_front" if target=="front" else "elevated_chase",
-                 split_manifest_sha256=provenance,temporal_policy="native timestamps; no invented 36Hz frames"))
+                 uve_grid=list(getattr(encoder,"token_grid",(4,8))),split_manifest_sha256=provenance,temporal_policy="native timestamps; no invented 36Hz frames"))
     for entry in manifest["sequences"]:
         source_id=f"{entry['dataset']}/{entry['sequence']}"
         name=entry['dataset']+'_'+hashlib.sha256(source_id.encode()).hexdigest()[:16]
@@ -77,7 +81,8 @@ def cache_manifest(manifest,output,device="auto",max_frames=None,target="front",
                 or meta.get('target_view')!=('native_front' if target=='front' else 'elevated_chase')
                 or meta.get('split_manifest_sha256')!=provenance or meta['frames']!=expected_frames
                 or max_frames is not None and meta['frames']>max_frames):raise ValueError('Existing cache provenance/configuration mismatch')
-            load_episode(directory/'episode.safetensors')
+            existing_tensors=load_episode(directory/'episode.safetensors')
+            if episode_grid(existing_tensors,meta)!=tuple(getattr(encoder,'token_grid',(4,8))):raise ValueError('Existing cache UVE grid mismatch')
             print(f'REUSED_CACHE {source_id}',flush=True)
             continue
         sequence=(PandaSetSequence if entry["dataset"]=="pandaset" else WaymoSequence)(entry["root"],entry["sequence"])
@@ -87,6 +92,7 @@ def cache_manifest(manifest,output,device="auto",max_frames=None,target="front",
         directory=output/entry["split"]/name
         if (directory/"episode.safetensors").exists():
             existing=json.loads((directory/"metadata.json").read_text())
+            if episode_grid(load_episode(directory/"episode.safetensors"),existing)!=tuple(getattr(encoder,"token_grid",(4,8))):raise ValueError("Existing cache UVE grid mismatch")
             if existing.get("target_view")!=("native_front" if target=="front" else "elevated_chase") or existing["frames"]!=count:
                 raise ValueError("Existing cache has incompatible target or frame count")
             continue
@@ -127,7 +133,7 @@ def cache_manifest(manifest,output,device="auto",max_frames=None,target="front",
                      camera_timestamps=torch.tensor(np.stack(cam_times),dtype=torch.float64),camera_mask=torch.tensor(np.stack(masks)),
                      intrinsics=torch.tensor(np.stack(ks),dtype=torch.float32),camera_to_ego=torch.tensor(np.stack(extrinsics),dtype=torch.float32)),
                      dict(source=entry["dataset"],source_id=source_id,sequence=entry["sequence"],split=entry["split"],frames=count,
-                          fps=fps,target_view="native_front" if target=="front" else "elevated_chase",target_reference=teacher,
+                          uve_grid=list(getattr(encoder,"token_grid",(4,8))),fps=fps,target_view="native_front" if target=="front" else "elevated_chase",target_reference=teacher,
                           camera_names=CAMERA_SLOTS,ego_reference=sequence.reference_kind,split_manifest_sha256=provenance,
                           timing="native; no temporal upsampling",pixel_size=[320,192],input_size=[224,140]))
         print(f"CACHED {source_id} split={entry['split']} frames={count} fps={fps:.3f} target={target}",flush=True)
@@ -140,10 +146,11 @@ def main():
     cache=sub.add_parser("cache");cache.add_argument("--manifest",required=True);cache.add_argument("--output",default="outputs/real_dataset")
     cache.add_argument("--device",default="auto");cache.add_argument("--max-frames",type=int)
     cache.add_argument("--reuse-existing",action="store_true")
+    cache.add_argument("--uve-grid",type=int,nargs=2,default=(4,8))
     cache.add_argument("--target",choices=("front","teacher"),default="front");cache.add_argument("--targets")
     a=p.parse_args()
     if a.command=="plan":atomic_json(a.output,plan(a.pandaset_root,a.waymo_root,a.seed))
-    else:cache_manifest(json.loads(Path(a.manifest).read_text()),a.output,a.device,a.max_frames,a.target,a.targets,reuse_existing=a.reuse_existing)
+    else:cache_manifest(json.loads(Path(a.manifest).read_text()),a.output,a.device,a.max_frames,a.target,a.targets,reuse_existing=a.reuse_existing,uve_grid=tuple(a.uve_grid))
 
 
 if __name__=="__main__":main()

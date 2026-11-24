@@ -9,6 +9,7 @@ from unrealityview.models.driving_policy_head import DrivingPolicyHead
 def save_checkpoint(directory, model, policy, step, extra=None):
     directory = Path(directory)
     directory.mkdir(parents=True,exist_ok=True)
+    extra={"uve_grid":list(getattr(model,"uve_grid",(4,8))),**(extra or {})}
     tensors = {"dit."+k:v.detach().cpu().contiguous() for k,v in model.state_dict().items()}
     tensors.update({"policy."+k:v.detach().cpu().contiguous() for k,v in policy.state_dict().items()})
     temporary = directory/"model.safetensors.tmp"
@@ -27,4 +28,5 @@ def load_checkpoint(directory, device="cpu"):
     weights = load_file(str(directory/"model.safetensors"))
     model.load_state_dict({k[4:]:v for k,v in weights.items() if k.startswith("dit.")},strict=True)
     policy.load_state_dict({k[7:]:v for k,v in weights.items() if k.startswith("policy.")},strict=True)
+    model.uve_grid=tuple(config.get("uve_grid",(4,8)))
     return model.to(device).eval(),policy.to(device).eval(),config

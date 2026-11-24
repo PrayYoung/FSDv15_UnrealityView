@@ -6,7 +6,7 @@ import numpy as np
 import torch
 from unrealityview.checkpoint import load_checkpoint
 from unrealityview.data.dataset import CachedEpisodeChunkDataset,stage_context
-from unrealityview.data.cache import atomic_json
+from unrealityview.data.cache import atomic_json,require_uve_grid
 from unrealityview.data.splits import assert_unseen_test
 from unrealityview.device import select_device,autocast_for
 from unrealityview.models.pretrained_taesd import PretrainedTAESD
@@ -22,6 +22,7 @@ def pixel_metrics(prediction, target):
 
 @torch.no_grad()
 def evaluate_models(model, policy, decoder, dataset, device, output, max_items=8, seed=917):
+    if tuple(getattr(model,"uve_grid",(4,8)))!=tuple(dataset.uve_grid):raise ValueError("Checkpoint/dataset UVE grid mismatch")
     model.eval();policy.eval()
     output=Path(output);output.mkdir(parents=True,exist_ok=True)
     results={str(n):[] for n in (1,2,4)}
@@ -123,6 +124,7 @@ def main():
     model,policy,config=load_checkpoint(a.checkpoint,device)
     decoder=PretrainedTAESD().to(device)
     dataset=CachedEpisodeChunkDataset(a.data,a.split,jitter=False)
+    require_uve_grid(config,dataset)
     if a.split=="test":assert_unseen_test(config.get("data_provenance"),[m["source_id"] for m in dataset.metadata if "source_id" in m])
     print(json.dumps(evaluate_models(model,policy,decoder,dataset,device,a.output,a.max_items),indent=2))
 

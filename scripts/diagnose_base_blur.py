@@ -8,7 +8,7 @@ from PIL import Image
 import torch
 from evaluate import pixel_metrics
 from unrealityview.checkpoint import load_checkpoint
-from unrealityview.data.cache import atomic_json
+from unrealityview.data.cache import atomic_json,require_uve_grid
 from unrealityview.data.dataset import CachedEpisodeChunkDataset
 from unrealityview.device import autocast_for,select_device
 from unrealityview.models.pretrained_taesd import PretrainedTAESD
@@ -103,20 +103,21 @@ def diagnose_split(model,decoder,dataset,device,output,count=40,seed=917):
 
 
 def main():
-    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--checkpoint',required=True);p.add_argument('--data',required=True);p.add_argument('--output',required=True);p.add_argument('--device',default='cuda');p.add_argument('--reference-metrics',required=True);a=p.parse_args()
+    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--checkpoint',required=True);p.add_argument('--data',required=True);p.add_argument('--output',required=True);p.add_argument('--device',default='cuda');p.add_argument('--reference-metrics');p.add_argument('--expected-step',type=int);a=p.parse_args()
     output=Path(a.output);output.mkdir(parents=True,exist_ok=True);device=select_device(a.device)
     model,_,config=load_checkpoint(a.checkpoint,device)
-    if config['step']!=3000:raise ValueError('Diagnosis requires the frozen step-3000 best checkpoint')
+    if a.expected_step is not None and config['step']!=a.expected_step:raise ValueError('Unexpected checkpoint step')
     decoder=PretrainedTAESD().to(device);reports={}
     for split in ('train','val'):
         dataset=CachedEpisodeChunkDataset(a.data,split,jitter=False)
+        require_uve_grid(config,dataset)
         reports[split]=diagnose_split(model,decoder,dataset,device,output)
         del dataset
-    reference=json.loads(Path(a.reference_metrics).read_text())
-    expected=[(r['source_id'],r['start']) for r in reference['per_chunk']['1']]
+    reference=json.loads(Path(a.reference_metrics).read_text()) if a.reference_metrics else None
+    expected=[(r['source_id'],r['start']) for r in reference['per_chunk']['1']] if reference else None
     actual=[(r['source_id'],r['start']) for r in reports['val']['windows']]
-    delta=reports['val']['nfe']['1']['psnr_db']-reference['nfe']['1']['psnr_db']
-    matched=actual==expected and abs(delta)<=.05
+    delta=reports['val']['nfe']['1']['psnr_db']-reference['nfe']['1']['psnr_db'] if reference else None
+    matched=actual==expected and abs(delta)<=.05 if reference else None
     atomic_json(output/'diagnosis.json',{'checkpoint_step':config['step'],
         'checkpoint_sha256':hashlib.sha256((Path(a.checkpoint)/'model.safetensors').read_bytes()).hexdigest(),
         'seed':917,'windows_per_split':40,'test_accessed':False,'training_performed':False,'splits':reports,
@@ -125,7 +126,7 @@ def main():
             'Train uses one first window per scene; validation retains the exact original 40 windows. Sampling distributions differ.',
             'Frozen-stage control ages the original observation honestly; no future camera snapshots or all-zero token conditions.',
             'Codec latent L1 is zero by construction; its meaningful reference metrics are pixel PSNR/L1.']})
-    if not matched:raise RuntimeError('Frozen validation baseline not reproduced; do not interpret ablations yet')
+    if reference and not matched:raise RuntimeError('Frozen validation baseline not reproduced; do not interpret ablations yet')
 
 
 if __name__=='__main__':main()

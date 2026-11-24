@@ -40,6 +40,7 @@ def train(args):
         if type(windows) is not int or windows<1:raise ValueError("diagnostic_train_windows must be positive")
         train_data.index=train_data.index[:windows]*max(1,math.ceil(config["batch_size"]/min(windows,len(train_data.index))))
     validation=CachedEpisodeChunkDataset(args.data,"val",jitter=False)
+    if train_data.uve_grid!=validation.uve_grid:raise ValueError("Train/validation UVE grid mismatch")
     manifest=Path(args.data)/"manifest.json"
     data_source=json.loads(manifest.read_text()).get("source","unknown") if manifest.is_file() else "unknown"
     weights=None
@@ -57,6 +58,7 @@ def train(args):
     # Archived configurations retain the historical embedding semantics.
     dit_config.setdefault("time_scale",1000.)
     model=ConditionalMeanFlowDiT(DiTConfig(**dit_config)).to(device)
+    model.uve_grid=train_data.uve_grid
     policy=DrivingPolicyHead().to(device)
     init=getattr(args,"init_weights",None)
     if init and getattr(args,"resume",None):raise ValueError("init-weights and resume are mutually exclusive")

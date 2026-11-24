@@ -3,7 +3,7 @@ import json
 import torch
 from torch.utils.data import Dataset
 from unrealityview.geometry import ego_waypoints
-from .cache import load_episode
+from .cache import load_episode,episode_grid
 from .splits import audit_cache_splits
 
 
@@ -35,6 +35,13 @@ class CachedEpisodeChunkDataset(Dataset):
         self.chunk_size,self.jitter,self.seed = chunk_size,jitter,seed
         self.episodes = [load_episode(path) for path in self.paths]
         self.metadata=[json.loads(path.with_name("metadata.json").read_text()) for path in self.paths]
+        grids={episode_grid(e,m) for e,m in zip(self.episodes,self.metadata)}
+        if len(grids)!=1:raise ValueError('Mixed UVE grids in dataset')
+        self.uve_grid=next(iter(grids))
+        manifest=self.root/'manifest.json'
+        if manifest.exists():
+            declared=json.loads(manifest.read_text()).get('uve_grid')
+            if declared is not None and tuple(declared)!=self.uve_grid:raise ValueError('Manifest UVE grid mismatch')
         self.index = [(ep,start) for ep,e in enumerate(self.episodes)
                       for start in range(chunk_size,len(e["chase_latents"])-max(chunk_size,36),self.stride)]
         if not self.index:
