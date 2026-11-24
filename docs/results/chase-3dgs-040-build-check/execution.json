@@ -1,0 +1,24 @@
+{
+  "final_classification": "WORKLOAD_FAILED",
+  "remote_exit_code": 1,
+  "provisioning_seconds": 115.0,
+  "setup_seconds": 45.0,
+  "workload_seconds": 1077.0,
+  "rental_destroyed": true,
+  "returned_bytes": 0,
+  "gpu": "RTX 3090",
+  "source_commit": "ea585014026d9791adfa748e6aa2cb018ef5afb8",
+  "approx_cost_usd": 0.0829,
+  "stages": {
+    "native_submodule_checkout": "passed",
+    "native_compilation_and_imports": "passed",
+    "cuda_kernel_preflight": "passed",
+    "archive_record_write": "failed",
+    "scene_preprocessing": "not_started",
+    "reconstruction": "not_started",
+    "flying_view_rendering": "not_started"
+  },
+  "cause": "First file-valued sync path was used by the runner as an output directory;archive_record.json was created as a directory before the workload.",
+  "reconstruction_iterations": 0,
+  "quality_measured": false
+}

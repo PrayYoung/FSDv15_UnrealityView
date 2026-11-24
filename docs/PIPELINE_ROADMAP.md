@@ -324,3 +324,18 @@ CUDA compilation; a successful reconstruction is still required before any claim
 
 The [completed blur diagnosis](results/pandaset-v2-pilot-5000/diagnosis/README.md)
 reproduced the baseline exactly. No finer-grid training has started.
+
+
+## Latest execution outcomes
+
+The [unpooled UVE attempt](results/pandaset-v2-ablation-uve10x16/README.md)
+failed the predeclared 4x8 JPEG/token parity limits on all six cameras, before any
+new cache, 20-step training preflight or optimizer update. Do not interpret this
+as a negative grid-resolution result or relax the thresholds after observing it.
+
+The [scene 040 build verification](results/chase-3dgs-040-build-check/README.md)
+passed native compilation/imports and CUDA kernels, then failed writing the archive
+record because the first file-valued sync path had been created as a directory
+by the runner. The next invocation must use a directory output root and preserve
+selective artifact collection. No reconstruction images exist from this attempt.
+Both rentals were reported destroyed; no new paid retry started for reporting.

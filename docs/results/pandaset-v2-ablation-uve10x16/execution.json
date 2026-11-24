@@ -1,0 +1,24 @@
+{
+  "final_classification": "WORKLOAD_FAILED",
+  "remote_exit_code": 1,
+  "provisioning_seconds": 244.0,
+  "setup_seconds": 193.0,
+  "workload_seconds": 21.0,
+  "rental_destroyed": true,
+  "returned_bytes": 957,
+  "gpu": "RTX 3090",
+  "source_commit": "3cdd603983f5fa19fcd9a18eddf34e7b8720ef62",
+  "approx_cost_usd": 0.0398,
+  "optimizer_steps": 0,
+  "stages": {
+    "general_cuda_preflight": "passed",
+    "frozen_76_cache_validation": "passed",
+    "jpeg_4x8_parity": "failed",
+    "reencode_10x16": "not_started",
+    "twenty_step_preflight": "not_started",
+    "training_5000": "not_started",
+    "post_training_diagnosis": "not_started"
+  },
+  "interpretation": "Execution/input-fidelity failure;no evidence about10x16trainingquality",
+  "parity_sha256": "7d181a1171d80eee247d56ba76f0dd5d395ba60c44897ec10a35d36a73cfcc11"
+}

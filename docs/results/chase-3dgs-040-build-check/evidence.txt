@@ -1,0 +1,6 @@
+DYNAMIC_3DGS_IMPORT_CUDA_OK
+NATIVE_CUDA_FORWARD_BACKWARD_OK
+Failure site: download_pandaset_archive.py, atomic archive-record replacement
+IsADirectoryError: archive_record.part -> archive_record.json
+No scene preprocessing, reconstruction or image export was reached.
+Machine paths, runtime identities and full environment logs are omitted.

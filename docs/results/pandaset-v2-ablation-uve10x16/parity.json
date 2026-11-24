@@ -1,0 +1,40 @@
+{
+  "passed": false,
+  "thresholds": {
+    "relative_rms_max": 0.2,
+    "cosine_min": 0.98
+  },
+  "per_camera": [
+    {
+      "slot": "front_left",
+      "relative_rms": 0.28755396604537964,
+      "cosine": 0.9599363207817078
+    },
+    {
+      "slot": "front",
+      "relative_rms": 0.25913214683532715,
+      "cosine": 0.9670109748840332
+    },
+    {
+      "slot": "front_right",
+      "relative_rms": 0.2973693907260895,
+      "cosine": 0.9569960832595825
+    },
+    {
+      "slot": "rear_left",
+      "relative_rms": 0.26051902770996094,
+      "cosine": 0.966907262802124
+    },
+    {
+      "slot": "rear",
+      "relative_rms": 0.22947482764720917,
+      "cosine": 0.9742450714111328
+    },
+    {
+      "slot": "rear_right",
+      "relative_rms": 0.27768993377685547,
+      "cosine": 0.9625576138496399
+    }
+  ],
+  "note": "Nonzero tolerance accommodates re-encoding quality90 JPEGs instead of original decoded pixels; not exact-token equivalence."
+}
