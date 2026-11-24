@@ -4,12 +4,14 @@ Camera-conditioned video generation with an independent waypoint planner and
 switchable visual styles. **PandaSet cameras are the active training and testing
 source.** This is an independent research prototype with no vehicle control.
 
-The camera-only import, Mean-Flow training, held-out evaluation and CUDA smoke
-pipeline work. A real PandaSet 5,000-step pilot completed, but failed the quality
-gate: final one-step PSNR was 10.02 dB against a 15 dB requirement, with
-texture-like prediction artifacts. See the [results, diagnosis and proposed changes](docs/results/pandaset-pilot-5000/README.md).
+The corrected PandaSet 5,000-step pilot passed its numerical gate: **21.81 dB
+one-step validation PSNR**, beating frame copy at 18.75 dB, with an 83.5% pixel-error
+reduction from initialization. Images still show blur and ghosting; this is not a
+finished demo. See the [results, diagnostic visuals and analysis](docs/results/pandaset-v2-pilot-5000/README.md).
+The [earlier failed pilot](docs/results/pandaset-pilot-5000/README.md) remains documented.
 Comic/cyberpunk adapters, real-data stop/resume and Style Studio are implemented
-and tested, but quality base and style training are still pending. No successful styled model result is claimed.
+and tested, but satisfactory base visuals and style training remain pending.
+No successful styled model result is claimed.
 
 The first target is the observed **native front camera**, also present among the
 conditioning inputs. It is reconstruction, not future-only prediction or an
@@ -69,7 +71,8 @@ are split before caching; provenance checks reject train/test overlap.
 
 See [v2 fixes and the gated verification protocol](docs/MEANFLOW_V2.md) for the
 implemented stability changes. The [Stage 1A one-window overfit check](docs/results/pandaset-v2-overfit/README.md)
-passed at 30.76 dB one-step PSNR. Held-out full-base quality is not yet established.
+passed at 30.76 dB one-step PSNR. The subsequent [full pilot](docs/results/pandaset-v2-pilot-5000/README.md)
+passed numerical validation; visual quality remains insufficient for a public demo.
 
 ## Scaling and resuming
 

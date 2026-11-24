@@ -1,0 +1,22 @@
+{
+  "chunks": [
+    {
+      "chunk": 0,
+      "latent_l1": 0.432321697473526
+    },
+    {
+      "chunk": 1,
+      "latent_l1": 0.44728079438209534
+    },
+    {
+      "chunk": 2,
+      "latent_l1": 0.4618435204029083
+    },
+    {
+      "chunk": 3,
+      "latent_l1": 0.46773865818977356
+    }
+  ],
+  "zero_drift_verified": false,
+  "note": "Drift is reported; no zero-drift assertion"
+}

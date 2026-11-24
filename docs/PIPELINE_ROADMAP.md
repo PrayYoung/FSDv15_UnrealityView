@@ -15,7 +15,12 @@ Difix quality on a GPU. Those remain gated experiments, not completed results.
 Stage 1A completed through the detached runner and passed its one-window gate at
 30.76 dB 1-NFE; see the [reviewed result](results/pandaset-v2-overfit/README.md).
 Its separate validation window scored below the copy baseline. Run identity and
-recovery paths are private, outside Git. No Stage 2 batch is running.
+recovery paths are private, outside Git. No Stage 2 batch is running. The subsequent
+[Stage 1B full pilot](results/pandaset-v2-pilot-5000/README.md) completed 5,000 steps:
+21.81 dB 1-NFE validation PSNR versus 18.75 dB frame copy; pixel L1 fell 83.5%.
+Numerical gates passed, but the inspected images remain blurred and ghosted.
+There is no front-view visual pass for downstream batch automation. The rental
+was destroyed; no new paid job was launched to publish this report.
 
 [Mean-Flow v2 changes](MEANFLOW_V2.md) and the
 [failed original pilot](results/pandaset-pilot-5000/README.md) remain documented.

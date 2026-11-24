@@ -1,0 +1,286 @@
+{
+  "source_commit": "5ae51f1e4ed3ff5f024276bf78806e754da7f322",
+  "training_config": "configs/pandaset_pilot_v2.json",
+  "selection_config": "configs/pandaset_validated_pilot.json",
+  "train_scenes": 60,
+  "validation_scenes": 8,
+  "reserved_test_scenes": 8,
+  "frames_per_scene": 80,
+  "validation_windows": 40,
+  "evaluation_seed": 917,
+  "curve": [
+    {
+      "step": 0,
+      "nfe": {
+        "1": {
+          "psnr_db": 8.525404522162596,
+          "pixel_l1": 0.617413567006588,
+          "latent_l1": 1.0399095341563225,
+          "waypoint_l1_m": 9.36339954137802
+        },
+        "2": {
+          "psnr_db": 8.525404522162596,
+          "pixel_l1": 0.617413567006588,
+          "latent_l1": 1.0399095341563225,
+          "waypoint_l1_m": 9.36339954137802
+        },
+        "4": {
+          "psnr_db": 8.525404522162596,
+          "pixel_l1": 0.617413567006588,
+          "latent_l1": 1.0399095341563225,
+          "waypoint_l1_m": 9.36339954137802
+        }
+      }
+    },
+    {
+      "step": 500,
+      "nfe": {
+        "1": {
+          "psnr_db": 20.08589872524085,
+          "pixel_l1": 0.12761956956237555,
+          "latent_l1": 0.42987277880311014,
+          "waypoint_l1_m": 9.36339954137802
+        },
+        "2": {
+          "psnr_db": 18.844953477368318,
+          "pixel_l1": 0.1449866283684969,
+          "latent_l1": 0.5164130993187428,
+          "waypoint_l1_m": 9.36339954137802
+        },
+        "4": {
+          "psnr_db": 18.919932120454796,
+          "pixel_l1": 0.1437199968844652,
+          "latent_l1": 0.5196042560040951,
+          "waypoint_l1_m": 9.36339954137802
+        }
+      }
+    },
+    {
+      "step": 1000,
+      "nfe": {
+        "1": {
+          "psnr_db": 20.418636852559853,
+          "pixel_l1": 0.1200059613212943,
+          "latent_l1": 0.43306945636868477,
+          "waypoint_l1_m": 9.36339954137802
+        },
+        "2": {
+          "psnr_db": 19.29761767676746,
+          "pixel_l1": 0.13461310938000678,
+          "latent_l1": 0.5034939602017403,
+          "waypoint_l1_m": 9.36339954137802
+        },
+        "4": {
+          "psnr_db": 19.380721963718056,
+          "pixel_l1": 0.13310941103845836,
+          "latent_l1": 0.5016991540789604,
+          "waypoint_l1_m": 9.36339954137802
+        }
+      }
+    },
+    {
+      "step": 1500,
+      "nfe": {
+        "1": {
+          "psnr_db": 21.258812061946056,
+          "pixel_l1": 0.10735278138890862,
+          "latent_l1": 0.4157656542956829,
+          "waypoint_l1_m": 9.36339954137802
+        },
+        "2": {
+          "psnr_db": 20.29814517167875,
+          "pixel_l1": 0.11917528621852398,
+          "latent_l1": 0.481504799425602,
+          "waypoint_l1_m": 9.36339954137802
+        },
+        "4": {
+          "psnr_db": 20.366232689892186,
+          "pixel_l1": 0.11818293780088425,
+          "latent_l1": 0.4800033219158649,
+          "waypoint_l1_m": 9.36339954137802
+        }
+      }
+    },
+    {
+      "step": 2000,
+      "nfe": {
+        "1": {
+          "psnr_db": 21.639612896174526,
+          "pixel_l1": 0.10284679168835283,
+          "latent_l1": 0.40802604109048846,
+          "waypoint_l1_m": 9.36339954137802
+        },
+        "2": {
+          "psnr_db": 20.931680834387617,
+          "pixel_l1": 0.11096317619085312,
+          "latent_l1": 0.4639807306230068,
+          "waypoint_l1_m": 9.36339954137802
+        },
+        "4": {
+          "psnr_db": 20.959887531317158,
+          "pixel_l1": 0.11073997858911752,
+          "latent_l1": 0.4643058210611343,
+          "waypoint_l1_m": 9.36339954137802
+        }
+      }
+    },
+    {
+      "step": 2500,
+      "nfe": {
+        "1": {
+          "psnr_db": 21.801528877545064,
+          "pixel_l1": 0.10170393427833915,
+          "latent_l1": 0.4151136726140976,
+          "waypoint_l1_m": 9.36339954137802
+        },
+        "2": {
+          "psnr_db": 21.43379042075258,
+          "pixel_l1": 0.10582855120301246,
+          "latent_l1": 0.4479573376476765,
+          "waypoint_l1_m": 9.36339954137802
+        },
+        "4": {
+          "psnr_db": 21.465547135536465,
+          "pixel_l1": 0.10521165635436773,
+          "latent_l1": 0.44892746582627296,
+          "waypoint_l1_m": 9.36339954137802
+        }
+      }
+    },
+    {
+      "step": 3000,
+      "nfe": {
+        "1": {
+          "psnr_db": 21.88463001428762,
+          "pixel_l1": 0.10072106951847673,
+          "latent_l1": 0.4166742883622646,
+          "waypoint_l1_m": 9.36339954137802
+        },
+        "2": {
+          "psnr_db": 21.749618429639167,
+          "pixel_l1": 0.10216314662247897,
+          "latent_l1": 0.43436627462506294,
+          "waypoint_l1_m": 9.36339954137802
+        },
+        "4": {
+          "psnr_db": 21.723722359835044,
+          "pixel_l1": 0.10280678495764732,
+          "latent_l1": 0.43921797871589663,
+          "waypoint_l1_m": 9.36339954137802
+        }
+      }
+    },
+    {
+      "step": 3500,
+      "nfe": {
+        "1": {
+          "psnr_db": 21.882961776940892,
+          "pixel_l1": 0.10116599155589938,
+          "latent_l1": 0.41954016834497454,
+          "waypoint_l1_m": 9.36339954137802
+        },
+        "2": {
+          "psnr_db": 21.824264526205134,
+          "pixel_l1": 0.10177369015291333,
+          "latent_l1": 0.4307099603116512,
+          "waypoint_l1_m": 9.36339954137802
+        },
+        "4": {
+          "psnr_db": 21.805676332949528,
+          "pixel_l1": 0.10205018408596515,
+          "latent_l1": 0.43467860892415044,
+          "waypoint_l1_m": 9.36339954137802
+        }
+      }
+    },
+    {
+      "step": 4000,
+      "nfe": {
+        "1": {
+          "psnr_db": 21.844760302954302,
+          "pixel_l1": 0.10144632793962956,
+          "latent_l1": 0.42235555723309515,
+          "waypoint_l1_m": 9.36339954137802
+        },
+        "2": {
+          "psnr_db": 21.808801004214427,
+          "pixel_l1": 0.10173474540933966,
+          "latent_l1": 0.43174517452716826,
+          "waypoint_l1_m": 9.36339954137802
+        },
+        "4": {
+          "psnr_db": 21.785651993495136,
+          "pixel_l1": 0.10214898670092225,
+          "latent_l1": 0.4354860894382,
+          "waypoint_l1_m": 9.36339954137802
+        }
+      }
+    },
+    {
+      "step": 4500,
+      "nfe": {
+        "1": {
+          "psnr_db": 21.8270884644504,
+          "pixel_l1": 0.10182164004072547,
+          "latent_l1": 0.4247706301510334,
+          "waypoint_l1_m": 9.36339954137802
+        },
+        "2": {
+          "psnr_db": 21.790982095087394,
+          "pixel_l1": 0.10187953580170869,
+          "latent_l1": 0.43217689022421835,
+          "waypoint_l1_m": 9.36339954137802
+        },
+        "4": {
+          "psnr_db": 21.765766534155595,
+          "pixel_l1": 0.10227475576102733,
+          "latent_l1": 0.4352999873459339,
+          "waypoint_l1_m": 9.36339954137802
+        }
+      }
+    },
+    {
+      "step": 5000,
+      "nfe": {
+        "1": {
+          "psnr_db": 21.808995417923754,
+          "pixel_l1": 0.10187906790524721,
+          "latent_l1": 0.4261710196733475,
+          "waypoint_l1_m": 9.36339954137802
+        },
+        "2": {
+          "psnr_db": 21.767466654823096,
+          "pixel_l1": 0.10228282688185572,
+          "latent_l1": 0.4336560495197773,
+          "waypoint_l1_m": 9.36339954137802
+        },
+        "4": {
+          "psnr_db": 21.74472044359363,
+          "pixel_l1": 0.10264016557484865,
+          "latent_l1": 0.43643206506967547,
+          "waypoint_l1_m": 9.36339954137802
+        }
+      }
+    }
+  ],
+  "visual_review": {
+    "status": "numerical_pass_visual_quality_insufficient_for_demo",
+    "scope": "First validation scene, single-chunk comparison and 32-frame camera-conditioned rollout; not all-scene visual certification",
+    "observations": [
+      "Recognizable road direction, trees and buildings",
+      "Blurred lane markings, vehicles, poles and building edges; ghosting",
+      "Later chunks remain soft; no zero-drift claim"
+    ],
+    "authorizes_batch_or_styles": false
+  },
+  "artifact_sha256": {
+    "metrics.json": "4eb7f3397b6b817091ce35c1e5c44d0c0921def44c958e13d55bd99d9ee0fb5b",
+    "reconstruction.png": "66e1a099157827e4f01f9a7ef0b9d53b957ae58d137716ec3bcc786a5171d455",
+    "closed_loop_contact_sheet.png": "eabf4a3f379e7256c1ac928ceaf4437202a2be08626bb02453b779edc84947fa",
+    "gate.json": "072c07de0af447ef68a0c7c9f3646f8a65f9f3e5898a0ab6487ae3b989ef40c7",
+    "rollout_metrics.json": "244d41cb2cbca18f46b038e620d7c453915bd8d22282760b77a3b779b1e9dbb0",
+    "training_summary.json": "8b8a81a605e0e1931ef8dd552b5143f3c6f47b5ea4767285171f4e6a287e0f65",
+    "closed_loop_32_frames.gif": "2d5ecfdc91763228289eb603faab5c5f5e95d2600333b0034a62b21a79a7e23c",
+    "contact_sheet.png": "3fd54986d7269d63d5790e19867eeb4974f57960378947904f5e5ea44eb2b41f"
+  }
+}
