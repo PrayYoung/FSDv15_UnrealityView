@@ -15,6 +15,12 @@ def require_review(report,review):
     return data
 
 
+def require_numeric(report):
+    data=json.loads(Path(report).read_text())
+    if data.get('numeric_gate_passed') is not True:raise ValueError('Numeric gate has not passed')
+    return data
+
+
 def front_gate(directory):
     directory=Path(directory)
     initial=json.loads((directory/'eval_000000/metrics.json').read_text())
@@ -31,9 +37,11 @@ def front_gate(directory):
 def main():
     p=argparse.ArgumentParser(description=__doc__);sub=p.add_subparsers(dest='command',required=True)
     check=sub.add_parser('check');check.add_argument('--report',required=True);check.add_argument('--review',required=True)
+    numeric=sub.add_parser('check-numeric');numeric.add_argument('--report',required=True)
     front=sub.add_parser('front-report');front.add_argument('--train',required=True);front.add_argument('--output',required=True)
     a=p.parse_args()
     if a.command=='check':require_review(a.report,a.review);print('PIPELINE_GATE_OK')
+    elif a.command=='check-numeric':require_numeric(a.report);print('NUMERIC_GATE_ONLY_OK; visual approval not granted')
     else:atomic_json(a.output,front_gate(a.train))
 
 

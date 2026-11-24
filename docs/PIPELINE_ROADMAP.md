@@ -291,3 +291,22 @@ checkpoint state remains the dominant cost. Do not omit unique optimizer/raw/EMA
 state while the rental disk is ephemeral and no durable backup is configured.
 No dataset, native ZIP, build environment or model-download cache is included in
 the Stage 1B return path. Existing local learned artifacts are retained.
+
+## Independent one-scene reconstruction verification
+
+`scripts/chase_3dgs_smoke_1scene.sh --independent-verification` is an explicit
+single-scene diagnostic authorized separately from downstream training. It still
+requires the reviewed Stage 1A gate and passing Stage 1B numeric report, but does
+not require or invent a Stage 1B visual pass. Default smoke and batch commands
+retain their existing visual gates. This mode cannot launch batch or model training.
+Use scene 040, 15,000 reconstruction iterations, raw rendering (Difix off), and the
+unchanged teacher PSNR/coverage thresholds. Poor output is a result to inspect,
+not permission to relax the gates or automatically repeat the experiment.
+
+Upload only source/configuration and the small evidence JSONs. Download only
+`archive_record.json`, scene `quality.json`, `calibration.json`, `manifest.json`
+(if the numeric gate passes), `inspection.png`, `chase_raw.gif`, the 80 rendered
+RGB targets, and the ingestion-check manifest. Native data, archive, alpha sequences,
+build environments, intermediate fits and the disposable smoke-fit checkpoint
+remain remote scratch. This run verifies rendered targets; it does not preserve a
+reconstruction checkpoint for interactive rerendering or continued 3DGS training.

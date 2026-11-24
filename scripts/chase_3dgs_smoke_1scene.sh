@@ -6,10 +6,16 @@ export HF_HOME="$PWD/.cache/huggingface"
 : "${OVERFIT_GATE:?Path to completed Stage 1A gate.json}"
 : "${OVERFIT_REVIEW:?Path to hash-bound passing visual review}"
 : "${FRONT_GATE:?Path to completed Stage 1B numeric report}"
-: "${FRONT_REVIEW:?Path to hash-bound passing Stage 1B visual review}"
 SEQUENCE=${SEQUENCE:-040}
 uv run --no-sync python -m scripts.pipeline_gates check --report "$OVERFIT_GATE" --review "$OVERFIT_REVIEW"
-uv run --no-sync python -m scripts.pipeline_gates check --report "$FRONT_GATE" --review "$FRONT_REVIEW"
+if [ "${1:-}" = --independent-verification ]; then
+  # Explicit single-scene teacher check; never grants a front-view visual pass.
+  uv run --no-sync python -m scripts.pipeline_gates check-numeric --report "$FRONT_GATE"
+else
+  [ "$#" = 0 ] || { echo 'Unknown smoke option' >&2; exit 2; }
+  : "${FRONT_REVIEW:?Path to hash-bound passing Stage 1B visual review}"
+  uv run --no-sync python -m scripts.pipeline_gates check --report "$FRONT_GATE" --review "$FRONT_REVIEW"
+fi
 uv run --no-sync python scripts/cuda_preflight.py
 bash tools/chase_3dgs/check_build_env.sh
 # Optional cleanup is explicit; the default executes raw dynamic 3DGS only.
