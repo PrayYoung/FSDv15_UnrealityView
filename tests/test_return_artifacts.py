@@ -3,7 +3,7 @@ import json
 import pytest
 import torch
 from safetensors.torch import load_file,save_file
-from scripts.compact_return_artifacts import compact,export_latest
+from scripts.compact_return_artifacts import compact,export_latest,compact_visuals
 from unrealityview.checkpoint import save_checkpoint,load_checkpoint
 from unrealityview.models.meanflow_dit import ConditionalMeanFlowDiT,DiTConfig
 from unrealityview.models.driving_policy_head import DrivingPolicyHead
@@ -38,3 +38,26 @@ def test_compaction_never_drops_unique_export(tmp_path):
     tensors=load_file(str(path));tensors['dit.output.bias'][0]+=1;save_file(tensors,str(path))
     with pytest.raises(ValueError,match='differs'):compact(tmp_path)
     assert path.is_file()
+
+
+def test_visual_retention_keeps_initial_best_final_metrics_and_unique_files(tmp_path):
+    for name,score in [('eval_000000',8),('eval_000500',20),('eval_001000',22),('eval_001500',21),('eval_raw_001000',23)]:
+        path=tmp_path/name;path.mkdir()
+        (path/'metrics.json').write_text(json.dumps({'nfe':{'1':{'psnr_db':score}}}))
+        (path/'contact_sheet.png').write_bytes(b'preview')
+        (path/'closed_loop.gif').write_bytes(b'preview')
+        (path/'unique.safetensors').write_bytes(b'learned')
+    compact_visuals(tmp_path)
+    for path in tmp_path.glob('eval_*'):
+        assert (path/'metrics.json').exists() and (path/'unique.safetensors').exists()
+        assert (path/'contact_sheet.png').exists()==(path.name in {'eval_000000','eval_001000','eval_001500'})
+    assert json.loads((tmp_path/'visual_retention.json').read_text())['omitted_bytes']==28
+
+
+def test_invalid_metrics_preserve_every_preview(tmp_path):
+    for name,score in [('eval_000000',8),('eval_000500',float('nan'))]:
+        path=tmp_path/name;path.mkdir()
+        (path/'metrics.json').write_text(json.dumps({'nfe':{'1':{'psnr_db':score}}}))
+        (path/'contact_sheet.png').write_bytes(b'preview')
+    with pytest.raises(ValueError,match='Nonfinite'):compact_visuals(tmp_path)
+    assert len(list(tmp_path.glob('*/contact_sheet.png')))==2

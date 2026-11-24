@@ -278,3 +278,16 @@ the convenience export with `python -m scripts.compact_return_artifacts --train
 TRAIN_DIRECTORY --export-latest` when space permits. The anticipated return is
 roughly 1.6–1.8 GB, rather than returning the dataset again. This is lossless storage
 compaction, not a change to training precision or exact-resume semantics.
+
+
+Future Stage 1B returns use `--compact-visuals`: retain all evaluation JSON and
+training logs, but retain rendered media only for the initial, best validation
+1-NFE PSNR, and final EMA evaluations. Intermediate and raw-weight comparison
+previews are omitted; their metrics remain. `visual_retention.json` records the
+selection and omitted bytes. Learned weights and exact-resume state are untouched.
+The completed pilot returned about 1.6 GiB: roughly 1.2 GiB restart state, 312 MiB
+best weights and 60 MiB diagnostics. This policy trims previews to roughly 10 MiB;
+checkpoint state remains the dominant cost. Do not omit unique optimizer/raw/EMA
+state while the rental disk is ephemeral and no durable backup is configured.
+No dataset, native ZIP, build environment or model-download cache is included in
+the Stage 1B return path. Existing local learned artifacts are retained.

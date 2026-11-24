@@ -14,7 +14,7 @@ return_payload() {
   result_code=$?
   trap - EXIT
   if [ -f outputs/pandaset_pilot_v2/train/checkpoint/training_state.json ]; then
-    uv run --no-sync python -m scripts.compact_return_artifacts --train outputs/pandaset_pilot_v2/train || echo 'Kept latest weights because compact verification failed' >&2
+    uv run --no-sync python -m scripts.compact_return_artifacts --train outputs/pandaset_pilot_v2/train --compact-visuals || echo 'Artifact compaction incomplete; unverified artifacts retained' >&2
   fi
   exit "$result_code"
 }
