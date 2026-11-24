@@ -13,11 +13,13 @@ uv run --no-sync python -m scripts.pipeline_gates check --report "$TEACHER_GATE"
 uv run --no-sync python scripts/cuda_preflight.py
 # Requires the checksum-pinned archive on remote storage. Setup/download are
 # explicit preparation, not silently repeated inside a 76-scene batch.
+DIFIX_ARGS=()
+if [ "${DIFIX_CLEANUP:-0}" = 1 ]; then DIFIX_ARGS+=(--difix-cleanup); fi
 case "${1:-render}" in
 render)
 .drivestudio-venv/bin/python -m tools.chase_3dgs.batch \
   --archive .cache/pandaset_archive/pandaset.zip --front-gate "$FRONT_GATE" --front-review "$FRONT_REVIEW" \
-  --teacher-gate "$TEACHER_GATE" --teacher-review "$TEACHER_REVIEW" --iters "${THREEDGS_ITERS:-15000}"
+  --teacher-gate "$TEACHER_GATE" --teacher-review "$TEACHER_REVIEW" --iters "${THREEDGS_ITERS:-15000}" "${DIFIX_ARGS[@]}"
 ;;
 cache)
 uv run --no-sync python scripts/fetch_pandaset_cameras.py \

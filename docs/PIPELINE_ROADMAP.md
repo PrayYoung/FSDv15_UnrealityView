@@ -90,8 +90,9 @@ result and does not silently replace the original gate.
 
 ## Stage 2A — one dynamic 3DGS flying-camera scene
 
-Run only after the Stage 1A result is reviewed. This single-scene experiment does
-not authorize Stage 1B or a batch automatically. Use a training scene such as
+Run only after Stage 1A review and the full Stage 1B pilot numeric/visual checks.
+The latest user-specified order is Stage 1B first, then Stage 2A. This single-scene
+experiment does not authorize a batch automatically. Use a training scene such as
 040, rather than consume a reserved final-test scene for iterative tuning.
 
 The isolated environment is `.drivestudio-venv`, Python 3.10 / Torch 2.5.1 CUDA
@@ -117,7 +118,8 @@ fetches immutable source revisions from
 
 ```bash
 # Include the passing Stage 1A gate/review files in the staging bundle.
-# In its command wrapper set OVERFIT_GATE and OVERFIT_REVIEW to those files.
+# In its command wrapper set OVERFIT_GATE/OVERFIT_REVIEW and the completed
+# Stage 1B FRONT_GATE/FRONT_REVIEW to the included reviewed reports.
 # Optional: SEQUENCE=040 THREEDGS_ITERS=15000 DIFIX_CLEANUP=0
 vast-run run --project-root . --gpu-model 'RTX 4090' --max-price 0.35 \
   --disk-gb 120 --template-hash '' \
@@ -169,10 +171,14 @@ Upstream references: [PandaSet preprocessing](https://github.com/ziyc/drivestudi
 Hold out every tenth native timestep from all six image-training views. This is
 within-scene reconstruction validation; source scene train/val/test identities
 for the eventual DiT remain fixed. Export an importer-visible manifest only when
-mean held-out camera PSNR >=22 dB and minimum per-frame chase alpha coverage >=0.85.
-Coverage means raw Gaussian opacity >=0.5; sky lighting is not counted as geometry.
-This strict condition may fail when sky occupies a large area; any change requires
-a separately recorded protocol amendment, not a hidden mask adjustment.
+mean held-out camera PSNR >=22 dB, whole-frame coverage >=0.50 and fixed lower-band
+coverage >=0.85, taking the minimum over all frames. Coverage means raw Gaussian
+opacity >=0.5. The fixed band is rows 67:192, the lower ~65% of the output, not a
+measured per-frame horizon or surveyed road mask. Sky lighting remains distinct
+from Gaussian geometry. The earlier whole-frame >=0.85 policy is retained in the
+history; the user requested this amendment before any reconstruction metrics were
+returned. Both whole-frame and band metrics, policy name and thresholds are stored.
+Empty scenes, broken lower-band geometry and insufficient full-frame coverage fail.
 
 Write to `outputs/chase_teacher/pandaset/040/`:
 
@@ -197,6 +203,8 @@ The model card limits the model to research/noncommercial use. Cleanup can inven
 content and does not establish geometric truth or temporal consistency. Raw
 coverage/held-out reconstruction gates remain in force. No cleanup is run by
 default, and its GPU compatibility/quality has not yet been validated here.
+`--difix-cleanup` is forwarded by the batch CLI; its stage shell wrapper uses
+`DIFIX_CLEANUP=1`. Reuse checks reject exports from a different cleanup/gate policy.
 
 ## Stage 2B/2C — separately reviewed batch, cache and training jobs
 
@@ -232,3 +240,36 @@ OpenCV style caching, LoRA training, object swaps or generative teacher creation
 launched by Stage 1 or Stage 2. Merged adapters avoid extra adapter operations in
 the inference graph; merge latency, size, visual quality and throughput still need
 measurement. No zero-latency or successful styled-output claim is made.
+
+## Setup failure and follow-up corrections
+
+The first Stage 2A attempt downloaded and SHA-256-verified the full archive in
+506.6 seconds (~87.9 MB/s effective average), then stopped while building a VisEr
+dependency: the selected Python 3.10 lacked `Python.h`. There were no reconstruction
+iterations or quality images. The rental was destroyed, approximately $0.057 spent.
+This is a setup failure, not evidence about 3DGS quality. Its archive was ephemeral.
+
+Setup now installs `python3.10-dev`, verifies the selected interpreter's header
+location, and completes CUDA imports before the large archive transfer. Native
+builds use two jobs below 24 GiB effective host/container RAM, otherwise four.
+During chase rendering only, all 80 frame IDs use consistent mean appearance
+embeddings; the original held-out metrics and split are computed first, and the
+trainer's original flags/indices are restored afterward. This prevents periodic
+held-out-frame appearance changes without changing the metric being graded.
+
+## Local storage policy for Stage 1B
+
+The complete 76-scene encoded camera cache is retained locally. A clean upload
+bundle hard-links its immutable files, and the runner's explicit
+`--discard-snapshot-after-upload` option discards only the regenerable compressed
+upload after verified transfer. It rebuilds that upload if a bounded infrastructure
+retry needs it. The default retains snapshots for other projects.
+
+Returned Stage 1B artifacts retain the full restart state (raw/EMA weights, optimizer,
+RNG, scaler and sampler) and the directly loadable best checkpoint. After verifying
+exact tensor equality, the duplicate `checkpoint/model.safetensors` export is omitted,
+saving ~327 MB. Its EMA remains in the restart state; `--resume` still works. Restore
+the convenience export with `python -m scripts.compact_return_artifacts --train
+TRAIN_DIRECTORY --export-latest` when space permits. The anticipated return is
+roughly 1.6–1.8 GB, rather than returning the dataset again. This is lossless storage
+compaction, not a change to training precision or exact-resume semantics.

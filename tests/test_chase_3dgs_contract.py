@@ -35,7 +35,7 @@ def test_manifest_and_core_cache_ingestion(tmp_path):
     targets=tmp_path/'teacher';directory=targets/'pandaset/040';(directory/'rgb').mkdir(parents=True)
     times=[100+i/10 for i in range(48)]
     for i in range(48):Image.new('RGB',(320,192),(30,50,80)).save(directory/'rgb'/f'{i:05d}.png')
-    quality=dict(heldout_psnr_db=24.,heldout_samples=12,chase_alpha_coverage_min=.9)
+    quality=dict(heldout_psnr_db=24.,heldout_samples=12,chase_alpha_coverage_min=.9,chase_ground_coverage_min=.9)
     report=export_manifest(directory,'040',times,quality)
     assert report['target_view']=='elevated_chase' and len(report['frame_sha256'])==48
     entry=dict(dataset='pandaset',sequence='040',root=str(native),split='train')
@@ -90,3 +90,37 @@ def test_visual_gate_requires_exact_report_fingerprint(tmp_path):
     with pytest.raises(ValueError,match='exact numeric report'):require_review(report,review)
     review.write_text(json.dumps(dict(visual_review_passed=True,report_sha256=hashlib.sha256(report.read_bytes()).hexdigest())))
     assert require_review(report,review)['numeric_gate_passed']
+
+
+def test_sky_band_passes_but_empty_and_broken_geometry_fail(tmp_path):
+    from tools.chase_3dgs.render_policy import alpha_coverages,GATE_POLICY
+    directory=tmp_path/'scene';(directory/'rgb').mkdir(parents=True)
+    for i in range(2):Image.new('RGB',(320,192)).save(directory/'rgb'/f'{i:05d}.png')
+    alpha=np.ones((192,320));alpha[:67]=0
+    c=alpha_coverages(alpha)
+    assert .5<c['whole']<.85 and c['ground']==1
+    q=dict(heldout_psnr_db=24,heldout_samples=2,chase_alpha_coverage_min=c['whole'],chase_ground_coverage_min=c['ground'])
+    report=export_manifest(directory,'040',[100.,100.1],q)
+    assert report is not None and report['quality']['gate_policy']==GATE_POLICY
+    for changed in (dict(chase_alpha_coverage_min=0,chase_ground_coverage_min=0),dict(chase_ground_coverage_min=.84),dict(chase_alpha_coverage_min=.49),dict(heldout_psnr_db=21.9)):
+        assert export_manifest(directory,'040',[100.,100.1],{**q,**changed}) is None
+    with pytest.raises(ValueError):alpha_coverages(np.full((192,320),float('nan')))
+
+
+def test_mean_appearance_scope_preserves_heldout_split_and_restores_on_error():
+    from types import SimpleNamespace
+    from tools.chase_3dgs.render_policy import consistent_novel_appearance
+    original=[0,10,20,30,40,50,60,70]
+    affine=SimpleNamespace(in_test_set=False);trainer=SimpleNamespace(test_set_indices=original,models={'Affine':affine})
+    assert 1 not in trainer.test_set_indices
+    with pytest.raises(RuntimeError):
+        with consistent_novel_appearance(trainer,80):
+            assert all(i in trainer.test_set_indices for i in range(80))
+            affine.in_test_set=True
+            raise RuntimeError('render failed')
+    assert trainer.test_set_indices is original and not affine.in_test_set
+
+
+def test_low_ram_build_jobs():
+    from tools.chase_3dgs.build_env import build_jobs
+    assert build_jobs(16*2**30)==2 and build_jobs(24*2**30)==4 and build_jobs(128*2**30)==4

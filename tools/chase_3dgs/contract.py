@@ -6,6 +6,7 @@ from pathlib import Path
 import numpy as np
 from PIL import Image
 from prepare_chase_teacher import chase_calibration
+from tools.chase_3dgs.render_policy import GATE_POLICY
 from unrealityview.data.cache import atomic_json
 
 CAMERA=dict(camera_back=6.8,camera_height=3.8,pitch_deg=19.,fov=75.)
@@ -38,8 +39,10 @@ def export_manifest(directory,sequence,timestamps,quality,teacher='DriveStudio O
     if not sequence.isdigit() or len(sequence)!=3:raise ValueError('Invalid PandaSet source identity')
     if frame_directory not in ('rgb','rgb_clean'):raise ValueError('Unsupported teacher frame directory')
     psnr=float(quality['heldout_psnr_db']);coverage=float(quality['chase_alpha_coverage_min'])
-    passed=bool(quality.get('heldout_samples',0)>0 and math.isfinite(psnr) and psnr>=22 and math.isfinite(coverage) and coverage>=.85)
-    quality={**quality,'numeric_gate_passed':passed,'visual_review_required':True}
+    ground=float(quality.get('chase_ground_coverage_min',0.))
+    passed=bool(quality.get('heldout_samples',0)>0 and math.isfinite(psnr) and psnr>=22 and math.isfinite(coverage) and coverage>=.50 and math.isfinite(ground) and ground>=.85)
+    quality={**quality,'numeric_gate_passed':passed,'visual_review_required':True,'gate_policy':GATE_POLICY,
+        'thresholds':dict(heldout_psnr_db=22.,whole_frame_alpha=.50,lower_band_alpha=.85,lower_band_start_row=67)}
     atomic_json(directory/'quality.json',quality)
     if not passed:return None
     frames=[]

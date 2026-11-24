@@ -5,10 +5,18 @@ export PYTHONPATH="$PWD/src:$PWD${PYTHONPATH:+:$PYTHONPATH}"
 export HF_HOME="$PWD/.cache/huggingface"
 : "${OVERFIT_GATE:?Path to completed Stage 1A gate.json}"
 : "${OVERFIT_REVIEW:?Path to hash-bound passing visual review}"
+: "${FRONT_GATE:?Path to completed Stage 1B numeric report}"
+: "${FRONT_REVIEW:?Path to hash-bound passing Stage 1B visual review}"
 SEQUENCE=${SEQUENCE:-040}
 uv run --no-sync python -m scripts.pipeline_gates check --report "$OVERFIT_GATE" --review "$OVERFIT_REVIEW"
+uv run --no-sync python -m scripts.pipeline_gates check --report "$FRONT_GATE" --review "$FRONT_REVIEW"
 uv run --no-sync python scripts/cuda_preflight.py
 bash tools/chase_3dgs/check_build_env.sh
+# Optional cleanup is explicit; the default executes raw dynamic 3DGS only.
+SETUP_ARGS=();RENDER_ARGS=()
+if [ "${DIFIX_CLEANUP:-0}" = 1 ]; then SETUP_ARGS+=(--difix);RENDER_ARGS+=(--difix-cleanup);fi
+bash tools/chase_3dgs/setup_drivestudio.sh "${SETUP_ARGS[@]}"
+
 # Native LiDAR/cuboids are needed here. Camera-only encoded caches cannot replace
 # them. The original archive was scratch and may need remote re-download.
 uv venv --python 3.11 .download-venv
@@ -19,10 +27,6 @@ HF_HUB_DISABLE_PROGRESS_BARS=1 HF_XET_NUM_CONCURRENT_RANGE_GETS=4 HF_XET_CHUNK_C
   --record outputs/chase_teacher/archive_record.json
 uv run --no-sync python -m tools.chase_3dgs.extract_pandaset_scene \
   --archive .cache/pandaset_archive/pandaset.zip --output .cache/chase_native --sequence "$SEQUENCE"
-# Optional cleanup is explicit; the default executes raw dynamic 3DGS only.
-SETUP_ARGS=();RENDER_ARGS=()
-if [ "${DIFIX_CLEANUP:-0}" = 1 ]; then SETUP_ARGS+=(--difix);RENDER_ARGS+=(--difix-cleanup);fi
-bash tools/chase_3dgs/setup_drivestudio.sh "${SETUP_ARGS[@]}"
 timeout --signal=TERM --kill-after=60s 7200 .drivestudio-venv/bin/python -m tools.chase_3dgs.render_chase_teacher \
   --native .cache/chase_native --processed .cache/chase_processed --sequence "$SEQUENCE" \
   --output outputs/chase_teacher --iters "${THREEDGS_ITERS:-15000}" "${RENDER_ARGS[@]}"

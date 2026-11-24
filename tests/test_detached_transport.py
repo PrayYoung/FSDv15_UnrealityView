@@ -58,3 +58,41 @@ def test_worker_never_starts_fails_promptly(tmp_path):
     responses=iter(['','STARTING']);times=iter([0,0,0,0,0,61,61])
     with pytest.raises(DetachedTransportError,match='startup grace'):
         run_detached(['ssh'],'body','/job',tmp_path/'log',execute=lambda *a,**k:SimpleNamespace(returncode=0,stdout=next(responses)),sleep=lambda _:None,clock=lambda:next(times))
+
+
+def test_snapshot_disposal_is_opt_in_and_retry_rebuilds(tmp_path):
+    from tools.remote_runner.install import install
+    import runpy
+    from pathlib import Path
+    path=tmp_path/'runner.py'
+    path.write_text('''from pathlib import Path
+uploaded=[]
+updates=[]
+def build_parser():
+    run_parser=None
+    run_parser.add_argument("--dry-run-search", action="store_true")
+def upload_snapshot(connection, key, snapshot, remote_workdir):
+    uploaded.append(snapshot.read_bytes())
+def create_repo_snapshot(project_root,snapshot):
+    snapshot.write_bytes(b'rebuilt')
+def update_metadata(path,**kwargs):updates.append(kwargs)
+def unused():
+    remote_exit_code = ssh_run_workload()
+def simulate(args,project_root,paths,config):
+    connection=None
+    remote_workdir='/remote'
+    for once in [0]:
+        if True:
+            if True:
+                upload_snapshot(connection, config.ssh_private_key, paths["snapshot"], remote_workdir)
+''')
+    install(path);module=runpy.run_path(str(path));archive=tmp_path/'snapshot.tar.gz';archive.write_bytes(b'original')
+    metadata=tmp_path/'metadata.json';metadata.write_text('{}');outputs=tmp_path/'weights.safetensors';outputs.write_bytes(b'unique')
+    paths=dict(snapshot=archive,metadata=metadata);config=SimpleNamespace(ssh_private_key=Path('/key'))
+    module['simulate'](SimpleNamespace(discard_snapshot_after_upload=False),tmp_path,paths,config)
+    assert archive.exists()
+    module['simulate'](SimpleNamespace(discard_snapshot_after_upload=True),tmp_path,paths,config)
+    assert not archive.exists()
+    module['simulate'](SimpleNamespace(discard_snapshot_after_upload=True),tmp_path,paths,config)
+    assert module['uploaded']==[b'original',b'original',b'rebuilt']
+    assert outputs.read_bytes()==b'unique' and module['updates'][-1]['snapshot_retained'] is False

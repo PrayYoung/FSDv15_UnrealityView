@@ -31,3 +31,8 @@ remote completion, retrieves its log, then retrieves outputs and destroys the
 instance. Unit tests simulate disconnects, lost acknowledgements, genuine nonzero
 workload exits and disappearance without an exit record. They do not establish
 recovery from every provider or network failure.
+
+For storage-constrained jobs, `vast-run run --discard-snapshot-after-upload` opts in
+to removing the local compressed upload after a verified transfer. The uncompressed
+source/cache bundle remains available and the runner rebuilds the archive for an
+infrastructure retry. Default behavior for other projects is unchanged.

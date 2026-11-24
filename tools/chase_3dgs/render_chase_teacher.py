@@ -11,6 +11,7 @@ import subprocess
 import sys
 import numpy as np
 from PIL import Image,ImageDraw
+from tools.chase_3dgs.render_policy import alpha_coverages,consistent_novel_appearance,GATE_POLICY
 from tools.chase_3dgs.contract import chase_calibration,processed_front_pose,project_world,export_manifest
 
 ROOT=Path(__file__).resolve().parents[2]
@@ -99,7 +100,7 @@ def render_scene(upstream,processed,native,sequence,checkpoint,output,difix=Fals
     timestamps=json.loads((native/sequence/'camera/front_camera/timestamps.json').read_text())
     if len(timestamps)!=80 or dataset.num_img_timesteps!=80:raise ValueError('Expected all 80 exact native frames')
     native_camera=dataset.pixel_source.camera_data[0]
-    references=[];renders=[];coverages=[];ego_coverages=[];heldout=[];calibrations=[]
+    references=[];renders=[];coverages=[];ground_coverages=[];ego_coverages=[];heldout=[];calibrations=[]
     with torch.no_grad():
         if dataset.test_image_set is not None:
             for i in range(len(dataset.test_image_set)):
@@ -109,20 +110,24 @@ def render_scene(upstream,processed,native,sequence,checkpoint,output,difix=Fals
                 prediction=trainer(image,camera)['rgb'].float().clamp(0,1)
                 mse=(prediction-image['pixels']).square().mean().item()
                 heldout.append(float(-10*np.log10(max(mse,1e-12))))
-        for i in range(80):
-            front=processed_front_pose(processed/sequence,i)
-            np.testing.assert_allclose(front,native_camera.cam_to_worlds[i].cpu().numpy(),atol=1e-4)
-            pose,k=chase_calibration(front)
-            image,camera=render_frame_inputs(pose,k,native_camera.normalized_time[i],i,device)
-            result=trainer(image,camera,novel_view=True)
-            rgb=result['rgb'].detach().cpu().float().clamp(0,1).numpy()
-            alpha=result['opacity'].detach().cpu().float().squeeze(-1).clamp(0,1).numpy()
-            rendered=Image.fromarray(np.rint(rgb*255).astype(np.uint8))
-            rendered.save(directory/'rgb'/f'{i:05d}.png');renders.append(rendered)
-            Image.fromarray(np.rint(alpha*255).astype(np.uint8)).save(directory/'alpha'/f'{i:05d}.png')
-            coverages.append(float((alpha>=.5).mean()));ego_coverages.append(float((alpha[144:,112:208]>=.5).mean()))
-            with Image.open(native/sequence/'camera/front_camera'/f'{i:02d}.jpg') as ref:references.append(ref.convert('RGB').resize((320,192)))
-            calibrations.append(dict(camera_to_world=pose.tolist(),intrinsics=k.tolist()))
+        # Held-out PSNR above uses the original test split. Only the novel
+        # view pass below uses consistent mean appearance for all 80 frames.
+        with consistent_novel_appearance(trainer,80):
+            for i in range(80):
+                front=processed_front_pose(processed/sequence,i)
+                np.testing.assert_allclose(front,native_camera.cam_to_worlds[i].cpu().numpy(),atol=1e-4)
+                pose,k=chase_calibration(front)
+                image,camera=render_frame_inputs(pose,k,native_camera.normalized_time[i],i,device)
+                result=trainer(image,camera,novel_view=True)
+                rgb=result['rgb'].detach().cpu().float().clamp(0,1).numpy()
+                alpha=result['opacity'].detach().cpu().float().squeeze(-1).clamp(0,1).numpy()
+                rendered=Image.fromarray(np.rint(rgb*255).astype(np.uint8))
+                rendered.save(directory/'rgb'/f'{i:05d}.png');renders.append(rendered)
+                Image.fromarray(np.rint(alpha*255).astype(np.uint8)).save(directory/'alpha'/f'{i:05d}.png')
+                coverage=alpha_coverages(alpha)
+                coverages.append(coverage['whole']);ground_coverages.append(coverage['ground']);ego_coverages.append(coverage['ego'])
+                with Image.open(native/sequence/'camera/front_camera'/f'{i:02d}.jpg') as ref:references.append(ref.convert('RGB').resize((320,192)))
+                calibrations.append(dict(camera_to_world=pose.tolist(),intrinsics=k.tolist()))
     cleaned=cleanup_difix(renders,references,pins) if difix else None
     if cleaned:
         (directory/'rgb_clean').mkdir(exist_ok=True)
@@ -150,7 +155,9 @@ def render_scene(upstream,processed,native,sequence,checkpoint,output,difix=Fals
         fit_iterations=int(cfg.trainer.optim.num_iters),heldout_psnr_db=float(np.mean(heldout)) if heldout else 0.,heldout_samples=len(heldout),
         heldout_definition='Every tenth native timestep withheld from all six image training views',
         chase_alpha_coverage_min=min(coverages),chase_alpha_coverage_mean=float(np.mean(coverages)),
-        alpha_definition='Fraction of pixels with raw Gaussian opacity >=0.5; sky is not counted as geometry',
+        chase_ground_coverage_min=min(ground_coverages),chase_ground_coverage_mean=float(np.mean(ground_coverages)),
+        per_frame_ground_alpha=ground_coverages,novel_appearance_policy='mean_embedding_all_frames',gate_policy=GATE_POLICY,
+        alpha_definition='Raw Gaussian opacity>=0.5; whole frame and fixed lower band rows67:192 measured separately; sky is not geometry',
         ego_footprint_coverage_min=min(ego_coverages),per_frame_alpha=coverages,
         difix_enabled=difix,upstream=pins,calibration_reference='Blue markers at local FLU (15,0,0),(25,0,0),(40,0,0); not planner output')
     manifest=export_manifest(directory,sequence,timestamps,quality,frame_directory='rgb_clean' if cleaned else 'rgb',
