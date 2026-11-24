@@ -1,5 +1,5 @@
-from unrealityview.styles import validate_style_slug
 """Train only video-style adapters. A trained base is needed for meaningful output."""
+from unrealityview.styles import validate_style_slug
 import argparse
 import json
 import math

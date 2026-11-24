@@ -1,9 +1,9 @@
-from unrealityview.styles import validate_style_slug
 """Deterministic color/ink teachers with optical-flow-based temporal stabilization.
 
 This is a 2D real-video baseline, not a 3D-consistent stylized Gaussian teacher.
 Flow consistency rejects disocclusions; it cannot guarantee zero flicker.
 """
+from unrealityview.styles import validate_style_slug
 import hashlib
 import json
 from pathlib import Path

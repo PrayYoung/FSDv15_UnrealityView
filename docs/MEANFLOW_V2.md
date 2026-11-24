@@ -65,17 +65,31 @@ original validation scene remains in its original partition. Use preserved encod
 caches; no full archive download is needed. A requested two-minute duration is an
 estimate, not a hard expectation for two full-size models plus evaluation.
 
-Predeclared numeric gates: both probes reach >=22 dB one-step PSNR on the selected
-training window, evaluation PSNR is nondecreasing, and weighted loss remains <=1.
-For corrected Mean-Flow after step 100, median non-skipped derivative RMS must be
-0.5–3 and maximum <=10. These heuristic derivative limits are diagnostic gates,
+Original submitted gate (review 1): both probes >=22 dB at 1 NFE, strict
+nondecreasing PSNR, and derivative median 0.5–3/max <=10. The user supplied an
+additional review after submission; that original run and verdict are preserved.
+
+Amended gate (review 2): corrected Mean-Flow must reach >=22 dB at **1 NFE**;
+the boundary-only control is scored separately at **4 NFE**, with both curves
+recorded for both controls. Weighted loss remains <=1. Allow up to 0.5 dB decline
+between evaluations, and also cap drawdown from the previous peak at 0.5 dB so
+many small drops cannot silently accumulate into a large regression. Corrected
+Mean-Flow post-step-100 derivative RMS median must be **0 < median <=3**, max <=10.
+A zero directional derivative can be mathematically valid for constant velocity;
+this positivity check is a diagnostic heuristic, not proof that zero means a bug.
+Boundary-only training sees interval zero; even four-step inference uses unseen
+nonzero intervals. Its four-step score is a comparison diagnostic, not proof of
+matched train/inference conditioning or one-step competence. These heuristic derivative limits are diagnostic gates,
 not mathematical properties of MeanFlow. The run writes `gate.json`; a numeric
 pass still requires manual inspection of crisp road/vehicle geometry. No full
-pilot starts automatically and no threshold is relaxed after seeing results.
+pilot starts automatically. Any criteria amendment is versioned and reported
+alongside the original verdict; thresholds are not silently changed after seeing results.
 
 Keep final/best probe weights, metrics and images; omit large optimizer-state
 files from the diagnostic return payload. The managed runner retrieves outputs
-and destroys the rental. No periodic agent log polling is needed.
+and destroys the rental. No periodic agent log polling is needed. Cache preflight loads both train and
+validation episodes and checks complete reference JPEG inventories before CUDA
+checks or training. The local staging bundle already included both partitions.
 
 Only after numeric and visual checks pass, run the non-LoRA front-target v2 pilot
 for 5,000 steps on the original frozen 60/8/8 scenes, keeping test reserved and
@@ -109,3 +123,23 @@ Synthetic unit fixtures are the only teacher import executed during local tests.
 The existing calibrated `prepare_real_data.py --target teacher --targets ...`
 PNG/JSON contract remains unchanged for future dynamic 3DGS exports. DriveStudio
 and OmniRe are possible external render sources, not installed or executed here.
+
+## Regrading a submitted job without repeating GPU work
+
+Training weights and metrics are unaffected by these gate-only changes. The existing
+job keeps its original source snapshot. Once its outputs return, run:
+
+```bash
+uv run --no-sync python -m scripts.check_pandaset_v2_overfit \
+  --output outputs/pandaset_v2_overfit --regrade-only
+```
+
+This writes a separately versioned `gate_review2.json` and never overwrites the
+original `gate.json` or retrains a model. Report both verdicts and explain any
+difference. A regrade still requires manual image review before the full pilot.
+
+The first submitted verification attempt ended after successful CUDA/JVP checks
+with SSH exit 255 (broken pipe), and returned no training or gate artifacts. The
+runner labeled it `WORKLOAD_FAILED`; the observable failure is a connection loss,
+not a negative model-quality result. No active rental remained. The revised gate
+was recorded before inspecting any training metrics (none were returned).
