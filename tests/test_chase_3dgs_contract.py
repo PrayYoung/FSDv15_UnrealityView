@@ -52,7 +52,10 @@ def test_manifest_and_core_cache_ingestion(tmp_path):
     assert not (directory/'manifest.json').exists()
 
 
-def test_external_extractor_whitelist_integrity_and_budget(tmp_path):
+def test_external_extractor_whitelist_integrity_and_budget(tmp_path,monkeypatch):
+    from types import SimpleNamespace
+    from tools.chase_3dgs import extract_pandaset_scene
+    monkeypatch.setattr(extract_pandaset_scene.shutil,'disk_usage',lambda _:SimpleNamespace(free=100*2**30))
     archive=tmp_path/'data.zip'
     with zipfile.ZipFile(archive,'w') as z:
         z.writestr('pandaset/040/camera/front_camera/00.jpg',b'jpeg')
@@ -68,6 +71,17 @@ def test_external_extractor_whitelist_integrity_and_budget(tmp_path):
     with zipfile.ZipFile(archive,'a') as z:z.writestr('pandaset/040/camera/front_camera/../../escape.jpg',b'bad')
     with zipfile.ZipFile(archive) as z:
         with pytest.raises(ValueError,match='Unsafe'):selected_members(z,'040')
+
+
+def test_external_extractor_preserves_low_disk_guard(tmp_path,monkeypatch):
+    from types import SimpleNamespace
+    from tools.chase_3dgs import extract_pandaset_scene
+    monkeypatch.setattr(extract_pandaset_scene.shutil,'disk_usage',lambda _:SimpleNamespace(free=0))
+    archive=tmp_path/'data.zip'
+    with zipfile.ZipFile(archive,'w') as z:z.writestr('pandaset/040/lidar/00.pkl.gz',b'opaque')
+    spec=dict(bytes=archive.stat().st_size,sha256=hashlib.sha256(archive.read_bytes()).hexdigest())
+    with pytest.raises(OSError,match='scratch space'):extract(archive,tmp_path/'native',['040'],spec)
+    assert not list((tmp_path/'native').rglob('*.pkl.gz'))
 
 
 def test_visual_gate_requires_exact_report_fingerprint(tmp_path):
