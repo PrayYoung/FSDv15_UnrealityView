@@ -20,6 +20,7 @@ for package in gsplat pytorch3d nvdiffrast; do
 done
 uv pip install --python "$PY" --no-build-isolation --no-deps .cache/third_party/pandaset/python
 PYTHONPATH="$ROOT/.cache/third_party/drivestudio:$ROOT/src:$ROOT" "$PY" -c 'import torch; from models.trainers import MultiTrainer; from models.nodes import RigidNodes,DeformableNodes; assert torch.cuda.is_available(); print("DYNAMIC_3DGS_IMPORT_CUDA_OK")'
+"$PY" tools/chase_3dgs/cuda_build_preflight.py
 
 if [ -d .cache/third_party/difix ]; then
   uv pip install --python "$PY" diffusers==0.33.1 accelerate==1.4.0 peft==0.14.0

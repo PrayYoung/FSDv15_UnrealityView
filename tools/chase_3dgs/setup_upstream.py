@@ -15,6 +15,16 @@ def checkout(root,name,spec):
     subprocess.run(['git','-C',str(dest),'checkout','--detach',spec['commit']],check=True)
     actual=subprocess.check_output(['git','-C',str(dest),'rev-parse','HEAD'],text=True).strip()
     if actual!=spec['commit']:raise ValueError('Upstream revision mismatch')
+    # GLM and other native dependencies are gitlinks, absent from a plain fetch.
+    # Resolve recorded commits, never the submodules' moving remote branches.
+    if name in ('gsplat','pytorch3d','nvdiffrast'):
+        subprocess.run(['git','-C',str(dest),'submodule','sync','--recursive'],check=True)
+        subprocess.run(['git','-C',str(dest),'submodule','update','--init','--recursive','--depth','1'],check=True)
+        status=subprocess.check_output(['git','-C',str(dest),'submodule','status','--recursive'],text=True)
+        if any(line and line[0]!=' ' for line in status.splitlines()):
+            raise ValueError('Upstream submodule revision mismatch')
+    if name=='gsplat' and not (dest/'gsplat/cuda/csrc/third_party/glm/glm/glm.hpp').is_file():
+        raise ValueError('Pinned gsplat GLM headers missing before native build')
     return dest
 
 

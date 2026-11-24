@@ -100,3 +100,8 @@ Reference / codec reconstruction / 4-NFE highlights the remaining detail gap:
 32-frame rollout with ongoing recorded camera conditioning:
 
 ![Camera-conditioned rollout diagnostic](closed_loop_32_frames.gif)
+
+
+The subsequent [inference-only Step 0 diagnosis](diagnosis/README.md) exactly
+reproduced the best-checkpoint baseline and measured train/validation and
+conditioning sensitivity. It proposes a controlled next test, not a verified fix.

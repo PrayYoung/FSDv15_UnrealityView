@@ -310,3 +310,17 @@ RGB targets, and the ingestion-check manifest. Native data, archive, alpha seque
 build environments, intermediate fits and the disposable smoke-fit checkpoint
 remain remote scratch. This run verifies rendered targets; it does not preserve a
 reconstruction checkpoint for interactive rerendering or continued 3DGS training.
+
+The next setup attempt exposed a missing pinned native submodule: gsplat's
+`gsplat/cuda/csrc/third_party/glm` was not populated by a plain parent checkout.
+Native source checkouts now initialize recursive submodules at their recorded
+commits and verify status, with an explicit gsplat GLM-header check. Unused
+DriveStudio Humans4D/SMPL submodules are not fetched. A local live checkout and
+C++ GLM-header compile/run succeeded. Regression tests ensure the recorded GLM
+commit is used even when its remote HEAD moves and missing headers fail early.
+CUDA forward/backward gsplat and PyTorch3D operations plus nvdiffrast CUDA
+rasterization now run before the native archive download. CPU tests cannot certify
+CUDA compilation; a successful reconstruction is still required before any claim.
+
+The [completed blur diagnosis](results/pandaset-v2-pilot-5000/diagnosis/README.md)
+reproduced the baseline exactly. No finer-grid training has started.
