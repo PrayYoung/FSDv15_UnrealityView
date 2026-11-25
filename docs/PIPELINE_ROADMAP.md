@@ -339,3 +339,17 @@ record because the first file-valued sync path had been created as a directory
 by the runner. The next invocation must use a directory output root and preserve
 selective artifact collection. No reconstruction images exist from this attempt.
 Both rentals were reported destroyed; no new paid retry started for reporting.
+
+
+## Prompt A and B outcomes
+
+[Prompt A Arm E](results/pandaset-v3-arme-5000/README.md) completed all 5,000 steps
+and diagnosis. Its best checkpoint was step 2,500, about 21.586 dB validation PSNR,
+below v2 best 21.885 dB. Conditioning sensitivity improved, but frame decay worsened
+and visual blur persists. Do not promote it as a successful quality improvement.
+
+[Prompt B](results/chase-3dgs-040-smoke/README.md) lost connectivity beyond bounded
+recovery. No usable logs/outputs returned, so reconstruction progress and quality
+are unverified. Closure was reconfirmed through the managed owner; metadata had
+omitted the infrastructure-handler destruction timestamp. No new paid retry was
+started for either experiment. Both reports preserve costs, limits and evidence.

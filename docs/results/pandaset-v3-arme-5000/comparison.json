@@ -1,0 +1,246 @@
+{
+  "baseline_4x8": {
+    "train_psnr": 26.339204495694467,
+    "val_psnr": 21.88463001428762,
+    "train_val_gap": 4.454574481406848,
+    "val_pixel_l1": 0.10072106951847673,
+    "val_latent_l1": 0.4166742883622646,
+    "frame_psnr": [
+      23.42437211426384,
+      22.618364432704126,
+      22.264272462347527,
+      21.900091849511853,
+      21.72536182583469,
+      21.48121912026226,
+      21.352916868404918,
+      21.00549053188693
+    ],
+    "f7_minus_f0": -2.4188815823769083,
+    "frozen_stage_delta": -0.004794247134423557,
+    "swapped_uve_delta": -1.2429568649072458,
+    "zero_previous": 14.289846456758832,
+    "swapped_previous": 13.98684058654472
+  },
+  "val_psnr_delta": -0.29885644380457066,
+  "followup_training_authorized": false,
+  "visual_review_required": true,
+  "note": "Existing4x8 cache unchanged. No re-encoding,10x16training,appearancefeatures,CFG or3DGS job.",
+  "current_arm_e": {
+    "train_psnr": 25.094119234677652,
+    "val_psnr": 21.58577357048305,
+    "train_val_gap": 3.5083456641946036,
+    "val_pixel_l1": 0.11083358079195023,
+    "val_latent_l1": 0.4099737167358398,
+    "frame_psnr": [
+      23.99547459259328,
+      22.965072184363418,
+      22.177441518300274,
+      21.696344444301683,
+      21.282473257168032,
+      21.038643418381913,
+      20.626849304289294,
+      20.310043849720863
+    ],
+    "f7_minus_f0": -3.6854307428724162,
+    "frozen_stage_delta": -0.12746225569486214,
+    "swapped_uve_delta": -4.637168967853178,
+    "zero_previous": 18.153247241604838,
+    "swapped_previous": 16.430625832477524
+  },
+  "checkpoint_step": 2500,
+  "cross_attention_health": {
+    "stages": {
+      "0": {
+        "ent/max": 0.483141336341699,
+        "max_p": 0.3248565748333931,
+        "logit_scale_min": 1.9441821575164795,
+        "logit_scale_mean": 1.9989032745361328,
+        "logit_scale_max": 2.0566515922546387,
+        "logit_scale_parameter_mean": 0.6924649278322855
+      },
+      "1": {
+        "ent/max": 0.5181398443877697,
+        "max_p": 0.29804265884061654,
+        "logit_scale_min": 1.9179497957229614,
+        "logit_scale_mean": 2.01121457417806,
+        "logit_scale_max": 2.130153179168701,
+        "logit_scale_parameter_mean": 0.698441743850708
+      },
+      "2": {
+        "ent/max": 0.5337161007026832,
+        "max_p": 0.2822352785617113,
+        "logit_scale_min": 2.018178701400757,
+        "logit_scale_mean": 2.0973421732584634,
+        "logit_scale_max": 2.1635005474090576,
+        "logit_scale_parameter_mean": 0.7404494682947794
+      },
+      "3": {
+        "ent/max": 0.5582340220610301,
+        "max_p": 0.2634574443101883,
+        "logit_scale_min": 1.9848730564117432,
+        "logit_scale_mean": 2.0662167072296143,
+        "logit_scale_max": 2.169065237045288,
+        "logit_scale_parameter_mean": 0.725297232468923
+      }
+    },
+    "scope": "40validation baseline1NFE forwards,allqueries/heads;unavailablekeys excluded",
+    "entropy_normalization": "log(numberofvalidkeys)"
+  },
+  "target_checks": {
+    "zero_history_psnr": false,
+    "frozen_stage_delta": false,
+    "swapped_uve_delta": true,
+    "attention_entropy": true,
+    "effective_logit_scale": false,
+    "validation_psnr": false,
+    "frame_decay": false
+  },
+  "conditioning_targets_passed": false,
+  "numeric_quality_targets_passed": false,
+  "treatment": "Arm E bundle: cross-only QK scaling,3Dquery init,geometry fusion,historydropout. Existing cached384channels retain their original fixed ray embedding.",
+  "interpretation": "A bundled experiment cannot identify each component causally. OOD controls do not establish a unique root cause.",
+  "future_training_authorized": false,
+  "best_nfe": {
+    "1": {
+      "psnr_db": 21.58577357048305,
+      "pixel_l1": 0.11083358079195023,
+      "latent_l1": 0.4099737167358398,
+      "per_frame": [
+        {
+          "psnr_db": 23.99547459259328,
+          "pixel_l1": 0.0865283727645874,
+          "latent_l1": 0.3284369923174381
+        },
+        {
+          "psnr_db": 22.965072184363418,
+          "pixel_l1": 0.09693297455087305,
+          "latent_l1": 0.375129920989275
+        },
+        {
+          "psnr_db": 22.177441518300274,
+          "pixel_l1": 0.10411620354279875,
+          "latent_l1": 0.40274376794695854
+        },
+        {
+          "psnr_db": 21.696344444301683,
+          "pixel_l1": 0.11060180105268955,
+          "latent_l1": 0.4171574078500271
+        },
+        {
+          "psnr_db": 21.282473257168032,
+          "pixel_l1": 0.11539755146950484,
+          "latent_l1": 0.4279043942689896
+        },
+        {
+          "psnr_db": 21.038643418381913,
+          "pixel_l1": 0.11884032506495715,
+          "latent_l1": 0.4342238061130047
+        },
+        {
+          "psnr_db": 20.626849304289294,
+          "pixel_l1": 0.12497515045106411,
+          "latent_l1": 0.44353096559643745
+        },
+        {
+          "psnr_db": 20.310043849720863,
+          "pixel_l1": 0.12927627563476562,
+          "latent_l1": 0.4506624795496464
+        }
+      ]
+    },
+    "2": {
+      "psnr_db": 21.16652936424817,
+      "pixel_l1": 0.11548758037388325,
+      "latent_l1": 0.4547362059354782,
+      "per_frame": [
+        {
+          "psnr_db": 23.601699267471407,
+          "pixel_l1": 0.08997649718075991,
+          "latent_l1": 0.36915463395416737
+        },
+        {
+          "psnr_db": 22.5617810349428,
+          "pixel_l1": 0.10088263154029846,
+          "latent_l1": 0.41838315650820734
+        },
+        {
+          "psnr_db": 21.75542782713627,
+          "pixel_l1": 0.10885812677443027,
+          "latent_l1": 0.4474809244275093
+        },
+        {
+          "psnr_db": 21.241268995232478,
+          "pixel_l1": 0.11598105803132057,
+          "latent_l1": 0.4621177062392235
+        },
+        {
+          "psnr_db": 20.851942873354187,
+          "pixel_l1": 0.12021711096167564,
+          "latent_l1": 0.473429162055254
+        },
+        {
+          "psnr_db": 20.60569216063924,
+          "pixel_l1": 0.12385281436145305,
+          "latent_l1": 0.47847736775875094
+        },
+        {
+          "psnr_db": 20.208833494420336,
+          "pixel_l1": 0.12982615511864423,
+          "latent_l1": 0.49010826274752617
+        },
+        {
+          "psnr_db": 19.911568647840674,
+          "pixel_l1": 0.1343062536790967,
+          "latent_l1": 0.49873842746019365
+        }
+      ]
+    },
+    "4": {
+      "psnr_db": 21.204899781890763,
+      "pixel_l1": 0.11488200202584267,
+      "latent_l1": 0.4551650010049343,
+      "per_frame": [
+        {
+          "psnr_db": 23.61429491985404,
+          "pixel_l1": 0.08996808156371117,
+          "latent_l1": 0.3709211699664593
+        },
+        {
+          "psnr_db": 22.56048017159526,
+          "pixel_l1": 0.1008389781229198,
+          "latent_l1": 0.4196033053100109
+        },
+        {
+          "psnr_db": 21.788121516819675,
+          "pixel_l1": 0.10831610281020403,
+          "latent_l1": 0.44779777675867083
+        },
+        {
+          "psnr_db": 21.264182068656815,
+          "pixel_l1": 0.11553795002400875,
+          "latent_l1": 0.46244677156209946
+        },
+        {
+          "psnr_db": 20.889900871053918,
+          "pixel_l1": 0.11946402899920941,
+          "latent_l1": 0.4738209158182144
+        },
+        {
+          "psnr_db": 20.63298255641979,
+          "pixel_l1": 0.12333927787840367,
+          "latent_l1": 0.4788538165390491
+        },
+        {
+          "psnr_db": 20.27493116960455,
+          "pixel_l1": 0.12853470649570226,
+          "latent_l1": 0.48966597616672514
+        },
+        {
+          "psnr_db": 19.981313096525724,
+          "pixel_l1": 0.13305688202381133,
+          "latent_l1": 0.49821029230952263
+        }
+      ]
+    }
+  }
+}

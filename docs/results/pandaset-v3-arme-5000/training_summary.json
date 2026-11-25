@@ -1,0 +1,30 @@
+{
+  "status": "stopped_at_checkpoint",
+  "steps": 5000,
+  "planned_steps": 20000,
+  "seconds": 2457.3795706103556,
+  "last_training_metrics": {
+    "step": 5000,
+    "loss": 0.9192209839820862,
+    "flow_loss": 0.9192209839820862,
+    "policy_loss": 0.0,
+    "flow_mse": 0.25554310325374635,
+    "boundary_mse": 0.24076638144156523,
+    "interior_mse": 0.4771939304364628,
+    "du_dt_rms": 1.3363960026756398,
+    "target_rms": 1.305324347715286,
+    "pred_rms": 1.206559948897605,
+    "interior_samples": 1.0,
+    "jvp_weight": 1.0,
+    "dit_grad_norm": 0.9235124588012695,
+    "policy_grad_norm": 0.0,
+    "dit_clipped": false,
+    "policy_clipped": false,
+    "jvp_backend": "exact",
+    "precision": "torch.bfloat16",
+    "lr": 0.00026227661222566516,
+    "elapsed_sec": 2447.7800005190074
+  },
+  "parameters_dit": 78625794,
+  "parameters_policy": 3280036
+}

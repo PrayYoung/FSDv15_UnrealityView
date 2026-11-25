@@ -1,0 +1,7 @@
+{
+  "source_id": "pandaset/040",
+  "source_episode_sha256": "677088b4c019e1b0c00a8dc248a4ec5b622ea0de12e63a8d3ef42893ec6cf0f5",
+  "local_probe_paid_cost_usd": 0,
+  "historical_parity_passed": false,
+  "note": "Completed local diagnosis; mismatch remains unresolved. Arm E uses original4x8 features unchanged."
+}

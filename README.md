@@ -17,6 +17,12 @@ Comic/cyberpunk adapters, real-data stop/resume and Style Studio are implemented
 and tested, but satisfactory base visuals and style training remain pending.
 No successful styled model result is claimed.
 
+The [completed Arm E pilot](docs/results/pandaset-v3-arme-5000/README.md) increased
+camera-conditioning sensitivity but scored 21.59 dB at its best checkpoint, below
+v2's 21.88 dB, with worse later-frame decay. The [Prompt B attempt](docs/results/chase-3dgs-040-smoke/README.md)
+ended in infrastructure failure without usable reconstruction artifacts. Both
+rentals are closed; no automatic paid retry or additional training was started.
+
 The first target is the observed **native front camera**, also present among the
 conditioning inputs. It is reconstruction, not future-only prediction or an
 elevated novel view. An external calibrated teacher is required for elevated views.

@@ -1,0 +1,29 @@
+{
+  "numeric_gate_passed": true,
+  "original_gate_retained": true,
+  "additional_gate": "beat previous-chunk copy PSNR",
+  "initial": {
+    "psnr_db": 8.525404522162596,
+    "pixel_l1": 0.617413567006588,
+    "latent_l1": 1.0399095341563225,
+    "waypoint_l1_m": 9.420992463827133
+  },
+  "final": {
+    "psnr_db": 21.429481835020546,
+    "pixel_l1": 0.11225917469710112,
+    "latent_l1": 0.4264268919825554,
+    "waypoint_l1_m": 9.420992463827133
+  },
+  "prev_chunk_copy": {
+    "psnr_db": 18.75103940543225,
+    "pixel_l1": 0.13556823637336493,
+    "latent_l1": 0.4972234532237053
+  },
+  "taesd_roundtrip": {
+    "psnr_db": 30.25096780112572,
+    "pixel_l1": 0.04102077460847795
+  },
+  "target_view": "native_front",
+  "test_reserved": true,
+  "visual_review_required": true
+}

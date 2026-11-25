@@ -1,0 +1,17 @@
+{
+  "best_metrics.json": "562ebeefb65b6a4d712b785f03647b03777142d1ca29969c1412b107cddb62b2",
+  "local_parity_reference.json": "b67e9d9cb532b07c0a22f9afd24c42cb82098463a4a6f45a38a8960d4e45f8e9",
+  "gate.json": "2e3e10cf533b8b1ecf394e60c36a271797bf12284b66675aa2381246f739ea08",
+  "best_closed_loop_contact_sheet.png": "ec5545e6643801ab1c9a38cc00dc12992c25ff2bd1471c4a5d7cae21153e14a5",
+  "comparison.json": "0aa0682a0ef9021894262e00d2a2686da8bc7e8e8e8a9f36defce3ae48053ba2",
+  "run_config.json": "61a1844dcc1cf6df630e4ffbb59ba83a2822ad5733eea6a8425beda431180f5d",
+  "README.md": "f5ccccd223586beaae695bd5a8f91337eceaa09f6cb297d24cac16026dee72d4",
+  "best_rollout_metrics.json": "cb55a5ea7f744a310c401714c6374a35c3cb8ac1a6d3a68339b6e5d138494672",
+  "training_summary.json": "a410747cd6c73e033bf63f64f6dd38cefef61a04587d5bd1690fe252170654b5",
+  "best_closed_loop_32_frames.gif": "4278ba19eb7550daa19c746627f2c05531ec9201394d00e54dec69fa9fb194ca",
+  "evaluation_curve.json": "dfce5507135b49302d35ddb5025744e683cf48104596b609214357d8ea81b2b2",
+  "execution.json": "e77c8078fc5245a3cee27579d75d67a94f2af34f435ba3b81b65a10400087a1a",
+  "diagnosis/train_contact_sheet.png": "61857b9336ce64ad72d26450bc45e4784f7dbf16f9074fa0ed699bb7879095c3",
+  "diagnosis/val_contact_sheet.png": "9b0aab77e2db515c123962dbe8ae92843e210313e78fe63a3a2cb8f3a49defdd",
+  "diagnosis/diagnosis.json": "6fdced4723a941f8dac4393531aaeac8cc256d3855b29f1ec07a15151e59063e"
+}

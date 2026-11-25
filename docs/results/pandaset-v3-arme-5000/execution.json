@@ -1,0 +1,29 @@
+{
+  "source_commit": "f367a602887c24e4244e3ec04c216643d24e2693",
+  "classification": "SUCCESS",
+  "steps": 5000,
+  "best_step": 2500,
+  "gpu": "RTX3090",
+  "hourly_price": 0.2562962962962963,
+  "provisioning_seconds": 201.0,
+  "setup_seconds": 125.0,
+  "workload_seconds": 2503.0,
+  "approx_rental_cost_usd": 0.23586378600823044,
+  "rental_destroyed": true,
+  "returned_bytes": 1629422853,
+  "dataset_returned": false,
+  "paid_attempts": 1,
+  "visual_review": {
+    "status": "insufficient_for_demo",
+    "reviewed": [
+      "four-scene validation contact sheet",
+      "validation-scene32frame closed-loop contact sheet"
+    ],
+    "observations": [
+      "Broad road geometry remains recognizable",
+      "Thin structures,vehicles and lane details remain smeared/ghosted",
+      "Later frames remain noticeably softer;no clear overall sharpness fix"
+    ],
+    "visual_quality_passed": false
+  }
+}

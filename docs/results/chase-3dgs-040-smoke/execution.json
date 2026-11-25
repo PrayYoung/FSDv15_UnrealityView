@@ -1,0 +1,17 @@
+{
+  "source_commit": "a5f8a92a98ec694859bad7a4b18d2cd65791ec03",
+  "classification": "INFRASTRUCTURE_FAILED",
+  "failure": "Remote connection unavailable beyond bounded recovery window",
+  "workload_exit_code": null,
+  "workload_progress": "unverified;no remote logs or output artifacts returned",
+  "quality_measured": false,
+  "images_returned": 0,
+  "returned_bytes": 0,
+  "paid_attempts": 1,
+  "provisioning_seconds": 147.0,
+  "reported_rental_cost_at_failure_usd": 0.2084,
+  "rental_destruction_reconfirmed": true,
+  "cleanup_note": "Infrastructure handler invoked owner destroy without recording success timestamp. Explicit owner destroy was reissued successfully at status review; missing timestamp alone does not prove continued billing.",
+  "final_provider_bill_verified": false,
+  "no_paid_retry_started": true
+}
