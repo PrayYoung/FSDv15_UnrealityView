@@ -10,7 +10,8 @@ reduction from initialization. Images still show blur and ghosting; this is not 
 finished demo. See the [results, diagnostic visuals and analysis](docs/results/pandaset-v2-pilot-5000/README.md).
 The [earlier failed pilot](docs/results/pandaset-pilot-5000/README.md) remains documented.
 The [10x16 ablation attempt](docs/results/pandaset-v2-ablation-uve10x16/README.md)
-stopped at JPEG/token parity before training. The [one-scene 3DGS build check](docs/results/chase-3dgs-040-build-check/README.md)
+stopped at JPEG/token parity before training. A [free local parity diagnosis](docs/results/pandaset-uve-parity-local/README.md)
+found batching/precision differences too small to explain the discrepancy; its cause remains unresolved. The [one-scene 3DGS build check](docs/results/chase-3dgs-040-build-check/README.md)
 passed native CUDA checks but stopped at archive-record writing before reconstruction.
 Comic/cyberpunk adapters, real-data stop/resume and Style Studio are implemented
 and tested, but satisfactory base visuals and style training remain pending.

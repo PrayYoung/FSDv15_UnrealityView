@@ -1,0 +1,1351 @@
+{
+  "source_id": "pandaset/040",
+  "source_episode_sha256": "677088b4c019e1b0c00a8dc248a4ec5b622ea0de12e63a8d3ef42893ec6cf0f5",
+  "source_unchanged": true,
+  "sampled_frame_ids": [
+    0,
+    11,
+    22,
+    33,
+    45,
+    56,
+    67,
+    79
+  ],
+  "episode_frames": 80,
+  "sampled_frames": 8,
+  "grid": [
+    4,
+    8
+  ],
+  "camera_slots": [
+    "front_left",
+    "front",
+    "front_right",
+    "rear_left",
+    "rear",
+    "rear_right"
+  ],
+  "fingerprints": {
+    "ray_projection": {
+      "name": "ray_projection",
+      "shape": [
+        6,
+        384
+      ],
+      "dtype": "torch.float32",
+      "sha256": "87a3302a42932e35f235f07f7a2cdcd56a97051f2b1bf80ab97abe2af577232c"
+    },
+    "backbone_first_weight": {
+      "name": "patch_embed.proj.weight",
+      "shape": [
+        384,
+        3,
+        14,
+        14
+      ],
+      "dtype": "torch.float32",
+      "sha256": "0f73e42d99d7a45233748fbb1b4a00d02758196899fcc504a1b56190dd4c59b9"
+    },
+    "backbone_last_weight": {
+      "name": "norm.weight",
+      "shape": [
+        384
+      ],
+      "dtype": "torch.float32",
+      "sha256": "75face057a127ba19eed589cd0a99fb465389b801d03f4643cfed7d9308811b1"
+    },
+    "backbone_state_sha256": "898b861e0f0a59ef515429633dc4f4927984cb8a74f977cdb30e8b9ad92fd859",
+    "note": "Current encoder fingerprints; historical cache did not record original encoder hashes, so identity cannot be confirmed retrospectively."
+  },
+  "torch_version": "2.5.1",
+  "device": "mps",
+  "modes": {
+    "mps_fp32_batch1": {
+      "status": "completed",
+      "seconds": 2.9506082497537136,
+      "cached_vs_with_rays": [
+        {
+          "slot": "front_left",
+          "available_frames": 8,
+          "reference_rms": 2.0945709438914735,
+          "prediction_rms": 2.146393265821978,
+          "error_rms": 0.5987196592534446,
+          "relative_rms": 0.2858435809966369,
+          "cosine": 0.960431756696912
+        },
+        {
+          "slot": "front",
+          "available_frames": 8,
+          "reference_rms": 2.1098477580300594,
+          "prediction_rms": 2.1369305494708826,
+          "error_rms": 0.530471746641961,
+          "relative_rms": 0.25142655180829554,
+          "cosine": 0.9688742721827296
+        },
+        {
+          "slot": "front_right",
+          "available_frames": 8,
+          "reference_rms": 2.044394015015259,
+          "prediction_rms": 2.0868219044433336,
+          "error_rms": 0.6067397885429775,
+          "relative_rms": 0.29678221716886066,
+          "cosine": 0.957066517925753
+        },
+        {
+          "slot": "rear_left",
+          "available_frames": 8,
+          "reference_rms": 2.0627473436390376,
+          "prediction_rms": 2.1002541188103785,
+          "error_rms": 0.5336208579522379,
+          "relative_rms": 0.2586942407647656,
+          "cosine": 0.9672985619487102
+        },
+        {
+          "slot": "rear",
+          "available_frames": 8,
+          "reference_rms": 2.0448854134404657,
+          "prediction_rms": 2.076893301882095,
+          "error_rms": 0.48574691959322946,
+          "relative_rms": 0.23754236613971103,
+          "cosine": 0.9723422324954865
+        },
+        {
+          "slot": "rear_right",
+          "available_frames": 8,
+          "reference_rms": 2.008951235236001,
+          "prediction_rms": 2.052155510490626,
+          "error_rms": 0.546081309090734,
+          "relative_rms": 0.2718240739310844,
+          "cosine": 0.9640600092966768
+        }
+      ],
+      "cached_vs_without_rays": [
+        {
+          "slot": "front_left",
+          "available_frames": 8,
+          "reference_rms": 2.0945709438914735,
+          "prediction_rms": 2.068465269575068,
+          "error_rms": 0.7573557032454159,
+          "relative_rms": 0.3615803539403328,
+          "cosine": 0.9338834498886219
+        },
+        {
+          "slot": "front",
+          "available_frames": 8,
+          "reference_rms": 2.1098477580300594,
+          "prediction_rms": 2.08984035082525,
+          "error_rms": 0.6703057639728444,
+          "relative_rms": 0.31770337998164433,
+          "cosine": 0.9490945135700606
+        },
+        {
+          "slot": "front_right",
+          "available_frames": 8,
+          "reference_rms": 2.044394015015259,
+          "prediction_rms": 2.061653426934104,
+          "error_rms": 0.7635162476637536,
+          "relative_rms": 0.3734682463634853,
+          "cosine": 0.9308799042013984
+        },
+        {
+          "slot": "rear_left",
+          "available_frames": 8,
+          "reference_rms": 2.0627473436390376,
+          "prediction_rms": 2.018634906635828,
+          "error_rms": 0.7131333563779315,
+          "relative_rms": 0.34572016712422127,
+          "cosine": 0.9391665066911067
+        },
+        {
+          "slot": "rear",
+          "available_frames": 8,
+          "reference_rms": 2.0448854134404657,
+          "prediction_rms": 2.014472479168573,
+          "error_rms": 0.6613932777704203,
+          "relative_rms": 0.32343781877618444,
+          "cosine": 0.9470165814211324
+        },
+        {
+          "slot": "rear_right",
+          "available_frames": 8,
+          "reference_rms": 2.008951235236001,
+          "prediction_rms": 2.028257382199293,
+          "error_rms": 0.7047649448466285,
+          "relative_rms": 0.3508123703977496,
+          "cosine": 0.9390968005925051
+        }
+      ],
+      "ray_subtracted_cached_vs_semantic": [
+        {
+          "slot": "front_left",
+          "available_frames": 8,
+          "reference_rms": 2.0156721258388,
+          "prediction_rms": 2.0684644059918,
+          "error_rms": 0.5987205165378123,
+          "relative_rms": 0.29703269140989946,
+          "cosine": 0.9573459209049294
+        },
+        {
+          "slot": "front",
+          "available_frames": 8,
+          "reference_rms": 2.0613622545877797,
+          "prediction_rms": 2.0898426106251784,
+          "error_rms": 0.5304711090291014,
+          "relative_rms": 0.25734007103723855,
+          "cosine": 0.9674334374168452
+        },
+        {
+          "slot": "front_right",
+          "available_frames": 8,
+          "reference_rms": 2.017986123924242,
+          "prediction_rms": 2.061648903495662,
+          "error_rms": 0.6067394934996607,
+          "relative_rms": 0.30066584021884907,
+          "cosine": 0.9559864155109513
+        },
+        {
+          "slot": "rear_left",
+          "available_frames": 8,
+          "reference_rms": 1.980814367278327,
+          "prediction_rms": 2.018633039536872,
+          "error_rms": 0.5336201657999725,
+          "relative_rms": 0.26939433326767304,
+          "cosine": 0.9645720164389011
+        },
+        {
+          "slot": "rear",
+          "available_frames": 8,
+          "reference_rms": 1.981542942299458,
+          "prediction_rms": 2.0144718629437057,
+          "error_rms": 0.485746582680401,
+          "relative_rms": 0.2451355316664105,
+          "cosine": 0.970581237157099
+        },
+        {
+          "slot": "rear_right",
+          "available_frames": 8,
+          "reference_rms": 1.9851570305309663,
+          "prediction_rms": 2.0282576012364135,
+          "error_rms": 0.5460819565861125,
+          "relative_rms": 0.2750824988590716,
+          "cosine": 0.9631994933297839
+        }
+      ],
+      "fp32_rays_vs_mode_rays": [
+        {
+          "slot": "front_left",
+          "available_frames": 8,
+          "reference_rms": 0.4683175655133228,
+          "prediction_rms": 0.4683175664074898,
+          "error_rms": 3.8512006494835016e-08,
+          "relative_rms": 8.22348110146627e-08,
+          "cosine": 0.9999999999999677
+        },
+        {
+          "slot": "front",
+          "available_frames": 8,
+          "reference_rms": 0.40580860237788824,
+          "prediction_rms": 0.4058086035123312,
+          "error_rms": 1.4323686692623416e-08,
+          "relative_rms": 3.5296656129741735e-08,
+          "cosine": 0.9999999999999689
+        },
+        {
+          "slot": "front_right",
+          "available_frames": 8,
+          "reference_rms": 0.4604135875174507,
+          "prediction_rms": 0.4604135790060407,
+          "error_rms": 6.891848730605111e-08,
+          "relative_rms": 1.4968821332502257e-07,
+          "cosine": 0.9999999999999633
+        },
+        {
+          "slot": "rear_left",
+          "available_frames": 8,
+          "reference_rms": 0.4782283323224563,
+          "prediction_rms": 0.4782283345991589,
+          "error_rms": 6.37794203808804e-08,
+          "relative_rms": 1.3336604310151092e-07,
+          "cosine": 0.9999999999999643
+        },
+        {
+          "slot": "rear",
+          "available_frames": 8,
+          "reference_rms": 0.449235175408118,
+          "prediction_rms": 0.4492351746547629,
+          "error_rms": 3.752007976960845e-08,
+          "relative_rms": 8.351990632862279e-08,
+          "cosine": 0.9999999999999702
+        },
+        {
+          "slot": "rear_right",
+          "available_frames": 8,
+          "reference_rms": 0.4482817399779703,
+          "prediction_rms": 0.44828174147139366,
+          "error_rms": 4.772871266963366e-08,
+          "relative_rms": 1.0647034758091903e-07,
+          "cosine": 0.9999999999999711
+        }
+      ],
+      "frozen_parity_limits_pass": false
+    },
+    "mps_fp32_batch8": {
+      "status": "completed",
+      "seconds": 2.418000125326216,
+      "cached_vs_with_rays": [
+        {
+          "slot": "front_left",
+          "available_frames": 8,
+          "reference_rms": 2.0945709438914735,
+          "prediction_rms": 2.146393265821978,
+          "error_rms": 0.5987196592534446,
+          "relative_rms": 0.2858435809966369,
+          "cosine": 0.960431756696912
+        },
+        {
+          "slot": "front",
+          "available_frames": 8,
+          "reference_rms": 2.1098477580300594,
+          "prediction_rms": 2.1369305494708826,
+          "error_rms": 0.530471746641961,
+          "relative_rms": 0.25142655180829554,
+          "cosine": 0.9688742721827296
+        },
+        {
+          "slot": "front_right",
+          "available_frames": 8,
+          "reference_rms": 2.044394015015259,
+          "prediction_rms": 2.0868219044433336,
+          "error_rms": 0.6067397885429775,
+          "relative_rms": 0.29678221716886066,
+          "cosine": 0.957066517925753
+        },
+        {
+          "slot": "rear_left",
+          "available_frames": 8,
+          "reference_rms": 2.0627473436390376,
+          "prediction_rms": 2.1002541188103785,
+          "error_rms": 0.5336208579522379,
+          "relative_rms": 0.2586942407647656,
+          "cosine": 0.9672985619487102
+        },
+        {
+          "slot": "rear",
+          "available_frames": 8,
+          "reference_rms": 2.0448854134404657,
+          "prediction_rms": 2.076893301882095,
+          "error_rms": 0.48574691959322946,
+          "relative_rms": 0.23754236613971103,
+          "cosine": 0.9723422324954865
+        },
+        {
+          "slot": "rear_right",
+          "available_frames": 8,
+          "reference_rms": 2.008951235236001,
+          "prediction_rms": 2.052155510490626,
+          "error_rms": 0.546081309090734,
+          "relative_rms": 0.2718240739310844,
+          "cosine": 0.9640600092966768
+        }
+      ],
+      "cached_vs_without_rays": [
+        {
+          "slot": "front_left",
+          "available_frames": 8,
+          "reference_rms": 2.0945709438914735,
+          "prediction_rms": 2.068465269575068,
+          "error_rms": 0.7573557032454159,
+          "relative_rms": 0.3615803539403328,
+          "cosine": 0.9338834498886219
+        },
+        {
+          "slot": "front",
+          "available_frames": 8,
+          "reference_rms": 2.1098477580300594,
+          "prediction_rms": 2.08984035082525,
+          "error_rms": 0.6703057639728444,
+          "relative_rms": 0.31770337998164433,
+          "cosine": 0.9490945135700606
+        },
+        {
+          "slot": "front_right",
+          "available_frames": 8,
+          "reference_rms": 2.044394015015259,
+          "prediction_rms": 2.061653426934104,
+          "error_rms": 0.7635162476637536,
+          "relative_rms": 0.3734682463634853,
+          "cosine": 0.9308799042013984
+        },
+        {
+          "slot": "rear_left",
+          "available_frames": 8,
+          "reference_rms": 2.0627473436390376,
+          "prediction_rms": 2.018634906635828,
+          "error_rms": 0.7131333563779315,
+          "relative_rms": 0.34572016712422127,
+          "cosine": 0.9391665066911067
+        },
+        {
+          "slot": "rear",
+          "available_frames": 8,
+          "reference_rms": 2.0448854134404657,
+          "prediction_rms": 2.014472479168573,
+          "error_rms": 0.6613932777704203,
+          "relative_rms": 0.32343781877618444,
+          "cosine": 0.9470165814211324
+        },
+        {
+          "slot": "rear_right",
+          "available_frames": 8,
+          "reference_rms": 2.008951235236001,
+          "prediction_rms": 2.028257382199293,
+          "error_rms": 0.7047649448466285,
+          "relative_rms": 0.3508123703977496,
+          "cosine": 0.9390968005925051
+        }
+      ],
+      "ray_subtracted_cached_vs_semantic": [
+        {
+          "slot": "front_left",
+          "available_frames": 8,
+          "reference_rms": 2.0156721258388,
+          "prediction_rms": 2.0684644059918,
+          "error_rms": 0.5987205165378123,
+          "relative_rms": 0.29703269140989946,
+          "cosine": 0.9573459209049294
+        },
+        {
+          "slot": "front",
+          "available_frames": 8,
+          "reference_rms": 2.0613622545877797,
+          "prediction_rms": 2.0898426106251784,
+          "error_rms": 0.5304711090291014,
+          "relative_rms": 0.25734007103723855,
+          "cosine": 0.9674334374168452
+        },
+        {
+          "slot": "front_right",
+          "available_frames": 8,
+          "reference_rms": 2.017986123924242,
+          "prediction_rms": 2.061648903495662,
+          "error_rms": 0.6067394934996607,
+          "relative_rms": 0.30066584021884907,
+          "cosine": 0.9559864155109513
+        },
+        {
+          "slot": "rear_left",
+          "available_frames": 8,
+          "reference_rms": 1.980814367278327,
+          "prediction_rms": 2.018633039536872,
+          "error_rms": 0.5336201657999725,
+          "relative_rms": 0.26939433326767304,
+          "cosine": 0.9645720164389011
+        },
+        {
+          "slot": "rear",
+          "available_frames": 8,
+          "reference_rms": 1.981542942299458,
+          "prediction_rms": 2.0144718629437057,
+          "error_rms": 0.485746582680401,
+          "relative_rms": 0.2451355316664105,
+          "cosine": 0.970581237157099
+        },
+        {
+          "slot": "rear_right",
+          "available_frames": 8,
+          "reference_rms": 1.9851570305309663,
+          "prediction_rms": 2.0282576012364135,
+          "error_rms": 0.5460819565861125,
+          "relative_rms": 0.2750824988590716,
+          "cosine": 0.9631994933297839
+        }
+      ],
+      "fp32_rays_vs_mode_rays": [
+        {
+          "slot": "front_left",
+          "available_frames": 8,
+          "reference_rms": 0.4683175655133228,
+          "prediction_rms": 0.4683175664074898,
+          "error_rms": 3.8512006494835016e-08,
+          "relative_rms": 8.22348110146627e-08,
+          "cosine": 0.9999999999999677
+        },
+        {
+          "slot": "front",
+          "available_frames": 8,
+          "reference_rms": 0.40580860237788824,
+          "prediction_rms": 0.4058086035123312,
+          "error_rms": 1.4323686692623416e-08,
+          "relative_rms": 3.5296656129741735e-08,
+          "cosine": 0.9999999999999689
+        },
+        {
+          "slot": "front_right",
+          "available_frames": 8,
+          "reference_rms": 0.4604135875174507,
+          "prediction_rms": 0.4604135790060407,
+          "error_rms": 6.891848730605111e-08,
+          "relative_rms": 1.4968821332502257e-07,
+          "cosine": 0.9999999999999633
+        },
+        {
+          "slot": "rear_left",
+          "available_frames": 8,
+          "reference_rms": 0.4782283323224563,
+          "prediction_rms": 0.4782283345991589,
+          "error_rms": 6.37794203808804e-08,
+          "relative_rms": 1.3336604310151092e-07,
+          "cosine": 0.9999999999999643
+        },
+        {
+          "slot": "rear",
+          "available_frames": 8,
+          "reference_rms": 0.449235175408118,
+          "prediction_rms": 0.4492351746547629,
+          "error_rms": 3.752007976960845e-08,
+          "relative_rms": 8.351990632862279e-08,
+          "cosine": 0.9999999999999702
+        },
+        {
+          "slot": "rear_right",
+          "available_frames": 8,
+          "reference_rms": 0.4482817399779703,
+          "prediction_rms": 0.44828174147139366,
+          "error_rms": 4.772871266963366e-08,
+          "relative_rms": 1.0647034758091903e-07,
+          "cosine": 0.9999999999999711
+        }
+      ],
+      "frozen_parity_limits_pass": false
+    },
+    "mps_fp16_batch1": {
+      "status": "completed",
+      "seconds": 1.7712497506290674,
+      "cached_vs_with_rays": [
+        {
+          "slot": "front_left",
+          "available_frames": 8,
+          "reference_rms": 2.0945709438914735,
+          "prediction_rms": 2.1466024747487524,
+          "error_rms": 0.5988158714431998,
+          "relative_rms": 0.28588951507685306,
+          "cosine": 0.960425216465664
+        },
+        {
+          "slot": "front",
+          "available_frames": 8,
+          "reference_rms": 2.1098477580300594,
+          "prediction_rms": 2.1370951878049653,
+          "error_rms": 0.5306483056829878,
+          "relative_rms": 0.2515102351168921,
+          "cosine": 0.9688568865519724
+        },
+        {
+          "slot": "front_right",
+          "available_frames": 8,
+          "reference_rms": 2.044394015015259,
+          "prediction_rms": 2.0869964093714,
+          "error_rms": 0.6069331392140788,
+          "relative_rms": 0.2968767931995481,
+          "cosine": 0.9570443467894596
+        },
+        {
+          "slot": "rear_left",
+          "available_frames": 8,
+          "reference_rms": 2.0627473436390376,
+          "prediction_rms": 2.1004419464214634,
+          "error_rms": 0.5339092961640843,
+          "relative_rms": 0.25883407282550536,
+          "cosine": 0.9672675820726014
+        },
+        {
+          "slot": "rear",
+          "available_frames": 8,
+          "reference_rms": 2.0448854134404657,
+          "prediction_rms": 2.077343925512115,
+          "error_rms": 0.48677804482838455,
+          "relative_rms": 0.23804661211279968,
+          "cosine": 0.9722336180555418
+        },
+        {
+          "slot": "rear_right",
+          "available_frames": 8,
+          "reference_rms": 2.008951235236001,
+          "prediction_rms": 2.0521498067417183,
+          "error_rms": 0.5462369641252219,
+          "relative_rms": 0.2719015546741496,
+          "cosine": 0.9640392289109794
+        }
+      ],
+      "cached_vs_without_rays": [
+        {
+          "slot": "front_left",
+          "available_frames": 8,
+          "reference_rms": 2.0945709438914735,
+          "prediction_rms": 2.068668795315998,
+          "error_rms": 0.7574554971479147,
+          "relative_rms": 0.3616279980188444,
+          "cosine": 0.9338712893020605
+        },
+        {
+          "slot": "front",
+          "available_frames": 8,
+          "reference_rms": 2.1098477580300594,
+          "prediction_rms": 2.0900427529584484,
+          "error_rms": 0.6704964621166707,
+          "relative_rms": 0.3177937647703574,
+          "cosine": 0.9490695378474054
+        },
+        {
+          "slot": "front_right",
+          "available_frames": 8,
+          "reference_rms": 2.044394015015259,
+          "prediction_rms": 2.0618349044808046,
+          "error_rms": 0.763688116283554,
+          "relative_rms": 0.37355231460988897,
+          "cosine": 0.9308556002156232
+        },
+        {
+          "slot": "rear_left",
+          "available_frames": 8,
+          "reference_rms": 2.0627473436390376,
+          "prediction_rms": 2.0188301712460137,
+          "error_rms": 0.7134200843641053,
+          "relative_rms": 0.3458591700840641,
+          "cosine": 0.9391212153658495
+        },
+        {
+          "slot": "rear",
+          "available_frames": 8,
+          "reference_rms": 2.0448854134404657,
+          "prediction_rms": 2.014943299758974,
+          "error_rms": 0.6621763362877069,
+          "relative_rms": 0.32382075393340143,
+          "cosine": 0.946899742823763
+        },
+        {
+          "slot": "rear_right",
+          "available_frames": 8,
+          "reference_rms": 2.008951235236001,
+          "prediction_rms": 2.0282433951820535,
+          "error_rms": 0.7048601871776713,
+          "relative_rms": 0.3508597793788001,
+          "cosine": 0.9390798397744956
+        }
+      ],
+      "ray_subtracted_cached_vs_semantic": [
+        {
+          "slot": "front_left",
+          "available_frames": 8,
+          "reference_rms": 2.0156721258388,
+          "prediction_rms": 2.0686709847914737,
+          "error_rms": 0.5988075216737404,
+          "relative_rms": 0.29707585573946116,
+          "cosine": 0.9573403072779703
+        },
+        {
+          "slot": "front",
+          "available_frames": 8,
+          "reference_rms": 2.0613622545877797,
+          "prediction_rms": 2.0900430553176745,
+          "error_rms": 0.53065062730429,
+          "relative_rms": 0.2574271582412412,
+          "cosine": 0.9674157831764056
+        },
+        {
+          "slot": "front_right",
+          "available_frames": 8,
+          "reference_rms": 2.017986123924242,
+          "prediction_rms": 2.0618339550315774,
+          "error_rms": 0.6069299410583884,
+          "relative_rms": 0.3007602152774631,
+          "cosine": 0.9559645355379747
+        },
+        {
+          "slot": "rear_left",
+          "available_frames": 8,
+          "reference_rms": 1.980814367278327,
+          "prediction_rms": 2.018834168423385,
+          "error_rms": 0.5339009312789417,
+          "relative_rms": 0.26953607571643917,
+          "cosine": 0.9645399778120796
+        },
+        {
+          "slot": "rear",
+          "available_frames": 8,
+          "reference_rms": 1.981542942299458,
+          "prediction_rms": 2.014938054892343,
+          "error_rms": 0.4867758605444983,
+          "relative_rms": 0.2456549641965493,
+          "cosine": 0.9704665620817147
+        },
+        {
+          "slot": "rear_right",
+          "available_frames": 8,
+          "reference_rms": 1.9851570305309663,
+          "prediction_rms": 2.0282404761911876,
+          "error_rms": 0.5462364910920524,
+          "relative_rms": 0.2751603438373596,
+          "cosine": 0.9631780374428256
+        }
+      ],
+      "fp32_rays_vs_mode_rays": [
+        {
+          "slot": "front_left",
+          "available_frames": 8,
+          "reference_rms": 0.4683175655133228,
+          "prediction_rms": 0.4683319118607838,
+          "error_rms": 0.00038000953679140543,
+          "relative_rms": 0.000811435582978565,
+          "cosine": 0.9999996712654187
+        },
+        {
+          "slot": "front",
+          "available_frames": 8,
+          "reference_rms": 0.40580860237788824,
+          "prediction_rms": 0.40578465451313406,
+          "error_rms": 0.00019864294520634395,
+          "relative_rms": 0.0004894990989406578,
+          "cosine": 0.9999998819295843
+        },
+        {
+          "slot": "front_right",
+          "available_frames": 8,
+          "reference_rms": 0.4604135875174507,
+          "prediction_rms": 0.4603764949244043,
+          "error_rms": 0.0002604120025810538,
+          "relative_rms": 0.0005656045122065031,
+          "cosine": 0.9999998432783781
+        },
+        {
+          "slot": "rear_left",
+          "available_frames": 8,
+          "reference_rms": 0.4782283323224563,
+          "prediction_rms": 0.47827523380121306,
+          "error_rms": 0.0002837319450149861,
+          "relative_rms": 0.0005932980667144442,
+          "cosine": 0.9999998288246743
+        },
+        {
+          "slot": "rear",
+          "available_frames": 8,
+          "reference_rms": 0.449235175408118,
+          "prediction_rms": 0.4492490190624054,
+          "error_rms": 0.00025205481993245026,
+          "relative_rms": 0.0005610754316009766,
+          "cosine": 0.9999998430768178
+        },
+        {
+          "slot": "rear_right",
+          "available_frames": 8,
+          "reference_rms": 0.4482817399779703,
+          "prediction_rms": 0.448304867215124,
+          "error_rms": 0.00022254434312936835,
+          "relative_rms": 0.0004964385637039437,
+          "cosine": 0.9999998781114615
+        }
+      ],
+      "frozen_parity_limits_pass": false
+    },
+    "mps_fp16_batch8": {
+      "status": "completed",
+      "seconds": 2.0356128746643662,
+      "cached_vs_with_rays": [
+        {
+          "slot": "front_left",
+          "available_frames": 8,
+          "reference_rms": 2.0945709438914735,
+          "prediction_rms": 2.1466024747487524,
+          "error_rms": 0.5988158714431998,
+          "relative_rms": 0.28588951507685306,
+          "cosine": 0.960425216465664
+        },
+        {
+          "slot": "front",
+          "available_frames": 8,
+          "reference_rms": 2.1098477580300594,
+          "prediction_rms": 2.1370951878049653,
+          "error_rms": 0.5306483056829878,
+          "relative_rms": 0.2515102351168921,
+          "cosine": 0.9688568865519724
+        },
+        {
+          "slot": "front_right",
+          "available_frames": 8,
+          "reference_rms": 2.044394015015259,
+          "prediction_rms": 2.0869964093714,
+          "error_rms": 0.6069331392140788,
+          "relative_rms": 0.2968767931995481,
+          "cosine": 0.9570443467894596
+        },
+        {
+          "slot": "rear_left",
+          "available_frames": 8,
+          "reference_rms": 2.0627473436390376,
+          "prediction_rms": 2.1004419464214634,
+          "error_rms": 0.5339092961640843,
+          "relative_rms": 0.25883407282550536,
+          "cosine": 0.9672675820726014
+        },
+        {
+          "slot": "rear",
+          "available_frames": 8,
+          "reference_rms": 2.0448854134404657,
+          "prediction_rms": 2.077343925512115,
+          "error_rms": 0.48677804482838455,
+          "relative_rms": 0.23804661211279968,
+          "cosine": 0.9722336180555418
+        },
+        {
+          "slot": "rear_right",
+          "available_frames": 8,
+          "reference_rms": 2.008951235236001,
+          "prediction_rms": 2.0521498067417183,
+          "error_rms": 0.5462369641252219,
+          "relative_rms": 0.2719015546741496,
+          "cosine": 0.9640392289109794
+        }
+      ],
+      "cached_vs_without_rays": [
+        {
+          "slot": "front_left",
+          "available_frames": 8,
+          "reference_rms": 2.0945709438914735,
+          "prediction_rms": 2.068668795315998,
+          "error_rms": 0.7574554971479147,
+          "relative_rms": 0.3616279980188444,
+          "cosine": 0.9338712893020605
+        },
+        {
+          "slot": "front",
+          "available_frames": 8,
+          "reference_rms": 2.1098477580300594,
+          "prediction_rms": 2.0900427529584484,
+          "error_rms": 0.6704964621166707,
+          "relative_rms": 0.3177937647703574,
+          "cosine": 0.9490695378474054
+        },
+        {
+          "slot": "front_right",
+          "available_frames": 8,
+          "reference_rms": 2.044394015015259,
+          "prediction_rms": 2.0618349044808046,
+          "error_rms": 0.763688116283554,
+          "relative_rms": 0.37355231460988897,
+          "cosine": 0.9308556002156232
+        },
+        {
+          "slot": "rear_left",
+          "available_frames": 8,
+          "reference_rms": 2.0627473436390376,
+          "prediction_rms": 2.0188301712460137,
+          "error_rms": 0.7134200843641053,
+          "relative_rms": 0.3458591700840641,
+          "cosine": 0.9391212153658495
+        },
+        {
+          "slot": "rear",
+          "available_frames": 8,
+          "reference_rms": 2.0448854134404657,
+          "prediction_rms": 2.014943299758974,
+          "error_rms": 0.6621763362877069,
+          "relative_rms": 0.32382075393340143,
+          "cosine": 0.946899742823763
+        },
+        {
+          "slot": "rear_right",
+          "available_frames": 8,
+          "reference_rms": 2.008951235236001,
+          "prediction_rms": 2.0282433951820535,
+          "error_rms": 0.7048601871776713,
+          "relative_rms": 0.3508597793788001,
+          "cosine": 0.9390798397744956
+        }
+      ],
+      "ray_subtracted_cached_vs_semantic": [
+        {
+          "slot": "front_left",
+          "available_frames": 8,
+          "reference_rms": 2.0156721258388,
+          "prediction_rms": 2.0686709847914737,
+          "error_rms": 0.5988075216737404,
+          "relative_rms": 0.29707585573946116,
+          "cosine": 0.9573403072779703
+        },
+        {
+          "slot": "front",
+          "available_frames": 8,
+          "reference_rms": 2.0613622545877797,
+          "prediction_rms": 2.0900430553176745,
+          "error_rms": 0.53065062730429,
+          "relative_rms": 0.2574271582412412,
+          "cosine": 0.9674157831764056
+        },
+        {
+          "slot": "front_right",
+          "available_frames": 8,
+          "reference_rms": 2.017986123924242,
+          "prediction_rms": 2.0618339550315774,
+          "error_rms": 0.6069299410583884,
+          "relative_rms": 0.3007602152774631,
+          "cosine": 0.9559645355379747
+        },
+        {
+          "slot": "rear_left",
+          "available_frames": 8,
+          "reference_rms": 1.980814367278327,
+          "prediction_rms": 2.018834168423385,
+          "error_rms": 0.5339009312789417,
+          "relative_rms": 0.26953607571643917,
+          "cosine": 0.9645399778120796
+        },
+        {
+          "slot": "rear",
+          "available_frames": 8,
+          "reference_rms": 1.981542942299458,
+          "prediction_rms": 2.014938054892343,
+          "error_rms": 0.4867758605444983,
+          "relative_rms": 0.2456549641965493,
+          "cosine": 0.9704665620817147
+        },
+        {
+          "slot": "rear_right",
+          "available_frames": 8,
+          "reference_rms": 1.9851570305309663,
+          "prediction_rms": 2.0282404761911876,
+          "error_rms": 0.5462364910920524,
+          "relative_rms": 0.2751603438373596,
+          "cosine": 0.9631780374428256
+        }
+      ],
+      "fp32_rays_vs_mode_rays": [
+        {
+          "slot": "front_left",
+          "available_frames": 8,
+          "reference_rms": 0.4683175655133228,
+          "prediction_rms": 0.4683319118607838,
+          "error_rms": 0.00038000953679140543,
+          "relative_rms": 0.000811435582978565,
+          "cosine": 0.9999996712654187
+        },
+        {
+          "slot": "front",
+          "available_frames": 8,
+          "reference_rms": 0.40580860237788824,
+          "prediction_rms": 0.40578465451313406,
+          "error_rms": 0.00019864294520634395,
+          "relative_rms": 0.0004894990989406578,
+          "cosine": 0.9999998819295843
+        },
+        {
+          "slot": "front_right",
+          "available_frames": 8,
+          "reference_rms": 0.4604135875174507,
+          "prediction_rms": 0.4603764949244043,
+          "error_rms": 0.0002604120025810538,
+          "relative_rms": 0.0005656045122065031,
+          "cosine": 0.9999998432783781
+        },
+        {
+          "slot": "rear_left",
+          "available_frames": 8,
+          "reference_rms": 0.4782283323224563,
+          "prediction_rms": 0.47827523380121306,
+          "error_rms": 0.0002837319450149861,
+          "relative_rms": 0.0005932980667144442,
+          "cosine": 0.9999998288246743
+        },
+        {
+          "slot": "rear",
+          "available_frames": 8,
+          "reference_rms": 0.449235175408118,
+          "prediction_rms": 0.4492490190624054,
+          "error_rms": 0.00025205481993245026,
+          "relative_rms": 0.0005610754316009766,
+          "cosine": 0.9999998430768178
+        },
+        {
+          "slot": "rear_right",
+          "available_frames": 8,
+          "reference_rms": 0.4482817399779703,
+          "prediction_rms": 0.448304867215124,
+          "error_rms": 0.00022254434312936835,
+          "relative_rms": 0.0004964385637039437,
+          "cosine": 0.9999998781114615
+        }
+      ],
+      "frozen_parity_limits_pass": false
+    },
+    "mps_bf16_batch1": {
+      "status": "unavailable_or_failed",
+      "error_type": "NotImplementedError",
+      "seconds": 0.003397541120648384,
+      "note": "Mode could not execute on this backend; no precision/backend fallback or pass assumed."
+    },
+    "mps_bf16_batch8": {
+      "status": "unavailable_or_failed",
+      "error_type": "NotImplementedError",
+      "seconds": 0.003915832377970219,
+      "note": "Mode could not execute on this backend; no precision/backend fallback or pass assumed."
+    }
+  },
+  "pairwise": {
+    "mps_fp32_batch1__vs__mps_fp32_batch8": [
+      {
+        "slot": "front_left",
+        "available_frames": 8,
+        "reference_rms": 2.146393265821978,
+        "prediction_rms": 2.146393265821978,
+        "error_rms": 0.0,
+        "relative_rms": 0.0,
+        "cosine": 1.0
+      },
+      {
+        "slot": "front",
+        "available_frames": 8,
+        "reference_rms": 2.1369305494708826,
+        "prediction_rms": 2.1369305494708826,
+        "error_rms": 0.0,
+        "relative_rms": 0.0,
+        "cosine": 1.0
+      },
+      {
+        "slot": "front_right",
+        "available_frames": 8,
+        "reference_rms": 2.0868219044433336,
+        "prediction_rms": 2.0868219044433336,
+        "error_rms": 0.0,
+        "relative_rms": 0.0,
+        "cosine": 1.0000000000000004
+      },
+      {
+        "slot": "rear_left",
+        "available_frames": 8,
+        "reference_rms": 2.1002541188103785,
+        "prediction_rms": 2.1002541188103785,
+        "error_rms": 0.0,
+        "relative_rms": 0.0,
+        "cosine": 1.0000000000000004
+      },
+      {
+        "slot": "rear",
+        "available_frames": 8,
+        "reference_rms": 2.076893301882095,
+        "prediction_rms": 2.076893301882095,
+        "error_rms": 0.0,
+        "relative_rms": 0.0,
+        "cosine": 1.0000000000000004
+      },
+      {
+        "slot": "rear_right",
+        "available_frames": 8,
+        "reference_rms": 2.052155510490626,
+        "prediction_rms": 2.052155510490626,
+        "error_rms": 0.0,
+        "relative_rms": 0.0,
+        "cosine": 1.0000000000000002
+      }
+    ],
+    "mps_fp32_batch1__vs__mps_fp16_batch1": [
+      {
+        "slot": "front_left",
+        "available_frames": 8,
+        "reference_rms": 2.146393265821978,
+        "prediction_rms": 2.1466024747487524,
+        "error_rms": 0.00979199072772183,
+        "relative_rms": 0.00456206739167713,
+        "cosine": 0.9999895995344894
+      },
+      {
+        "slot": "front",
+        "available_frames": 8,
+        "reference_rms": 2.1369305494708826,
+        "prediction_rms": 2.1370951878049653,
+        "error_rms": 0.009725200781604042,
+        "relative_rms": 0.004551013969083863,
+        "cosine": 0.9999896479014099
+      },
+      {
+        "slot": "front_right",
+        "available_frames": 8,
+        "reference_rms": 2.0868219044433336,
+        "prediction_rms": 2.0869964093714,
+        "error_rms": 0.009587571093487627,
+        "relative_rms": 0.0045943408362129215,
+        "cosine": 0.9999894503946709
+      },
+      {
+        "slot": "rear_left",
+        "available_frames": 8,
+        "reference_rms": 2.1002541188103785,
+        "prediction_rms": 2.1004419464214634,
+        "error_rms": 0.010365401740845779,
+        "relative_rms": 0.004935308374358493,
+        "cosine": 0.9999878264532593
+      },
+      {
+        "slot": "rear",
+        "available_frames": 8,
+        "reference_rms": 2.076893301882095,
+        "prediction_rms": 2.077343925512115,
+        "error_rms": 0.009929239310135115,
+        "relative_rms": 0.004780813391394334,
+        "cosine": 0.9999885979235674
+      },
+      {
+        "slot": "rear_right",
+        "available_frames": 8,
+        "reference_rms": 2.052155510490626,
+        "prediction_rms": 2.0521498067417183,
+        "error_rms": 0.009804873302356527,
+        "relative_rms": 0.0047778412757873276,
+        "cosine": 0.9999885860885106
+      }
+    ],
+    "mps_fp32_batch1__vs__mps_fp16_batch8": [
+      {
+        "slot": "front_left",
+        "available_frames": 8,
+        "reference_rms": 2.146393265821978,
+        "prediction_rms": 2.1466024747487524,
+        "error_rms": 0.00979199072772183,
+        "relative_rms": 0.00456206739167713,
+        "cosine": 0.9999895995344894
+      },
+      {
+        "slot": "front",
+        "available_frames": 8,
+        "reference_rms": 2.1369305494708826,
+        "prediction_rms": 2.1370951878049653,
+        "error_rms": 0.009725200781604042,
+        "relative_rms": 0.004551013969083863,
+        "cosine": 0.9999896479014099
+      },
+      {
+        "slot": "front_right",
+        "available_frames": 8,
+        "reference_rms": 2.0868219044433336,
+        "prediction_rms": 2.0869964093714,
+        "error_rms": 0.009587571093487627,
+        "relative_rms": 0.0045943408362129215,
+        "cosine": 0.9999894503946709
+      },
+      {
+        "slot": "rear_left",
+        "available_frames": 8,
+        "reference_rms": 2.1002541188103785,
+        "prediction_rms": 2.1004419464214634,
+        "error_rms": 0.010365401740845779,
+        "relative_rms": 0.004935308374358493,
+        "cosine": 0.9999878264532593
+      },
+      {
+        "slot": "rear",
+        "available_frames": 8,
+        "reference_rms": 2.076893301882095,
+        "prediction_rms": 2.077343925512115,
+        "error_rms": 0.009929239310135115,
+        "relative_rms": 0.004780813391394334,
+        "cosine": 0.9999885979235674
+      },
+      {
+        "slot": "rear_right",
+        "available_frames": 8,
+        "reference_rms": 2.052155510490626,
+        "prediction_rms": 2.0521498067417183,
+        "error_rms": 0.009804873302356527,
+        "relative_rms": 0.0047778412757873276,
+        "cosine": 0.9999885860885106
+      }
+    ],
+    "mps_fp32_batch8__vs__mps_fp16_batch1": [
+      {
+        "slot": "front_left",
+        "available_frames": 8,
+        "reference_rms": 2.146393265821978,
+        "prediction_rms": 2.1466024747487524,
+        "error_rms": 0.00979199072772183,
+        "relative_rms": 0.00456206739167713,
+        "cosine": 0.9999895995344894
+      },
+      {
+        "slot": "front",
+        "available_frames": 8,
+        "reference_rms": 2.1369305494708826,
+        "prediction_rms": 2.1370951878049653,
+        "error_rms": 0.009725200781604042,
+        "relative_rms": 0.004551013969083863,
+        "cosine": 0.9999896479014099
+      },
+      {
+        "slot": "front_right",
+        "available_frames": 8,
+        "reference_rms": 2.0868219044433336,
+        "prediction_rms": 2.0869964093714,
+        "error_rms": 0.009587571093487627,
+        "relative_rms": 0.0045943408362129215,
+        "cosine": 0.9999894503946709
+      },
+      {
+        "slot": "rear_left",
+        "available_frames": 8,
+        "reference_rms": 2.1002541188103785,
+        "prediction_rms": 2.1004419464214634,
+        "error_rms": 0.010365401740845779,
+        "relative_rms": 0.004935308374358493,
+        "cosine": 0.9999878264532593
+      },
+      {
+        "slot": "rear",
+        "available_frames": 8,
+        "reference_rms": 2.076893301882095,
+        "prediction_rms": 2.077343925512115,
+        "error_rms": 0.009929239310135115,
+        "relative_rms": 0.004780813391394334,
+        "cosine": 0.9999885979235674
+      },
+      {
+        "slot": "rear_right",
+        "available_frames": 8,
+        "reference_rms": 2.052155510490626,
+        "prediction_rms": 2.0521498067417183,
+        "error_rms": 0.009804873302356527,
+        "relative_rms": 0.0047778412757873276,
+        "cosine": 0.9999885860885106
+      }
+    ],
+    "mps_fp32_batch8__vs__mps_fp16_batch8": [
+      {
+        "slot": "front_left",
+        "available_frames": 8,
+        "reference_rms": 2.146393265821978,
+        "prediction_rms": 2.1466024747487524,
+        "error_rms": 0.00979199072772183,
+        "relative_rms": 0.00456206739167713,
+        "cosine": 0.9999895995344894
+      },
+      {
+        "slot": "front",
+        "available_frames": 8,
+        "reference_rms": 2.1369305494708826,
+        "prediction_rms": 2.1370951878049653,
+        "error_rms": 0.009725200781604042,
+        "relative_rms": 0.004551013969083863,
+        "cosine": 0.9999896479014099
+      },
+      {
+        "slot": "front_right",
+        "available_frames": 8,
+        "reference_rms": 2.0868219044433336,
+        "prediction_rms": 2.0869964093714,
+        "error_rms": 0.009587571093487627,
+        "relative_rms": 0.0045943408362129215,
+        "cosine": 0.9999894503946709
+      },
+      {
+        "slot": "rear_left",
+        "available_frames": 8,
+        "reference_rms": 2.1002541188103785,
+        "prediction_rms": 2.1004419464214634,
+        "error_rms": 0.010365401740845779,
+        "relative_rms": 0.004935308374358493,
+        "cosine": 0.9999878264532593
+      },
+      {
+        "slot": "rear",
+        "available_frames": 8,
+        "reference_rms": 2.076893301882095,
+        "prediction_rms": 2.077343925512115,
+        "error_rms": 0.009929239310135115,
+        "relative_rms": 0.004780813391394334,
+        "cosine": 0.9999885979235674
+      },
+      {
+        "slot": "rear_right",
+        "available_frames": 8,
+        "reference_rms": 2.052155510490626,
+        "prediction_rms": 2.0521498067417183,
+        "error_rms": 0.009804873302356527,
+        "relative_rms": 0.0047778412757873276,
+        "cosine": 0.9999885860885106
+      }
+    ],
+    "mps_fp16_batch1__vs__mps_fp16_batch8": [
+      {
+        "slot": "front_left",
+        "available_frames": 8,
+        "reference_rms": 2.1466024747487524,
+        "prediction_rms": 2.1466024747487524,
+        "error_rms": 0.0,
+        "relative_rms": 0.0,
+        "cosine": 1.0
+      },
+      {
+        "slot": "front",
+        "available_frames": 8,
+        "reference_rms": 2.1370951878049653,
+        "prediction_rms": 2.1370951878049653,
+        "error_rms": 0.0,
+        "relative_rms": 0.0,
+        "cosine": 1.0000000000000004
+      },
+      {
+        "slot": "front_right",
+        "available_frames": 8,
+        "reference_rms": 2.0869964093714,
+        "prediction_rms": 2.0869964093714,
+        "error_rms": 0.0,
+        "relative_rms": 0.0,
+        "cosine": 1.0000000000000002
+      },
+      {
+        "slot": "rear_left",
+        "available_frames": 8,
+        "reference_rms": 2.1004419464214634,
+        "prediction_rms": 2.1004419464214634,
+        "error_rms": 0.0,
+        "relative_rms": 0.0,
+        "cosine": 1.0000000000000002
+      },
+      {
+        "slot": "rear",
+        "available_frames": 8,
+        "reference_rms": 2.077343925512115,
+        "prediction_rms": 2.077343925512115,
+        "error_rms": 0.0,
+        "relative_rms": 0.0,
+        "cosine": 1.0
+      },
+      {
+        "slot": "rear_right",
+        "available_frames": 8,
+        "reference_rms": 2.0521498067417183,
+        "prediction_rms": 2.0521498067417183,
+        "error_rms": 0.0,
+        "relative_rms": 0.0,
+        "cosine": 1.0000000000000002
+      }
+    ]
+  },
+  "projected_ray_rms_by_camera": [
+    0.46831753849983215,
+    0.40580859780311584,
+    0.4604136049747467,
+    0.47822830080986023,
+    0.44923514127731323,
+    0.44828173518180847
+  ],
+  "frozen_thresholds": {
+    "relative_rms_max": 0.2,
+    "cosine_min": 0.98
+  },
+  "paid_compute_used": false,
+  "limitations": [
+    "Ray-subtracted cached tokens are a proxy: original semantic features and original mixed-precision ray rounding were not stored separately.",
+    "Same JPEG inputs isolate current batching/precision differences, not JPEG damage versus unavailable original decoded pixels.",
+    "Current weight hashes cannot establish historical encoder identity without historical hashes.",
+    "A small evenly spaced frame sample is not identical to the prior all80-frame CUDA comparison. Unsupported modes are reported, not silently emulated.",
+    "No cache, model parameters, parity thresholds or training settings were modified."
+  ]
+}

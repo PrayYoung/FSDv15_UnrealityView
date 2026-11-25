@@ -54,3 +54,8 @@ unverified. No appearance-token, CFG, sharpness-loss or extra training run start
 The rental was reported destroyed. Workload 21 seconds, setup 193 seconds,
 provisioning 244 seconds; approximate charge **$0.040**. Only the small parity JSON
 was returned; the dataset was not downloaded back to the Mac.
+
+
+The subsequent [free local Part 1 diagnostic](../pandaset-uve-parity-local/README.md)
+quantifies batching, precision and ray-subtracted differences without modifying
+the cache or starting any training.

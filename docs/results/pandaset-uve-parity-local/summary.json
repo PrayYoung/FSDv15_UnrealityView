@@ -1,0 +1,74 @@
+{
+  "scope": "PromptA/Part1 local parity only",
+  "source_id": "pandaset/040",
+  "sampled_frame_ids": [
+    0,
+    11,
+    22,
+    33,
+    45,
+    56,
+    67,
+    79
+  ],
+  "sampled_frames": 8,
+  "paid_compute_cost_usd": 0,
+  "source_episode_sha256": "677088b4c019e1b0c00a8dc248a4ec5b622ea0de12e63a8d3ef42893ec6cf0f5",
+  "source_tensor_unchanged": true,
+  "current_encoder_fingerprints": {
+    "ray_projection": {
+      "name": "ray_projection",
+      "shape": [
+        6,
+        384
+      ],
+      "dtype": "torch.float32",
+      "sha256": "87a3302a42932e35f235f07f7a2cdcd56a97051f2b1bf80ab97abe2af577232c"
+    },
+    "backbone_first_weight": {
+      "name": "patch_embed.proj.weight",
+      "shape": [
+        384,
+        3,
+        14,
+        14
+      ],
+      "dtype": "torch.float32",
+      "sha256": "0f73e42d99d7a45233748fbb1b4a00d02758196899fcc504a1b56190dd4c59b9"
+    },
+    "backbone_last_weight": {
+      "name": "norm.weight",
+      "shape": [
+        384
+      ],
+      "dtype": "torch.float32",
+      "sha256": "75face057a127ba19eed589cd0a99fb465389b801d03f4643cfed7d9308811b1"
+    },
+    "backbone_state_sha256": "898b861e0f0a59ef515429633dc4f4927984cb8a74f977cdb30e8b9ad92fd859",
+    "note": "Current encoder fingerprints; historical cache did not record original encoder hashes, so identity cannot be confirmed retrospectively."
+  },
+  "current_cpu_mps_encoder_fingerprints_identical": true,
+  "mps_fp32_cached_token_relative_rms_range": [
+    0.23754236613971103,
+    0.29678221716886066
+  ],
+  "mps_fp32_semantic_proxy_relative_rms_range": [
+    0.2451355316664105,
+    0.30066584021884907
+  ],
+  "mps_fp32_batch1_vs8_max_relative_rms": 0.0,
+  "mps_fp32_vs_fp16_max_relative_rms": 0.004935308374358493,
+  "controlled_cpu_fp16_vs_bf16_max_relative_rms": 0.03988123694953436,
+  "controlled_cpu_fp32_batch1_vs8_max_relative_rms": 4.393157435781713e-05,
+  "conclusions": [
+    "Current batch1vs8 and tested precision differences are much smaller than the original cache mismatch on this sample.",
+    "Subtracting the same known ray projection leaves a large semantic-proxy mismatch; ray omission alone is not a demonstrated explanation.",
+    "JPEG damage, historical encoder identity and other original-input differences remain unresolved; no unique root cause is established."
+  ],
+  "future_work_started": false,
+  "report_sha256": {
+    "mps_native.json": "c4fe39615aad9487379128275fc2c9c7013873c1974760a6562ba9af0c2139a6",
+    "cpu_native.json": "f9e1588d22fc65caa3a384d5f0b44a26c301deaf3665ace65d19a25934a347fe",
+    "cpu_fp32_ray_control.json": "7705259c789de454c1a3142fde90da6309dc3b0cf5a0f1679eb89da7b232a18b"
+  }
+}
