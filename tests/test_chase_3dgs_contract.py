@@ -1,5 +1,6 @@
 """Synthetic fixtures test contracts/geometry only; never model-quality evidence."""
 import hashlib
+import gzip
 import json
 from pathlib import Path
 import zipfile
@@ -59,14 +60,14 @@ def test_external_extractor_whitelist_integrity_and_budget(tmp_path,monkeypatch)
     archive=tmp_path/'data.zip'
     with zipfile.ZipFile(archive,'w') as z:
         z.writestr('pandaset/040/camera/front_camera/00.jpg',b'jpeg')
-        z.writestr('pandaset/040/lidar/00.pkl.gz',b'opaque native bytes')
-        z.writestr('pandaset/040/annotations/cuboids/00.pkl.gz',b'opaque annotations')
+        z.writestr('pandaset/040/lidar/00.pkl.gz',gzip.compress(b'opaque native bytes'))
+        z.writestr('pandaset/040/annotations/cuboids/00.pkl.gz',gzip.compress(b'opaque annotations'))
         z.writestr('pandaset/040/annotations/semseg/00.pkl.gz',b'excluded')
         z.writestr('pandaset/041/lidar/00.pkl.gz',b'excluded')
     spec=dict(bytes=archive.stat().st_size,sha256=hashlib.sha256(archive.read_bytes()).hexdigest())
     with pytest.raises(ValueError,match='budget'):extract(archive,tmp_path/'small',['040'],spec,max_bytes=1)
     extract(archive,tmp_path/'native',['040'],spec)
-    assert (tmp_path/'native/040/lidar/00.pkl.gz').read_bytes()==b'opaque native bytes'
+    assert (tmp_path/'native/040/lidar/00.pkl').read_bytes()==b'opaque native bytes'
     assert not (tmp_path/'native/041').exists() and not (tmp_path/'native/040/annotations/semseg').exists()
     with zipfile.ZipFile(archive,'a') as z:z.writestr('pandaset/040/camera/front_camera/../../escape.jpg',b'bad')
     with zipfile.ZipFile(archive) as z:

@@ -86,3 +86,19 @@ idempotence; it records only after optimizer work, with finite scalar losses.
 The retry's artifact owner syncs the small receipt periodically. Monitoring may
 stop after the receipt confirms ten completed optimizer updates, per the user's
 instruction; automatic result retrieval and cleanup continue afterward.
+
+## Native-table extraction retry
+
+The verified mirror stores scene040 LiDAR and cuboids as `.pkl.gz`; the pinned
+SDK discovers only `.pkl`. Preserve the archive and decompress selected native
+tables into SDK-compatible filenames without deserializing them in the
+extractor. Enforce expanded per-file/scene byte limits, disk headroom, and
+destination uniqueness. Before preprocessing, require all80 frames for each
+of six cameras, LiDAR and cuboids, plus camera/LiDAR pose and timestamp arrays.
+
+Local verification used the real pinned archive directory and one real frame:
+the pinned SDK with pandas2.2.3 loaded179370 LiDAR points and106 cuboids after
+decompression. Temporary native samples were removed. This validates table
+discovery and decoding, not full preprocessing, GPU fitting or image quality.
+Synthetic tests also cover missing frames, expansion limits and conflicting
+compressed/uncompressed destinations. Scene-ID normalization remains enabled.
