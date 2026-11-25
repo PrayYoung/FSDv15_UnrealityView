@@ -37,6 +37,17 @@ def instrument_optimizer_progress(training):
         training.write_text(text.replace(marker,marker+hook,1))
 
 
+def normalize_pandaset_scene_lookup(processor):
+    """The shared CLI parses integer IDs; the SDK indexes directory names."""
+    text=processor.read_text()
+    old='        scene_data = self.pandaset[scene_idx]'
+    new='        scene_data = self.pandaset[str(scene_idx).zfill(3)]'
+    if new in text:return
+    if text.count(old)!=1:
+        raise ValueError('Pinned PandaSet scene lookup does not match upstream')
+    processor.write_text(text.replace(old,new,1))
+
+
 def main():
     p=argparse.ArgumentParser();p.add_argument('--root',default='.cache/third_party');p.add_argument('--difix',action='store_true');a=p.parse_args()
     pins=json.loads((Path(__file__).parent/'upstream_pins.json').read_text());root=Path(a.root)
@@ -45,6 +56,7 @@ def main():
     nodes=root/'drivestudio/models/nodes/__init__.py'
     text=nodes.read_text();nodes.write_text(text.replace('from .smpl import SMPLNodes',''))
     instrument_optimizer_progress(root/'drivestudio/tools/train.py')
+    normalize_pandaset_scene_lookup(root/'drivestudio/datasets/pandaset/pandaset_preprocess.py')
     # SMPL model code is not loaded or used. Progress instrumentation is opt-in. The
     # generated configuration also removes the SMPL node and load_smpl flag.
 
