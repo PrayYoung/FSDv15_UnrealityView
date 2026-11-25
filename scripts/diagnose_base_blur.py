@@ -60,6 +60,7 @@ def aggregate(rows):
 def diagnose_split(model,decoder,dataset,device,output,count=40,seed=917):
     model.eval();indices=select_indices(dataset,count);donors=donor_indices(dataset,indices)
     results={str(n):[] for n in (1,2,4)}
+    health=[]
     controls={name:[] for name in ('swapped_uve','frozen_stage_uve','zero_z_prev','swapped_z_prev')} if dataset.split=='val' else {}
     baselines={'taesd_roundtrip':[],'prev_chunk_copy':[]};windows=[];visual=[];shown=set()
     for i,(index,donor) in enumerate(zip(indices,donors)):
@@ -75,7 +76,14 @@ def diagnose_split(model,decoder,dataset,device,output,count=40,seed=917):
         baselines['prev_chunk_copy'].append(measurements(previous,target,copy,truth))
         noise=torch.randn(previous.shape,device=device,generator=torch.Generator(device=device).manual_seed(seed+i))
         for n in (1,2,4):
-            with autocast_for(device):pred=model.sample_chunk(previous,tokens,n,ages,noise=noise)
+            attention=[(name,module) for name,module in model.named_modules() if name.endswith('cross_attn')] if hasattr(model,'named_modules') else []
+            for _,module in attention:module.collect_health=(dataset.split=='val' and n==1)
+            try:
+                with autocast_for(device):pred=model.sample_chunk(previous,tokens,n,ages,noise=noise)
+                if dataset.split=='val' and n==1:
+                    health.append({name:dict(module.health) for name,module in attention if hasattr(module,'health')})
+            finally:
+                for _,module in attention:module.collect_health=False
             pixels=decoder.decode(pred.float());results[str(n)].append(measurements(pred,target,pixels,truth))
             if n==1 and item['source_id'] not in shown and len(shown)<4:
                 shown.add(item['source_id']);visual.append((truth[0].cpu(),pixels[0].cpu(),codec[0].cpu()))
@@ -98,6 +106,17 @@ def diagnose_split(model,decoder,dataset,device,output,count=40,seed=917):
     contact_sheet(videos,Path(output)/f'{dataset.split}_contact_sheet.png',tuple(j for k in range(len(visual)) for j in (k*8,k*8+7)))
     report={'windows':windows,'nfe':{k:aggregate(v) for k,v in results.items()},
         'baselines':{k:aggregate(v) for k,v in baselines.items()},'conditioning_1nfe':{'baseline':aggregate(results['1']),**{k:aggregate(v) for k,v in controls.items()}}}
+    if dataset.split=='val' and health and any(health):
+        stages={}
+        for stage in range(4):
+            modules=[f'blocks.{i}.cross_attn' for i in range(stage*len(model.blocks)//4,(stage+1)*len(model.blocks)//4)]
+            rows=[frame[name] for frame in health for name in modules if name in frame]
+            if rows:
+                stages[str(stage)]={k:float(np.mean([r[k] for r in rows])) for k in rows[0]}
+                if 'logit_scale_min' in rows[0]:
+                    stages[str(stage)]['logit_scale_min']=min(r['logit_scale_min'] for r in rows)
+                    stages[str(stage)]['logit_scale_max']=max(r['logit_scale_max'] for r in rows)
+        report['cross_attention_health']={'stages':stages,'scope':'40validation baseline1NFE forwards,allqueries/heads;unavailablekeys excluded','entropy_normalization':'log(numberofvalidkeys)'}
     atomic_json(Path(output)/f'{dataset.split}_diagnosis.json',report)
     return report
 
@@ -109,7 +128,7 @@ def main():
     if a.expected_step is not None and config['step']!=a.expected_step:raise ValueError('Unexpected checkpoint step')
     decoder=PretrainedTAESD().to(device);reports={}
     for split in ('train','val'):
-        dataset=CachedEpisodeChunkDataset(a.data,split,jitter=False)
+        dataset=CachedEpisodeChunkDataset(a.data,split,jitter=False,include_rays=model.config.geometry_conditioning)
         require_uve_grid(config,dataset)
         reports[split]=diagnose_split(model,decoder,dataset,device,output)
         del dataset

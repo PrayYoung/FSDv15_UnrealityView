@@ -154,10 +154,10 @@ def build_style_cache(base_root,output,styles=STYLES,device="auto",decoder=None)
 
 
 class StylizedChunkDataset(Dataset):
-    def __init__(self,base_root,style_root,style,split="train",real_previous_ratio=.2):
+    def __init__(self,base_root,style_root,style,split="train",real_previous_ratio=.2,include_rays=False):
         validate_style_slug(style)
         if not 0<=real_previous_ratio<=1:raise ValueError("Invalid style dataset configuration")
-        self.base=CachedEpisodeChunkDataset(base_root,split,jitter=split=="train")
+        self.base=CachedEpisodeChunkDataset(base_root,split,jitter=split=="train",include_rays=include_rays)
         self.real_previous_ratio=real_previous_ratio;self.styles=[];self.directories=[]
         for path,episode in zip(self.base.paths,self.base.episodes):
             directory=Path(style_root)/style/split/path.parent.name

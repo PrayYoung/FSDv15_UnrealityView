@@ -59,9 +59,9 @@ def adaptive_loss(mse,p=1.,c=.01):
 
 
 def meanflow_loss(model,z0,z_prev,tokens,ages=None,fm_ratio=.75,
-                  prev_chunk_noise_std_max=.20,jvp_method='auto',generator=None,
+                  prev_chunk_noise_std_max=.20,prev_chunk_dropout=0.,jvp_method='auto',generator=None,
                   adaptive_p=1.,adaptive_c=.01,time_sampling='logit_normal',jvp_weight=1.):
-    if not 0<=fm_ratio<=1 or not 0<=jvp_weight<=1 or prev_chunk_noise_std_max<0:
+    if not 0<=fm_ratio<=1 or not 0<=jvp_weight<=1 or prev_chunk_noise_std_max<0 or not 0<=prev_chunk_dropout<1:
         raise ValueError('Invalid Mean-Flow configuration')
     b=len(z0);ages=z0.new_zeros(b,4) if ages is None else ages
     r,t=sample_times(b,z0.device,time_sampling,generator)
@@ -73,6 +73,9 @@ def meanflow_loss(model,z0,z_prev,tokens,ages=None,fm_ratio=.75,
     velocity=eps-z0
     std=torch.rand(b,device=z0.device,generator=generator)*prev_chunk_noise_std_max
     prev=z_prev+expand(std)*torch.randn(z_prev.shape,device=z_prev.device,dtype=z_prev.dtype,generator=generator)
+    if prev_chunk_dropout:
+        keep=(torch.rand(b,device=z0.device,generator=generator)>=prev_chunk_dropout).to(prev.dtype)
+        prev=prev*expand(keep)
     target=velocity.detach().float().clone();interior=~boundary
     backend=jvp_backend(z,jvp_method);tangent=None
     if interior.any() and jvp_weight:

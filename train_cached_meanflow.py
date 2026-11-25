@@ -34,12 +34,12 @@ def train(args):
     random.seed(seed);np.random.seed(seed);torch.manual_seed(seed)
     output=Path(args.output);output.mkdir(parents=True,exist_ok=True)
     atomic_json(output/"run_config.json",{**config,"device":str(device),"precision":str(precision_for(device))})
-    train_data=CachedEpisodeChunkDataset(args.data,"train",jitter=config.get("train_jitter",True))
+    train_data=CachedEpisodeChunkDataset(args.data,"train",jitter=config.get("train_jitter",True),include_rays=config["dit"].get("geometry_conditioning",False))
     windows=config.get("diagnostic_train_windows")
     if windows is not None:
         if type(windows) is not int or windows<1:raise ValueError("diagnostic_train_windows must be positive")
         train_data.index=train_data.index[:windows]*max(1,math.ceil(config["batch_size"]/min(windows,len(train_data.index))))
-    validation=CachedEpisodeChunkDataset(args.data,"val",jitter=False)
+    validation=CachedEpisodeChunkDataset(args.data,"val",jitter=False,include_rays=config["dit"].get("geometry_conditioning",False))
     if train_data.uve_grid!=validation.uve_grid:raise ValueError("Train/validation UVE grid mismatch")
     manifest=Path(args.data)/"manifest.json"
     data_source=json.loads(manifest.read_text()).get("source","unknown") if manifest.is_file() else "unknown"
@@ -101,7 +101,7 @@ def train(args):
         warmup_jvp=config.get("jvp_warmup_steps",0)
         jvp_weight=min(1.,max(0.,(step-1)/warmup_jvp)) if warmup_jvp else 1.
         legacy="time_scale" not in config["dit"]
-        options=dict(fm_ratio=config.get("fm_ratio",.5 if legacy else .75),
+        options=dict(prev_chunk_dropout=config.get("prev_chunk_dropout",0.),fm_ratio=config.get("fm_ratio",.5 if legacy else .75),
             adaptive_p=config.get("adaptive_p",.5 if legacy else 1.),
             adaptive_c=config.get("adaptive_c",.001 if legacy else .01),
             time_sampling=config.get("time_sampling","uniform" if legacy else "logit_normal"),

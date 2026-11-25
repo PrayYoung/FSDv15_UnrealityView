@@ -18,7 +18,8 @@ from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel,ConfigDict,Field,field_validator
 from starlette.middleware.trustedhost import TrustedHostMiddleware
 from unrealityview.checkpoint import load_checkpoint
-from unrealityview.data.cache import resolve_safe_subpath,load_episode
+from unrealityview.data.cache import resolve_safe_subpath,load_episode,episode_grid
+from unrealityview.data.dataset import stage_uve_tokens
 from unrealityview.device import select_device,synchronize,autocast_for
 from unrealityview.geometry import ground_raycast,project_waypoints,ego_waypoints
 from unrealityview.models.pretrained_taesd import PretrainedTAESD
@@ -246,6 +247,9 @@ def render(req:RenderRequest):
                                  "active_style":req.style,"style_strength":req.style_strength,"lora_merge_ms":0.,"lora_size_mb":0.,
                                  "psnr_db":None,"sram_mib":None,"uve_stage_frames":[],"stream_mode":"cached ground truth"}}
         model,policy,decoder,device,config=get_models()
+        grid=episode_grid(episode,metadata)
+        if tuple(getattr(model,"uve_grid",(4,8)))!=grid:raise HTTPException(409,"Checkpoint/cache UVE grid mismatch")
+        include_rays=model.config.geometry_conditioning
         style_metrics=apply_style(model,req.style,req.style_strength)
         previous=episode["chase_latents"][start-8:start].permute(1,0,2,3)[None].float().to(device)
         sid=str(req.session_id)
@@ -257,7 +261,7 @@ def render(req:RenderRequest):
             previous=old[2 if old[1]==req.chunk-1 else 3].to(device)
         ring=UVERingBuffer()
         first=min(start-1,int(torch.searchsorted(completed,times[start],right=True))-1)
-        ring.publish(episode["uve_tokens"][first][None].float().to(device),ts=float(completed[first]),frame_id=first)
+        ring.publish(stage_uve_tokens(episode,first,grid,include_rays)[None].to(device),ts=float(completed[first]),frame_id=first)
         engine=RealityViewStreamingEngine(model,ring)
         stage_current=[float(times[start])]
         newest_frame=[first]
@@ -268,7 +272,7 @@ def render(req:RenderRequest):
             newest_frame[0]=frame
             stage_current[0]=max(stage_current[0],float(times[min(start+stage*2,len(times)-1)]))
             if req.interleaving:
-                ring.publish(episode["uve_tokens"][frame][None].float().to(device),ts=float(completed[frame]),frame_id=frame)
+                ring.publish(stage_uve_tokens(episode,frame,grid,include_rays)[None].to(device),ts=float(completed[frame]),frame_id=frame)
         generator=torch.Generator(device=device).manual_seed(req.seed+req.chunk)
         noise=torch.randn(previous.shape,device=device,generator=generator)
         synchronize(device);begin=time.perf_counter()

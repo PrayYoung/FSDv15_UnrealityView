@@ -1,9 +1,9 @@
 # Follow-up suggestions and current scope
 
-The latest review has two proposed workstreams. **Only Prompt A / Part 1 is active:
-the free local one-episode parity diagnostic.** Record later work here without
-automatically implementing or launching it. No paid compute is authorized by this
-step; parity thresholds remain RMS<=0.20/cosine>=0.98, and the existing cache,
+The review has two workstreams. The user subsequently clarified: **complete all
+Prompt A, publish its result, then complete Prompt B.** The local Part 1 remains
+completed; [the Arm E protocol](ARM_E_PROTOCOL.md) records the newly authorized
+pilot and budget. The earlier limited scope below is historical; parity thresholds remain RMS<=0.20/cosine>=0.98, and the existing cache,
 checkpoints, split allocation and reserved test scenes stay untouched.
 
 ## Active: local parity diagnostic

@@ -13,7 +13,7 @@ import torch
 from torch.utils.data import DataLoader
 from unrealityview.checkpoint import load_checkpoint
 from unrealityview.data.cache import atomic_json
-from unrealityview.data.dataset import stage_context
+from unrealityview.data.dataset import stage_context,stage_uve_tokens
 from unrealityview.data.stylize_cache import StylizedChunkDataset
 from unrealityview.device import select_device,autocast_for,precision_for
 from unrealityview.models.lora import inject_dit_lora,extract_lora_state_dict,save_lora,model_fingerprint
@@ -65,7 +65,7 @@ def evaluate_style(model,policy,decoder,data,device,output,max_items=4,seed=719)
     frames=[];generator=torch.Generator(device=device).manual_seed(seed+10000)
     for chunk in range(4):
         start=8+chunk*8;ids,ages=stage_context(episode,start,float(data.base.metadata[0].get("fps",10)))
-        tokens=episode["uve_tokens"][ids][None].float().to(device)
+        tokens=stage_uve_tokens(episode,ids,data.base.uve_grid,model.config.geometry_conditioning)[None].to(device)
         with autocast_for(device):
             previous=model.sample_chunk(previous,tokens,1,ages[None].to(device),
                          noise=torch.randn(previous.shape,device=device,generator=generator))
@@ -84,8 +84,8 @@ def train(args):
     inject_dit_lora(model,args.rank,args.alpha,args.start_block,not args.no_unpatch,getattr(args,"early_rank",None))
     params=[p for p in model.parameters() if p.requires_grad]
     ema=extract_lora_state_dict(model)
-    data=StylizedChunkDataset(args.data,args.styles_data,args.style,"train",.2)
-    validation=StylizedChunkDataset(args.data,args.styles_data,args.style,"val",0.)
+    data=StylizedChunkDataset(args.data,args.styles_data,args.style,"train",.2,include_rays=model.config.geometry_conditioning)
+    validation=StylizedChunkDataset(args.data,args.styles_data,args.style,"val",0.,include_rays=model.config.geometry_conditioning)
     train_ids=sorted(k for k,v in data.base.provenance.items() if v=="train")
     # Adapters cannot silently train on scenes reserved as base validation/test.
     forbidden=set(base_config.get("data_provenance",{}).get("validation_source_ids",[]))

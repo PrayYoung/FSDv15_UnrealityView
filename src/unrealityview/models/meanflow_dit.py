@@ -1,6 +1,7 @@
 from dataclasses import asdict, dataclass
 from collections.abc import Callable
 import torch
+import math
 from torch import nn
 from .blocks import AdaLNBlock, Attention, TimeEmbed
 
@@ -17,9 +18,12 @@ class DiTConfig:
     stages: int = 4
     cross_attention: str = "block"
     time_scale: float = 10.0
+    qk_logit_scale: bool = False
+    geometry_conditioning: bool = False
 
     def __post_init__(self):
         if self.cross_attention not in ("block","stage"):raise ValueError("Unknown cross-attention architecture")
+        if self.geometry_conditioning and self.cross_attention!="block":raise ValueError("Geometry conditioning requires block cross-attention")
         self.latent_shape = tuple(self.latent_shape)
         self.patch_size = tuple(self.patch_size)
         if self.stages != 4 or self.depth % self.stages or self.hidden_dim % self.num_heads:
@@ -41,13 +45,13 @@ class ConditionalMeanFlowDiT(nn.Module):
         self.time = TimeEmbed(c.hidden_dim,scale=c.time_scale)
         self.interval = TimeEmbed(c.hidden_dim,scale=c.time_scale)
         self.blocks = nn.ModuleList([AdaLNBlock(c.hidden_dim,c.num_heads,
-                             c.context_dim if c.cross_attention=="block" else None) for _ in range(c.depth)])
+                             c.context_dim if c.cross_attention=="block" else None,qk_logit_scale=c.qk_logit_scale) for _ in range(c.depth)])
         if c.cross_attention=="block":
             self.age_embed=TimeEmbed(c.context_dim,scale=c.time_scale)
         else:
             # Version-1 checkpoints remain readable with their original architecture.
             self.age = TimeEmbed(c.hidden_dim,scale=c.time_scale)
-            self.cross = nn.ModuleList([Attention(c.hidden_dim,c.num_heads,c.context_dim) for _ in range(c.stages)])
+            self.cross = nn.ModuleList([Attention(c.hidden_dim,c.num_heads,c.context_dim,qk_logit_scale=c.qk_logit_scale) for _ in range(c.stages)])
             self.cross_norm = nn.ModuleList([nn.LayerNorm(c.hidden_dim) for _ in range(c.stages)])
         self.final_norm = nn.LayerNorm(c.hidden_dim,elementwise_affine=False)
         # Non-overlapping ConvTranspose3d is exactly a per-token linear
@@ -55,6 +59,14 @@ class ConditionalMeanFlowDiT(nn.Module):
         self.output = nn.Linear(c.hidden_dim,c.latent_channels*c.patch_size[0]*c.patch_size[1]*c.patch_size[2])
         nn.init.zeros_(self.output.weight)
         nn.init.zeros_(self.output.bias)
+
+        if c.geometry_conditioning:
+            dt=c.hidden_dim//4;dh=(c.hidden_dim-dt)//2;dw=c.hidden_dim-dt-dh
+            axes=torch.meshgrid(*[torch.arange(n).float() for n in self.grid],indexing='ij')
+            self.position.data.copy_(.5*torch.cat([sin_cos_axis(a,d) for a,d in zip(axes,(dt,dh,dw))],-1).reshape_as(self.position))
+            self.sem_norm=nn.LayerNorm(c.context_dim)
+            self.ray_mlp=nn.Sequential(nn.Linear(54,256),nn.SiLU(),nn.Linear(256,c.context_dim),nn.LayerNorm(c.context_dim))
+            self.sem_gain=nn.Parameter(torch.tensor(1.));self.ray_gain=nn.Parameter(torch.tensor(1.))
 
     def forward(self, z, r, t, z_prev, uve_tokens, stage_ages=None,
                 uve_provider: Callable | None = None):
@@ -77,8 +89,17 @@ class ConditionalMeanFlowDiT(nn.Module):
                     x = block(x,stage_cond)
             else:
                 # Derive the missing-camera mask BEFORE adding freshness embeddings.
-                mask=tokens.detach().ne(0).any(-1)
-                fresh=tokens+self.age_embed(age)[:,None,:].to(tokens.dtype)
+                if c.geometry_conditioning:
+                    if tokens.shape[-1]!=c.context_dim+6:raise ValueError('Geometry conditioning needs semantic384+rays6 tokens')
+                    sem=tokens[...,:c.context_dim];mask=sem.detach().ne(0).any(-1)
+                    # Mask rays BEFORE nonlinear fusion, including hostile unavailable values.
+                    rays=torch.where(mask[...,None],tokens[...,c.context_dim:],torch.zeros_like(tokens[...,c.context_dim:]))
+                    with torch.autocast(tokens.device.type,enabled=False):
+                        fused=(self.sem_gain*self.sem_norm(sem.float())+self.ray_gain*self.ray_mlp(fourier_encode_rays(rays.float()))).to(sem.dtype)
+                    fresh=fused+self.age_embed(age)[:,None,:].to(fused.dtype)
+                else:
+                    mask=tokens.detach().ne(0).any(-1)
+                    fresh=tokens+self.age_embed(age)[:,None,:].to(tokens.dtype)
                 fresh=fresh*mask[...,None].to(fresh.dtype)
                 for block in self.blocks[stage*(c.depth//4):(stage+1)*(c.depth//4)]:
                     x=block(x,cond,fresh,mask)
@@ -100,3 +121,14 @@ class ConditionalMeanFlowDiT(nn.Module):
             r = z.new_full((len(z),),1-(i+1)/num_steps)
             z = z-(t-r).view(-1,1,1,1,1)*self(z,r,t,z_prev,uve_tokens,stage_ages,uve_provider)
         return z
+
+
+def sin_cos_axis(axis,dim):
+    half=(dim+1)//2
+    freq=torch.exp(-math.log(1000.)*torch.arange(half).float()/max(half-1,1))
+    phase=axis[...,None]*freq
+    return torch.cat((phase.sin(),phase.cos()),-1)[...,:dim]
+
+
+def fourier_encode_rays(rays,num_freqs=4):
+    return torch.cat([rays]+[f((2**k)*math.pi*rays) for k in range(num_freqs) for f in (torch.sin,torch.cos)],-1)

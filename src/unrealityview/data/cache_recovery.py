@@ -9,7 +9,7 @@ from .splits import stable_split
 RAW_CAMERAS=('front_left','front','front_right','rear_left','rear','rear_right','chase')
 
 
-def recoverable_episodes(root,revision,selections,frames):
+def recoverable_episodes(root,revision,selections,frames,raw_cameras=RAW_CAMERAS):
     root=Path(root);old=json.loads((root/'split_manifest.json').read_text())
     if old.get('download',{}).get('revision')!=revision:raise ValueError('Recovery source revision mismatch')
     digest=hashlib.sha256(json.dumps(old,sort_keys=True).encode()).hexdigest()
@@ -24,7 +24,7 @@ def recoverable_episodes(root,revision,selections,frames):
         if stable_split('pandaset',identity.split('/')[1],old['seed'])!=wanted[identity]:raise ValueError('Recovery scene split mismatch')
         episode=load_episode(path)
         if len(episode['chase_latents'])!=frames:raise ValueError('Recovery tensor count mismatch')
-        for camera in RAW_CAMERAS:
+        for camera in raw_cameras:
             if any(not (path.parent/'raw'/camera/f'{i:05d}.jpg').is_file() for i in range(frames)):
                 raise ValueError('Recovery RGB cache incomplete')
         ready[identity]=path.parent

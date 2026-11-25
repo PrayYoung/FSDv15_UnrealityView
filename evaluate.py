@@ -5,7 +5,7 @@ from pathlib import Path
 import numpy as np
 import torch
 from unrealityview.checkpoint import load_checkpoint
-from unrealityview.data.dataset import CachedEpisodeChunkDataset,stage_context
+from unrealityview.data.dataset import CachedEpisodeChunkDataset,stage_context,stage_uve_tokens
 from unrealityview.data.cache import atomic_json,require_uve_grid
 from unrealityview.data.splits import assert_unseen_test
 from unrealityview.device import select_device,autocast_for
@@ -94,7 +94,7 @@ def evaluate_models(model, policy, decoder, dataset, device, output, max_items=8
     for chunk in range(4):
         start=8+chunk*8
         ids,rollout_ages=stage_context(ep,start,float(dataset.metadata[0].get("fps",36)))
-        context=ep["uve_tokens"][ids][None].float().to(device)
+        context=stage_uve_tokens(ep,ids,dataset.uve_grid,getattr(model.config,"geometry_conditioning",False))[None].to(device)
         with autocast_for(device):
             previous=model.sample_chunk(previous,context,1,stage_ages=rollout_ages[None].to(device),
                                         noise=torch.randn(previous.shape,device=device,generator=gen))
@@ -123,7 +123,7 @@ def main():
     if a.max_items<1:p.error("max-items must be positive")
     model,policy,config=load_checkpoint(a.checkpoint,device)
     decoder=PretrainedTAESD().to(device)
-    dataset=CachedEpisodeChunkDataset(a.data,a.split,jitter=False)
+    dataset=CachedEpisodeChunkDataset(a.data,a.split,jitter=False,include_rays=model.config.geometry_conditioning)
     require_uve_grid(config,dataset)
     if a.split=="test":assert_unseen_test(config.get("data_provenance"),[m["source_id"] for m in dataset.metadata if "source_id" in m])
     print(json.dumps(evaluate_models(model,policy,decoder,dataset,device,a.output,a.max_items),indent=2))

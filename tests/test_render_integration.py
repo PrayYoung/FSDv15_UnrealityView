@@ -10,16 +10,17 @@ from unrealityview.models.driving_policy_head import DrivingPolicyHead
 from unrealityview.models.pretrained_taesd import PretrainedTAESD
 
 
-def test_model_and_ground_truth_routes_and_closed_loop_state(tmp_path,monkeypatch):
+@pytest.mark.parametrize("geometry",[False,True])
+def test_model_and_ground_truth_routes_and_closed_loop_state(tmp_path,monkeypatch,geometry):
     from app import server
     monkeypatch.setattr(server,"DATA_ROOT",tmp_path)
     directory=tmp_path/"val"/"episode_0000"
     save_episode(directory,{"uve_tokens":torch.randn(32,192,384),"chase_latents":torch.randn(32,4,24,40),
-                            "ego_states":torch.zeros(32,3)}, {"frames":32,"source":"unit-test fixture"})
+                            "ego_states":torch.zeros(32,3),"intrinsics":torch.eye(3).repeat(32,6,1,1),"camera_to_ego":torch.eye(4).repeat(32,6,1,1)}, {"frames":32,"source":"unit-test fixture"})
     for name in ("front_left","front","front_right","rear_left","rear","rear_right","chase"):
         path=directory/"raw"/name;path.mkdir(parents=True)
         for frame in range(32):Image.new("RGB",(320,192),(40,70,90)).save(path/f"{frame:05d}.jpg")
-    model=ConditionalMeanFlowDiT(DiTConfig(hidden_dim=16,depth=4,num_heads=4)).eval()
+    model=ConditionalMeanFlowDiT(DiTConfig(hidden_dim=16,depth=4,num_heads=4,geometry_conditioning=geometry,qk_logit_scale=geometry)).eval()
     policy=DrivingPolicyHead(hidden_dim=16,depth=1,num_heads=4).eval()
     decoder=PretrainedTAESD(pretrained=False)
     monkeypatch.setattr(server,"_models",(model,policy,decoder,torch.device("cpu"),{"step":1,"data_source":"unit-test fixture"}))

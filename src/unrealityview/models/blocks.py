@@ -18,12 +18,13 @@ class TimeEmbed(nn.Module):
 
 
 class Attention(nn.Module):
-    def __init__(self, dim, heads, context_dim=None):
+    def __init__(self, dim, heads, context_dim=None, qk_logit_scale=False):
         super().__init__()
         self.heads = heads
         self.q = nn.Linear(dim,dim)
         self.kv = nn.Linear(context_dim or dim,dim*2)
         self.out = nn.Linear(dim,dim)
+        if qk_logit_scale:self.logit_scale=nn.Parameter(torch.full((1,heads,1,1),math.log(2.)))
 
     def forward(self, x, context=None, key_mask=None):
         if context is not None and key_mask is None:
@@ -35,6 +36,8 @@ class Attention(nn.Module):
         # RMS rather than L2 norm preserves the standard 1/sqrt(head_dim) scale.
         q = (q.float() * (q.float().square().mean(-1,keepdim=True)+1e-6).rsqrt()).to(q.dtype)
         k = (k.float() * (k.float().square().mean(-1,keepdim=True)+1e-6).rsqrt()).to(k.dtype)
+        if hasattr(self,"logit_scale"):q=q*self.logit_scale.exp().clamp(max=8.).to(q.dtype)
+        if getattr(self,"collect_health",False):self._record_health(q,k,key_mask)
         if q.device.type == "mps":
             # PyTorch 2.5 MPS FP16 SDPA SafeSoftmaxBackward can produce NaNs.
             # Keep this backend's attention reduction and softmax in FP32.
@@ -47,8 +50,21 @@ class Attention(nn.Module):
         return self.out(y.transpose(1,2).reshape(b,n,d))
 
 
+    @torch.no_grad()
+    def _record_health(self,q,k,mask):
+        logits=q.float()@k.float().transpose(-1,-2)/(q.shape[-1]**.5)
+        if mask is not None:logits=logits.masked_fill(~mask[:,None,None,:],float('-inf'))
+        p=logits.softmax(-1);entropy=-(p*p.clamp_min(1e-12).log()).sum(-1)
+        count=(mask.sum(-1) if mask is not None else torch.full((len(q),),k.shape[-2],device=q.device)).float()
+        norm=count.clamp_min(2).log()[:,None,None]
+        self.health={"ent/max":float((entropy/norm).mean()),"max_p":float(p.max(-1).values.mean())}
+        if hasattr(self,'logit_scale'):
+            scale=self.logit_scale.detach().exp().clamp(max=8.)
+            self.health.update(logit_scale_min=float(scale.min()),logit_scale_mean=float(scale.mean()),logit_scale_max=float(scale.max()),logit_scale_parameter_mean=float(self.logit_scale.detach().mean()))
+
+
 class AdaLNBlock(nn.Module):
-    def __init__(self, dim, heads, context_dim=None):
+    def __init__(self, dim, heads, context_dim=None, qk_logit_scale=False):
         super().__init__()
         self.norm1 = nn.LayerNorm(dim,elementwise_affine=False,eps=1e-6)
         self.norm2 = nn.LayerNorm(dim,elementwise_affine=False,eps=1e-6)
@@ -57,7 +73,7 @@ class AdaLNBlock(nn.Module):
         self.has_cross=context_dim is not None
         if self.has_cross:
             self.cross_norm=nn.LayerNorm(dim,elementwise_affine=False,eps=1e-6)
-            self.cross_attn=Attention(dim,heads,context_dim)
+            self.cross_attn=Attention(dim,heads,context_dim,qk_logit_scale=qk_logit_scale)
         self.mod = nn.Sequential(nn.SiLU(),nn.Linear(dim,(9 if self.has_cross else 6)*dim))
         nn.init.zeros_(self.mod[-1].weight)
         nn.init.zeros_(self.mod[-1].bias)
