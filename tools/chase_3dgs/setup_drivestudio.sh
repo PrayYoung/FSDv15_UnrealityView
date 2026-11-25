@@ -12,10 +12,12 @@ fi
 bash tools/chase_3dgs/compile_cuda_probe.sh
 uv venv --python 3.10 .drivestudio-venv
 PY="$ROOT/.drivestudio-venv/bin/python"
+export PATH="$ROOT/.drivestudio-venv/bin:$PATH"
 "$PY" tools/chase_3dgs/build_env.py --check-headers
 export MAX_JOBS=$("$PY" tools/chase_3dgs/build_env.py --jobs)
 uv pip install --python "$PY" torch==2.5.1 torchvision==0.20.1 --index-url https://download.pytorch.org/whl/cu124
 uv pip install --python "$PY" -r tools/chase_3dgs/requirements.txt
+"$PY" tools/chase_3dgs/runtime_env.py
 "$PY" tools/chase_3dgs/setup_upstream.py "$@"
 for package in gsplat pytorch3d nvdiffrast; do
   uv pip install --python "$PY" --no-build-isolation --no-deps ".cache/third_party/$package"

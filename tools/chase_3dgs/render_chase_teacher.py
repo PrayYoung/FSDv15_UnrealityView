@@ -185,6 +185,8 @@ def main():
     p.add_argument('--iters',type=int,default=15000);p.add_argument('--checkpoint');p.add_argument('--difix-cleanup',action='store_true');a=p.parse_args()
     if len(a.sequence)!=3 or not a.sequence.isdigit():p.error('sequence must be three digits')
     if not 100<=a.iters<=30000:p.error('iters must be 100..30000')
+    from tools.chase_3dgs.runtime_env import configure_runtime_tools
+    configure_runtime_tools()
     upstream=Path(a.upstream).resolve();pins=json.loads((ROOT/'tools/chase_3dgs/upstream_pins.json').read_text())
     if subprocess.check_output(['git','-C',str(upstream),'rev-parse','HEAD'],text=True).strip()!=pins['drivestudio']['commit']:raise ValueError('Unpinned DriveStudio checkout')
     native=Path(a.native).resolve();processed=Path(a.processed).resolve();scratch=Path(a.scratch).resolve()/a.sequence

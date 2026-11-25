@@ -58,3 +58,31 @@ or dataset download. Local tests emulate a hidden compiler and verify child-shel
 inheritance and runtime-only rejection; actual CUDA compilation still requires
 the submitted GPU preflight. The user's new resubmission authorization retains
 the$1 limit and minimal-return/automatic-cleanup policies.
+
+## Ninja-path retry and optimizer-start handoff
+
+The CUDA-path correction reached successful native package builds, but nvdiffrast
+runtime JIT could not find Ninja. Native packages are installed in the isolated
+`.drivestudio-venv`; add that interpreter's bin directory to PATH in the setup
+shell, workload shell and standalone Python preflight/render entry points. Verify
+the executable before native builds. Keep CUDA/toolchain and scientific settings
+unchanged.
+
+The user authorized another retry and requested monitoring only until fitting
+actually starts. An opt-in progress hook runs immediately after the pinned
+`trainer.backward(loss_dict)` call, which includes its optimizer step. It writes
+an atomic small JSON receipt after updates1,2,10 and every100 thereafter, only
+when UNREALITY_PROGRESS_FILE is set. It does not change losses, optimizer state,
+random draws, camera processing or quality thresholds. The owner periodically
+retrieves the minimal return directory; confirm at least10 completed updates
+with finite losses before handing off unattended. This establishes startup,
+not eventual completion or quality. Stop monitoring after that receipt.
+
+Runtime tooling is checked with the selected interpreter's bin directory rather
+than resolving its python symlink to the system installation. This ensures Ninja
+is found both during package builds and nvdiffrast's lazy runtime compilation.
+The progress hook is matched against the pinned upstream source and tested for
+idempotence; it records only after optimizer work, with finite scalar losses.
+The retry's artifact owner syncs the small receipt periodically. Monitoring may
+stop after the receipt confirms ten completed optimizer updates, per the user's
+instruction; automatic result retrieval and cleanup continue afterward.

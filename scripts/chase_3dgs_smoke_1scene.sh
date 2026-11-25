@@ -37,6 +37,8 @@ SETUP_ARGS=();RENDER_ARGS=()
 if [ "${DIFIX_CLEANUP:-0}" = 1 ]; then SETUP_ARGS+=(--difix);RENDER_ARGS+=(--difix-cleanup);fi
 uv run --no-sync python -m scripts.chase_timed_stage --record outputs/chase_teacher/stage_times.json --stage build -- bash tools/chase_3dgs/setup_drivestudio.sh "${SETUP_ARGS[@]}"
 stage_return_snapshot
+export PATH="$PWD/.drivestudio-venv/bin:$PATH"
+export UNREALITY_PROGRESS_FILE="$PWD/outputs/chase_teacher_return/optimizer_progress.json"
 
 # Native LiDAR/cuboids are needed here. Camera-only encoded caches cannot replace
 # them. The original archive was scratch and may need remote re-download.

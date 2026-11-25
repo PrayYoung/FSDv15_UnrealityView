@@ -6,6 +6,8 @@ import nvdiffrast.torch as dr
 
 
 def main():
+    from tools.chase_3dgs.runtime_env import configure_runtime_tools
+    configure_runtime_tools()
     assert torch.cuda.is_available(), 'CUDA unavailable'
     device='cuda'
     points=torch.tensor([[[-.1,0.,2.],[.1,0.,2.]]],device=device,requires_grad=True)

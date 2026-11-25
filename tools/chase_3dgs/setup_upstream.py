@@ -28,6 +28,15 @@ def checkout(root,name,spec):
     return dest
 
 
+def instrument_optimizer_progress(training):
+    text=training.read_text()
+    marker='        trainer.backward(loss_dict)'
+    hook="\n        # unrealityview_optimizer_progress\n        from tools.chase_3dgs.progress import record_optimizer_progress\n        record_optimizer_progress(step, loss_dict)"
+    if 'unrealityview_optimizer_progress' not in text:
+        if text.count(marker)!=1:raise ValueError('Pinned optimizer progress hook does not match upstream')
+        training.write_text(text.replace(marker,marker+hook,1))
+
+
 def main():
     p=argparse.ArgumentParser();p.add_argument('--root',default='.cache/third_party');p.add_argument('--difix',action='store_true');a=p.parse_args()
     pins=json.loads((Path(__file__).parent/'upstream_pins.json').read_text());root=Path(a.root)
@@ -35,7 +44,8 @@ def main():
         checkout(root,name,pins[name])
     nodes=root/'drivestudio/models/nodes/__init__.py'
     text=nodes.read_text();nodes.write_text(text.replace('from .smpl import SMPLNodes',''))
-    # Only import is removed; SMPL model code is not loaded or used. The
+    instrument_optimizer_progress(root/'drivestudio/tools/train.py')
+    # SMPL model code is not loaded or used. Progress instrumentation is opt-in. The
     # generated configuration also removes the SMPL node and load_smpl flag.
 
 
