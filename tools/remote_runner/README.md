@@ -36,3 +36,12 @@ For storage-constrained jobs, `vast-run run --discard-snapshot-after-upload` opt
 to removing the local compressed upload after a verified transfer. The uncompressed
 source/cache bundle remains available and the runner rebuilds the archive for an
 infrastructure retry. Default behavior for other projects is unchanged.
+
+Infrastructure recovery can be installed with
+`python tools/remote_runner/recovery_install.py --runner /path/to/vast_run.py`.
+The owner makes one bounded log/output recovery attempt before destruction,
+records confirmed destruction even for infrastructure failures, and retains the
+instance reference for finalizer retry if cleanup fails. Normal artifact transfers
+remain unchanged; failure recovery transfers use a45-second bound. The opt-in
+`--exclude-host-id` flag prevents reselecting a known failed host. No manual SSH,
+provider API bypass, workload resubmission or automatic extra paid attempt is used.
