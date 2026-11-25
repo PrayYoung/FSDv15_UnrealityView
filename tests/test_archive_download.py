@@ -50,3 +50,12 @@ def test_local_archive_extraction_without_network(archive,tmp_path,monkeypatch):
     assert len(manifest['download']['members'])==168
     assert manifest['download']['transport'].startswith('verified local ZIP')
     assert not list((tmp_path/'native').rglob('*.pkl'))
+
+
+def test_record_directory_rejected_before_disk_or_download(tmp_path,monkeypatch):
+    record=tmp_path/'record.json';record.mkdir()
+    monkeypatch.setattr(bulk.shutil,'disk_usage',lambda _:pytest.fail('disk check must not run'))
+    def downloader(**kwargs):pytest.fail('downloader must not run')
+    with pytest.raises(IsADirectoryError,match='record destination'):
+        bulk.download({},tmp_path/'archive',record,downloader)
+    assert not (tmp_path/'archive').exists()

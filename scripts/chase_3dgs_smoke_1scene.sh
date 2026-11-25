@@ -7,6 +7,15 @@ export HF_HOME="$PWD/.cache/huggingface"
 : "${OVERFIT_REVIEW:?Path to hash-bound passing visual review}"
 : "${FRONT_GATE:?Path to completed Stage 1B numeric report}"
 SEQUENCE=${SEQUENCE:-040}
+return_scene_artifacts() {
+  result_code=$?
+  trap - EXIT
+  uv run --no-sync python -m scripts.collect_chase_return --source outputs/chase_teacher \
+    --destination outputs/chase_teacher_return --sequence "$SEQUENCE" --exit-code "$result_code" || echo 'Return collection incomplete' >&2
+  exit "$result_code"
+}
+trap return_scene_artifacts EXIT
+mkdir -p outputs/chase_teacher outputs/chase_teacher_return
 uv run --no-sync python -m scripts.pipeline_gates check --report "$OVERFIT_GATE" --review "$OVERFIT_REVIEW"
 if [ "${1:-}" = --independent-verification ]; then
   # Explicit single-scene teacher check; never grants a front-view visual pass.
@@ -21,7 +30,7 @@ bash tools/chase_3dgs/check_build_env.sh
 # Optional cleanup is explicit; the default executes raw dynamic 3DGS only.
 SETUP_ARGS=();RENDER_ARGS=()
 if [ "${DIFIX_CLEANUP:-0}" = 1 ]; then SETUP_ARGS+=(--difix);RENDER_ARGS+=(--difix-cleanup);fi
-bash tools/chase_3dgs/setup_drivestudio.sh "${SETUP_ARGS[@]}"
+uv run --no-sync python -m scripts.chase_timed_stage --record outputs/chase_teacher/stage_times.json --stage build -- bash tools/chase_3dgs/setup_drivestudio.sh "${SETUP_ARGS[@]}"
 
 # Native LiDAR/cuboids are needed here. Camera-only encoded caches cannot replace
 # them. The original archive was scratch and may need remote re-download.

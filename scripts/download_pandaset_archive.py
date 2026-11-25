@@ -48,6 +48,9 @@ def retry_delay(error, attempt):
 
 
 def download(spec, directory, record, downloader=None, sleep=time.sleep):
+    record=Path(record)
+    if record.is_dir():raise IsADirectoryError("Archive record destination is a directory; use a directory-valued runner sync root")
+    record.parent.mkdir(parents=True,exist_ok=True)
     directory = Path(directory); directory.mkdir(parents=True, exist_ok=True)
     target = directory / spec['filename']
     start = time.monotonic()

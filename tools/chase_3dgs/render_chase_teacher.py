@@ -9,6 +9,7 @@ import os
 from pathlib import Path
 import subprocess
 import sys
+import time
 import numpy as np
 from PIL import Image,ImageDraw
 from tools.chase_3dgs.render_policy import alpha_coverages,consistent_novel_appearance,GATE_POLICY
@@ -32,17 +33,27 @@ def build_config(upstream,processed,sequence,scratch,iters):
     return path
 
 
-def fit_scene(upstream,native,processed,sequence,scratch,iters,env):
-    subprocess.run([sys.executable,'datasets/preprocess.py','--dataset','pandaset',
+def timed_phase(label,action,record):
+    start=time.monotonic();status='failed'
+    try:
+        result=action();status='completed';return result
+    finally:
+        from unrealityview.data.cache import atomic_json
+        data=json.loads(record.read_text()) if record.exists() else {}
+        data[label]=dict(seconds=time.monotonic()-start,status=status);atomic_json(record,data)
+
+
+def fit_scene(upstream,native,processed,sequence,scratch,iters,env,timing_record):
+    timed_phase('preprocessing',lambda:subprocess.run([sys.executable,'datasets/preprocess.py','--dataset','pandaset',
         '--data_root',str(native),'--target_dir',str(processed),'--workers','1',
         '--scene_ids',sequence,'--process_keys','images','lidar','calib','pose','dynamic_masks','objects'],
-        cwd=upstream,env=env,check=True)
-    subprocess.run([sys.executable,str(ROOT/'tools/chase_3dgs/extract_sky_masks.py'),
-        '--scene',str(processed/sequence)],env=env,check=True)
+        cwd=upstream,env=env,check=True),timing_record)
+    timed_phase('sky_masks',lambda:subprocess.run([sys.executable,str(ROOT/'tools/chase_3dgs/extract_sky_masks.py'),
+        '--scene',str(processed/sequence)],env=env,check=True),timing_record)
     cfg=build_config(upstream,processed,sequence,scratch,iters)
-    subprocess.run([sys.executable,'tools/train.py','--config_file',str(cfg),
+    timed_phase('fit_15000' if iters==15000 else 'fit',lambda:subprocess.run([sys.executable,'tools/train.py','--config_file',str(cfg),
         '--output_root',str(scratch/'fits'),'--project','chase','--run_name',sequence],
-        cwd=upstream,env=env,check=True)
+        cwd=upstream,env=env,check=True),timing_record)
     return scratch/'fits/chase'/sequence/'checkpoint_final.pth'
 
 
@@ -182,8 +193,9 @@ def main():
     scratch.mkdir(parents=True,exist_ok=True);processed.mkdir(parents=True,exist_ok=True)
     env={**os.environ,'PYTHONPATH':f'{upstream}:{ROOT}/src:{ROOT}'}
     sys.path.insert(0,str(upstream))
-    checkpoint=Path(a.checkpoint).resolve() if a.checkpoint else fit_scene(upstream,native,processed,a.sequence,scratch,a.iters,env)
-    render_scene(upstream,processed,native,a.sequence,checkpoint,Path(a.output).resolve(),a.difix_cleanup)
+    timing_record=Path(a.output).resolve()/'pandaset'/a.sequence/'timings.json'
+    checkpoint=Path(a.checkpoint).resolve() if a.checkpoint else fit_scene(upstream,native,processed,a.sequence,scratch,a.iters,env,timing_record)
+    timed_phase('render_and_metrics',lambda:render_scene(upstream,processed,native,a.sequence,checkpoint,Path(a.output).resolve(),a.difix_cleanup),timing_record)
 
 
 if __name__=='__main__':main()
