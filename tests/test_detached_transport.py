@@ -4,6 +4,19 @@ import pytest
 from tools.remote_runner.detached_transport import run_detached,worker_scripts,DetachedTransportError
 
 
+def test_optional_receipt_uses_owner_status_request(tmp_path,monkeypatch):
+    monkeypatch.setenv('VAST_RUN_PROGRESS_PATH','outputs/optimizer.json')
+    calls=[]
+    responses=iter(['','RUNNING\nPROGRESS:{"completed_updates":10}', 'EXIT:0','log'])
+    def execute(*args,**kwargs):
+        calls.append(kwargs['input'])
+        return SimpleNamespace(returncode=0,stdout=next(responses))
+    assert run_detached(['ssh'],'body','/job',tmp_path/'remote.log',execute=execute,
+                        sleep=lambda _:None,clock=lambda:0)==0
+    assert 'head -c 16384 /job/outputs/optimizer.json' in calls[1]
+    assert (tmp_path/'remote.progress.json').read_text()=='{"completed_updates": 10}\n'
+
+
 def test_disconnect_during_launch_and_wait_does_not_repeat_workload(tmp_path):
     calls=[];responses=iter([(255,''),(0,''),(255,''),(0,'RUNNING'),(0,'EXIT:0'),(0,'saved remote log')])
     def execute(argv,**kwargs):

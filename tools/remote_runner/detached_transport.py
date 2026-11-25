@@ -4,6 +4,8 @@ Reconnect to the same remote worker after SSH loss; never resubmit its workload.
 The owning runner retains provisioning, caps, retries, artifact sync and cleanup.
 """
 import hashlib
+import json
+import os
 from pathlib import Path
 import shlex
 import subprocess
@@ -63,6 +65,15 @@ def run_detached(ssh_argv,script,workdir,log_path,*,timeout_seconds=21600,
     """
     token=hashlib.sha256((script+'\n'+Path(log_path).name).encode()).hexdigest()[:24]
     root,launch,status=worker_scripts(script,workdir,token,timeout_seconds)
+    # Optional small receipt, fetched by the existing owner status request.
+    # No separate SSH controller, provider polling, or per-step log streaming.
+    progress=os.environ.get('VAST_RUN_PROGRESS_PATH')
+    if progress:
+        relative=Path(progress)
+        if relative.is_absolute() or '..' in relative.parts:
+            raise ValueError('Progress receipt must stay inside remote workdir')
+        receipt=shlex.quote(str(Path(workdir)/relative))
+        status+=f'\nif [ -f {receipt} ]; then printf "PROGRESS:"; head -c 16384 {receipt}; fi\n'
     started=clock();last_success=started;launched=False;acknowledged_at=None
     def invoke(payload):
         try:
@@ -81,6 +92,15 @@ def run_detached(ssh_argv,script,workdir,log_path,*,timeout_seconds=21600,
         if not launched:
             launched=True;acknowledged_at=clock();sleep(poll_seconds);continue
         state=result.stdout.strip()
+        if '\nPROGRESS:' in state:
+            state,raw=state.split('\nPROGRESS:',1)
+            try:
+                record=json.loads(raw)
+            except (ValueError,TypeError):
+                pass  # A partial optional receipt must not affect the workload.
+            else:
+                path=Path(log_path).with_suffix('.progress.json')
+                path.write_text(json.dumps(record)+'\n')
         if state.startswith('EXIT:'):
             try:code=int(state.split(':',1)[1])
             except ValueError:raise DetachedTransportError('Invalid recorded remote exit code') from None
