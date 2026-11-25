@@ -43,3 +43,18 @@ not reconstruction success, and numeric success is not visual certification.
 Do not automatically retry a poor scientific result or spend for a second rental.
 Stop after reporting. User review decides whether cleanup/Difix or batching is
 warranted; no automatic76-scene batch, generative flying-view or style training.
+
+## RunPod compiler-discovery correction
+
+The first RunPod attempt passed CUDA compute but failed before archive download
+because the native-build shell could not find nvcc. Public image metadata lists
+a CUDA12.4 development toolkit and compiler paths; the terminated Pod cannot be
+inspected retrospectively, so PATH reset is supported rather than proven there.
+Source `tools/chase_3dgs/cuda_env.sh` in each build/workload shell to discover a
+CUDA12 nvcc plus runtime headers, export CUDA_HOME/CUDA_PATH/CUDACXX and PATH,
+and reject runtime-only or incompatible installations. A native object compile
+probe runs after host build tools are installed and before native package builds
+or dataset download. Local tests emulate a hidden compiler and verify child-shell
+inheritance and runtime-only rejection; actual CUDA compilation still requires
+the submitted GPU preflight. The user's new resubmission authorization retains
+the$1 limit and minimal-return/automatic-cleanup policies.

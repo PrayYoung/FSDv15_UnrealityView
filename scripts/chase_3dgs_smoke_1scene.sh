@@ -30,6 +30,7 @@ else
   uv run --no-sync python -m scripts.pipeline_gates check --report "$FRONT_GATE" --review "$FRONT_REVIEW"
 fi
 uv run --no-sync python scripts/cuda_preflight.py
+source tools/chase_3dgs/cuda_env.sh
 bash tools/chase_3dgs/check_build_env.sh
 # Optional cleanup is explicit; the default executes raw dynamic 3DGS only.
 SETUP_ARGS=();RENDER_ARGS=()
