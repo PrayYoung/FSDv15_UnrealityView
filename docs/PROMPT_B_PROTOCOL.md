@@ -102,3 +102,23 @@ decompression. Temporary native samples were removed. This validates table
 discovery and decoding, not full preprocessing, GPU fitting or image quality.
 Synthetic tests also cover missing frames, expansion limits and conflicting
 compressed/uncompressed destinations. Scene-ID normalization remains enabled.
+
+## Post-preprocessing hook/lifecycle correction
+
+The native-table retry completed80-frame preprocessing and Gaussian initialization.
+Its first `trainer.backward()` returned, then the receipt import failed because
+DriveStudio's `tools` package shadowed this repository's namespace. Import the
+stdlib-only receipt from `unrealityview.runtime.optimizer_progress` instead, with
+an explicit subprocess regression reproducing the upstream working directory.
+This is optimizer-start engineering evidence, not a completed reconstruction.
+
+That attempt's artifact stream included a login banner and its destruction was
+late: the owner reported an approximate1.3261USD rental, exceeding the intended
+1USD cap. Never treat a configured watchdog as proof of budget compliance. The
+owner now prevents macOS idle sleep, starts its watchdog immediately, rechecks a
+UTC deadline every5seconds, bounds normal artifact sync at120seconds, and strips
+only a bounded pre-gzip login banner. The workload also has a7200second timeout.
+Explicit `vast-run status RUN --verify-destroyed` must confirm the prior instance
+is absent before a replacement. These measures depend on the local controller
+remaining available; a closed/powered-off laptop or provider API outage can still
+delay destruction. Record observed costs and destruction timestamps honestly.

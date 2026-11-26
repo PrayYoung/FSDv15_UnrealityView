@@ -30,11 +30,14 @@ def checkout(root,name,spec):
 
 def instrument_optimizer_progress(training):
     text=training.read_text()
+    text=text.replace('from tools.chase_3dgs.progress import record_optimizer_progress',
+                      'from unrealityview.runtime.optimizer_progress import record_optimizer_progress')
     marker='        trainer.backward(loss_dict)'
-    hook="\n        # unrealityview_optimizer_progress\n        from tools.chase_3dgs.progress import record_optimizer_progress\n        record_optimizer_progress(step, loss_dict)"
+    hook="\n        # unrealityview_optimizer_progress\n        from unrealityview.runtime.optimizer_progress import record_optimizer_progress\n        record_optimizer_progress(step, loss_dict)"
     if 'unrealityview_optimizer_progress' not in text:
         if text.count(marker)!=1:raise ValueError('Pinned optimizer progress hook does not match upstream')
-        training.write_text(text.replace(marker,marker+hook,1))
+        text=text.replace(marker,marker+hook,1)
+    training.write_text(text)
 
 
 def normalize_pandaset_scene_lookup(processor):
