@@ -23,22 +23,29 @@ def test_fourier_full_pose_and_clean_loss_math():
     moved=pose.clone();moved[2,3]+=2
     assert not torch.allclose(rays,plucker_rays(k,moved,10,16))
     x=torch.tensor([0.,1.],requires_grad=True);y=torch.zeros_like(x)
-    expected=.1**2*(math.sqrt(101)-1)/2
+    expected=(math.sqrt(1.01)-.1)/2
     assert pseudo_huber(x,y).item()==pytest.approx(expected)
     assert charbonnier(y,y).item()==pytest.approx(.001)
+    legacy=(.1**2*(torch.sqrt(1+((x-y)/.1).square())-1)).mean()
+    torch.testing.assert_close(pseudo_huber(x,y),legacy/.1)
     perceptual=lambda a,b:(a-b).abs().mean()
     loss,terms=three_term_loss(x,y,x,y,perceptual)
+    assert torch.allclose(terms['charbonnier'],2*charbonnier(x,y))
     assert torch.allclose(loss,.5*terms['pseudo_huber']+terms['charbonnier']+.8*terms['vgg'])
     loss.backward();assert torch.isfinite(x.grad).all()
 
 
-def test_real_diffusers_tiny_stateless_tokens_gradients_and_fusion():
+@pytest.mark.parametrize('additional_conditions',[False,True])
+def test_real_diffusers_tiny_stateless_tokens_gradients_and_fusion(additional_conditions):
     from diffusers import PixArtTransformer2DModel
     torch.manual_seed(9)
-    base=PixArtTransformer2DModel(num_attention_heads=2,attention_head_dim=8,num_layers=1,
-        cross_attention_dim=16,caption_channels=16,sample_size=32,in_channels=4,out_channels=8,
-        patch_size=2,norm_type='ada_norm_single',use_additional_conditions=False)
+    heads=3 if additional_conditions else 2
+    width=heads*8
+    base=PixArtTransformer2DModel(num_attention_heads=heads,attention_head_dim=8,num_layers=1,
+        cross_attention_dim=width,caption_channels=width,sample_size=128 if additional_conditions else 32,in_channels=4,out_channels=8,
+        patch_size=2,norm_type='ada_norm_single',use_additional_conditions=additional_conditions)
     model=StatelessPixArt(base,rank=2,alpha=4)
+    assert torch.count_nonzero(model.role_emb.weight)==0
     args=(torch.randn(1,4,24,40),torch.randn(1,6,4,20,32),torch.randn(1,6,160,6),torch.randn(1,240,6))
     model.train();out=model(*args);assert out.shape==(1,4,24,40)
     out.square().mean().backward()
@@ -70,3 +77,39 @@ def test_actual_frozen_taesd_decoder_allows_prediction_gradients():
     ae.decode(z).sample.square().mean().backward()
     assert z.grad is not None and torch.isfinite(z.grad).all()
     assert all(p.grad is None for p in ae.parameters())
+
+
+def test_vgg_channel_sum_squared_distance_layer_weights_and_clamp():
+    from unrealityview.pipeline2.losses import ChannelNormalizedVGG16
+    class Zero(nn.Module):
+        def forward(self,x):return x*0
+    metric=ChannelNormalizedVGG16(nn.Sequential(*([nn.Identity() for _ in range(22)]+[Zero()])))
+    mean=metric.mean;std=metric.std
+    x=mean+std*torch.tensor([.1,0.,0.])[None,:,None,None]
+    y=mean+std*torch.tensor([0.,.1,0.])[None,:,None,None]
+    # First three taps have orthogonal unit features (squared distance2),
+    # final tap is zero; layer weighting gives(2+2+2+.5*0)/3.5.
+    assert metric(x,y).item()==pytest.approx(6/3.5,rel=1e-5)
+    out_of_range=torch.tensor([-.5,1.5,.5])[None,:,None,None].requires_grad_()
+    torch.testing.assert_close(metric(out_of_range,y),metric(out_of_range.clamp(0,1),y))
+    metric(out_of_range,y).backward()
+    assert out_of_range.grad[0,0].eq(0).all() and out_of_range.grad[0,1].eq(0).all()
+
+
+def test_training_can_sample_clean_and_all_augmented_camera_banks(tmp_path,monkeypatch):
+    from PIL import Image
+    ds=RecoveryScenes.__new__(RecoveryScenes)
+    ds.episodes=[{'intrinsics':torch.eye(3).expand(80,6,3,3).clone(),
+                  'camera_to_ego':torch.eye(4).expand(80,6,4,4).clone(),
+                  'chase_latents':torch.zeros(80,4,24,40)}]
+    ds.directories=[tmp_path/'episode.safetensors']
+    (tmp_path/'raw/chase').mkdir(parents=True)
+    Image.new('RGB',(320,192)).save(tmp_path/'raw/chase/00002.jpg')
+    ds.latents=[torch.stack([torch.full((80,6,4,20,32),float(i)) for i in range(4)])]
+    def choose(low,high,size):
+        assert low==0 and high==4 and size==(6,)
+        return torch.tensor([0,1,2,3,0,1])
+    monkeypatch.setattr(torch,'randint',choose)
+    monkeypatch.setattr(torch,'rand',lambda *a,**k:torch.tensor(1.))
+    cameras,*_=ds.batch([(0,2)],'cpu',train=True)
+    torch.testing.assert_close(cameras[0,:,0,0,0],torch.tensor([0.,1.,2.,3.,0.,1.]))

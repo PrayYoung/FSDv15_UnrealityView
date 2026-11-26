@@ -99,7 +99,7 @@ def evaluate_pilot(model,vae,vgg,val,device,output,arm_e):
         torch.cuda.synchronize();clock=time.perf_counter()
         for _ in range(30):vae.decode(model(*example))
         torch.cuda.synchronize();decoded_ms=(time.perf_counter()-clock)*1000/30
-    report=dict(status='completed',val_scenes=8,frames_per_scene=79,variants=variants,matched_frames_8_79=matched,
+    report=dict(status='completed',recipe_version='prompt_d_corrected_v2',vgg_metric='weighted_channel_sum_normalized_squared_L2_v2',val_scenes=8,frames_per_scene=79,variants=variants,matched_frames_8_79=matched,
         temporal=temporal,latency=dict(fused_lora_model_ms=ms,fused_lora_model_fps=1000/ms,model_plus_decode_ms=decoded_ms,includes_camera_encoding=False),
         historical_references=dict(codec_claim_db=30.25,v2_db=21.8846,arm_e_db=21.5858,arm_e_f0_db=24.,note='Historicalreferencesuseddifferentwindowselection;matchedArmEandcodecabovearemeasuredonthesameframes'),
         differences={key:variants[key]['psnr_db']-variants['all_6_cams']['psnr_db'] for key in ('drop_front','swapped_scene_cams')},

@@ -4,7 +4,8 @@ import torch.nn.functional as F
 
 
 def pseudo_huber(prediction,target,c=.1):
-    return (c*c*(torch.sqrt(1+((prediction.float()-target.float())/c).square())-1)).mean()
+    # Recipe-v2 normalization (the v1 expression was smaller by a factor c).
+    return (torch.sqrt((prediction.float()-target.float()).square()+c*c)-c).mean()
 
 
 def charbonnier(prediction,target,eps=1e-3):
@@ -22,16 +23,21 @@ class ChannelNormalizedVGG16(nn.Module):
         self.register_buffer('std',torch.tensor([.229,.224,.225])[None,:,None,None])
 
     def forward(self,prediction,target):
-        x=(prediction-self.mean)/self.std;y=(target-self.mean)/self.std;loss=x.new_zeros(())
+        x=(prediction.clamp(0,1)-self.mean)/self.std
+        y=(target.clamp(0,1)-self.mean)/self.std;loss=x.new_zeros(())
+        weights={3:1.,8:1.,15:1.,22:.5}
         for index,layer in enumerate(self.features):
             x=layer(x)
             with torch.no_grad():y=layer(y)
-            if index in (3,8,15,22):loss=loss+F.l1_loss(F.normalize(x.float(),dim=1,eps=1e-6),F.normalize(y.float(),dim=1,eps=1e-6))
-        return loss/4
+            if index in weights:
+                xn=F.normalize(x.float(),dim=1,eps=1e-6)
+                yn=F.normalize(y.float(),dim=1,eps=1e-6)
+                loss=loss+weights[index]*(xn-yn).square().sum(dim=1).mean()
+        return loss/3.5
 
 
 def three_term_loss(pred_z,target_z,pred_rgb,target_rgb,perceptual):
-    terms={'pseudo_huber':pseudo_huber(pred_z,target_z),'charbonnier':charbonnier(pred_rgb,target_rgb),
+    terms={'pseudo_huber':pseudo_huber(pred_z,target_z),'charbonnier':2*charbonnier(pred_rgb,target_rgb),
            'vgg':perceptual(pred_rgb,target_rgb)}
     return .5*terms['pseudo_huber']+terms['charbonnier']+.8*terms['vgg'],terms
 

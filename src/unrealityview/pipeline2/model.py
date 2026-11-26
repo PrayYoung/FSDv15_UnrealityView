@@ -18,6 +18,7 @@ class StatelessPixArt(nn.Module):
         dimension=backbone.config.num_attention_heads*backbone.config.attention_head_dim
         self.checkpoint_blocks=checkpoint_blocks
         self.role_emb=nn.Embedding(7,dimension)
+        nn.init.zeros_(self.role_emb.weight)
         self.ray_mlp=nn.Sequential(nn.Linear(54,256),nn.SiLU(),nn.Linear(256,dimension))
         nn.init.zeros_(self.ray_mlp[-1].weight);nn.init.zeros_(self.ray_mlp[-1].bias)
         self.null_caption=nn.Parameter(torch.zeros(1,1,backbone.config.caption_channels))

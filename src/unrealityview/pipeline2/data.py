@@ -44,7 +44,7 @@ class RecoveryScenes:
         if len(set(self.ids))!=len(self.ids):raise ValueError('Duplicate scene identity')
 
     @torch.no_grad()
-    def encode(self,vae,device,batch_size=48,augmentation_banks=2):
+    def encode(self,vae,device,batch_size=48,augmentation_banks=3):
         # Independent RGB jitter banks are encoded once, then sampled per camera
         # during training; validation always uses the clean bank.
         banks=1+augmentation_banks if self.split=='train' else 1
@@ -74,7 +74,7 @@ class RecoveryScenes:
             if donor==scene and variant=='swapped_scene_cams':raise ValueError('Different-scene donor required')
             source=self.episodes[donor];banks=self.latents[donor]
             if train:
-                choice=torch.randint(1,len(banks),(6,))
+                choice=torch.randint(0,len(banks),(6,))
                 latent=torch.stack([banks[choice[c],previous,c] for c in range(6)])
             else:latent=banks[0,previous].clone()
             if variant=='drop_front' or (train and torch.rand(())<.1):

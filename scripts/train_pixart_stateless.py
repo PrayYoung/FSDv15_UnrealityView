@@ -18,23 +18,25 @@ def main():
     if a.steps!=2000 or a.batch_size*a.grad_accum!=16:raise ValueError('Frozen pilot requires2000updates/effectivebatch16')
     if not torch.cuda.is_available():raise RuntimeError('CUDA required')
     torch.manual_seed(42);random.seed(42);torch.set_num_threads(min(8,os.cpu_count() or 1))
-    torch.backends.cuda.enable_flash_sdp(True);torch.backends.cuda.enable_math_sdp(False);torch.backends.cuda.enable_mem_efficient_sdp(False)
+    torch.backends.cuda.enable_flash_sdp(True);torch.backends.cuda.enable_math_sdp(True);torch.backends.cuda.enable_mem_efficient_sdp(True)
     device='cuda';output=Path(a.output);output.mkdir(parents=True,exist_ok=True);start=time.monotonic()
     os.environ['UNREALITY_PROGRESS_FILE']=str(output/'optimizer_progress.json')
     pins=json.loads(Path('configs/pixart_stateless_pins.json').read_text())
     atomic_json(output/'run_config.json',dict(steps=2000,effective_batch=16,batch_size=a.batch_size,grad_accum=a.grad_accum,
-        seed=42,pins=pins,camera_lag=1,token_count=1200,stateless=True,latent_history=False,
+        seed=42,pins=pins,recipe_version='prompt_d_corrected_v2',camera_lag=1,token_count=1200,stateless=True,latent_history=False,
         lora_rank=16,lora_alpha=32,learning_rate=1.5e-4,warmup=100,ema_decay=.992,
         loss_weights=dict(pseudo_huber=.5,charbonnier=1.,channel_normalized_vgg16=.8),
-        augmentation='two independently RGB-jittered cached banks,selected per camera per sample;single-camera dropout0.10',
-        sdpa_backend='FlashAttention CUDA only',normalized_time=1.,pretrained_timestep=999,
+        loss_normalization=dict(latent='sqrt(delta^2+c^2)-c;c=.1',rgb='2*Charbonnier;eps=.001;clamped[0,1]',vgg='channel_unit_normalized_squared_L2;channel_sum;layer_weights1,1,1,.5/3.5'),
+        role_initialization='zeros',
+        augmentation='one clean plus three independently RGB-jittered banks,selected per camera per sample;single-camera dropout0.10',
+        sdpa_backend='Flash enabled;efficient and math fallback enabled',normalized_time=1.,pretrained_timestep=999,
         expected_train_scenes=60,expected_val_scenes=8,reserved_test_access=False))
     train=RecoveryScenes(a.cache,'train',60);val=RecoveryScenes(a.cache,'val',8)
     if set(train.ids)&set(val.ids):raise ValueError('Train/validation leakage')
     atomic_json(output/'data_receipt.json',dict(train=train.ids,val=val.ids,target='native_front',camera_frames='t-1',target_frames='t',frames_per_scene=80))
     ae=AutoencoderTiny.from_pretrained(pins['taesd']['repo'],revision=pins['taesd']['revision'],use_safetensors=True).to(device).eval().requires_grad_(False)
     encoded=time.monotonic();train.encode(ae,device);val.encode(ae,device)
-    atomic_json(output/'preencode.json',dict(seconds=time.monotonic()-encoded,train_banks=3,val_banks=1,archive_download=False))
+    atomic_json(output/'preencode.json',dict(seconds=time.monotonic()-encoded,train_banks=4,val_banks=1,archive_download=False))
     base=PixArtTransformer2DModel.from_pretrained(pins['transformer']['repo'],revision=pins['transformer']['revision'],subfolder='transformer',use_safetensors=True,torch_dtype=torch.bfloat16)
     if len(base.transformer_blocks)!=28:raise ValueError('Expected pretrained28blockbackbone')
     model=StatelessPixArt(base).to(device,dtype=torch.bfloat16)
@@ -53,7 +55,7 @@ def main():
             cams,camr,tr,z,gt=train.batch(pairs,device,train=True)
             noise=torch.randn_like(z)
             with torch.autocast('cuda',dtype=torch.bfloat16):
-                pred=model(noise,cams,camr,tr);pixels=(ae.decode(pred).sample+1)/2
+                pred=model(noise,cams,camr,tr);pixels=((ae.decode(pred).sample+1)/2).clamp(0,1)
                 loss,terms=three_term_loss(pred,z,pixels,gt,vgg)
             if not torch.isfinite(loss):raise ValueError('Nonfinite training loss')
             (loss/a.grad_accum).backward()

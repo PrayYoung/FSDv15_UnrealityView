@@ -1,0 +1,20 @@
+{
+  "scope": "CPU mathematical preflight; not GPU quality or real-image VGG magnitude",
+  "recipe": "prompt_d_corrected_v2",
+  "latent_error": 1.0,
+  "latent_c": 0.1,
+  "latent_v1": 0.09049875289201736,
+  "latent_v2": 0.9049875736236572,
+  "latent_ratio": 10.000000493967951,
+  "rgb_error": 1.0,
+  "rgb_v1": 1.0000004768371582,
+  "rgb_v2": 2.0000009536743164,
+  "vgg_fixture_expected": 1.7142857142857142,
+  "vgg_fixture": "Three orthogonal unit feature taps (squared L2=2 each), final zero; layer weights 1,1,1,0.5 divided by 3.5",
+  "additional_conditions_tested": [
+    false,
+    true
+  ],
+  "current_GPU_baseline_modified": false,
+  "new_GPU_job_submitted": false
+}
