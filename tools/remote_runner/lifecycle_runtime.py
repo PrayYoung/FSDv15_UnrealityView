@@ -37,3 +37,21 @@ class PrefixStream:
         if size<0:result=self.prefix+self.stream.read();self.prefix=b'';return result
         first=self.prefix[:size];self.prefix=self.prefix[len(first):]
         return first+self.stream.read(size-len(first))
+
+
+def compact_progress(metadata,key,ssh_argv):
+    """One read-only, bounded diagnostic snapshot; no lifecycle API or launch."""
+    import shlex
+    root=shlex.quote(metadata['remote_workdir'])
+    script=f'''set -euo pipefail
+cd {root}
+for file in outputs/chase_teacher/stage_times.json outputs/chase_teacher/archive_record.json outputs/chase_teacher_return/optimizer_progress.json outputs/pixart_stateless_return/optimizer_progress.json; do
+  if [ -f "$file" ]; then printf '\\n%s\\n' "$file"; head -c 4096 "$file"; fi
+done
+for file in .vast-managed/*/worker.log; do
+  if [ -f "$file" ]; then printf '\\nWORKER_TAIL\\n'; tail -c 3000 "$file"; fi
+done
+'''
+    result=subprocess.run([*ssh_argv,'bash','-s'],input=script,text=True,capture_output=True,check=False,timeout=20)
+    if result.returncode:raise RuntimeError('Progress snapshot transport failed: '+result.stderr[-300:])
+    return result.stdout

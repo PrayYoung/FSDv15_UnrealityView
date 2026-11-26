@@ -39,8 +39,27 @@ def patch(source):
     compile(source,'vast_run.py','exec');return source
 
 
+
+def patch_snapshot(source):
+    if '--progress-snapshot' in source:return source
+    source=source.replace('    status_parser.add_argument("--verify-destroyed", action="store_true")',
+        '    status_parser.add_argument("--verify-destroyed", action="store_true")\n    status_parser.add_argument("--progress-snapshot", action="store_true")',1)
+    start=source.index('def do_status(');end=source.index('\ndef do_list_active(',start)
+    section=source[start:end]
+    old='    live_instance = None'
+    new='''    if getattr(args, "progress_snapshot", False):
+        from vast_lifecycle import compact_progress
+        connection = SshConnection(host=metadata["ssh_host"], port=int(metadata["ssh_port"]))
+        print(compact_progress(metadata, config.ssh_private_key, ssh_base_command(connection, config.ssh_private_key)))
+        return 0
+    live_instance = None'''
+    if old not in section:raise ValueError('Status snapshot anchor changed')
+    section=section.replace(old,new,1);source=source[:start]+section+source[end:]
+    compile(source,'vast_run.py','exec');return source
+
+
 def install(path):
-    path=Path(path);before=path.read_text();after=patch(before)
+    path=Path(path);before=path.read_text();after=patch_snapshot(patch(before))
     if before!=after:
         shutil.copy2(path,path.with_suffix('.before-lifecycle.py'));path.write_text(after)
     shutil.copy2(Path(__file__).with_name('lifecycle_runtime.py'),path.with_name('vast_lifecycle.py'))

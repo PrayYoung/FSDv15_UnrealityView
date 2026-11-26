@@ -35,3 +35,17 @@ def test_hook_import_survives_upstream_tools_package(tmp_path):
     env={**os.environ,'PYTHONPATH':str(root/'src'),'UNREALITY_PROGRESS_FILE':str(tmp_path/'progress.json')}
     subprocess.run([__import__('sys').executable,str(source)],cwd=tmp_path,env=env,check=True)
     assert '"completed_updates": 10' in (tmp_path/'progress.json').read_text()
+
+
+def test_progress_snapshot_is_bounded_read_only(monkeypatch):
+    from types import SimpleNamespace
+    from tools.remote_runner import lifecycle_runtime
+    from tools.remote_runner.lifecycle_install import patch_snapshot
+    calls=[]
+    def run(argv,**kwargs):
+        calls.append((argv,kwargs));return SimpleNamespace(returncode=0,stdout='build completed',stderr='')
+    monkeypatch.setattr(lifecycle_runtime.subprocess,'run',run)
+    assert lifecycle_runtime.compact_progress({'remote_workdir':'/owned/job'},None,['ssh','host'])=='build completed'
+    assert calls[0][1]['timeout']==20 and 'tail -c 3000' in calls[0][1]['input']
+    assert 'nohup' not in calls[0][1]['input'] and 'rm ' not in calls[0][1]['input']
+    source=(Path.home()/'vast-run/vast_run.py').read_text();assert patch_snapshot(source)==source
