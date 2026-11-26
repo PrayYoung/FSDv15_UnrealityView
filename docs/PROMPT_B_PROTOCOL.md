@@ -122,3 +122,15 @@ Explicit `vast-run status RUN --verify-destroyed` must confirm the prior instanc
 is absent before a replacement. These measures depend on the local controller
 remaining available; a closed/powered-off laptop or provider API outage can still
 delay destruction. Record observed costs and destruction timestamps honestly.
+
+## Completed-controller recovery
+
+A later native-front baseline finished remotely after its original local runner
+PID exited. Recover only the existing completed job: refuse a live/unknown owner,
+require its recorded terminal exit, take a per-run recovery lock, collect only the
+allowlisted outputs, then destroy and verify that exact instance. Do not submit
+another workload. The independent budget watchdog now detects a dead foreground
+owner and can perform this same recovery before its unchanged UTC deadline.
+An unfinished orphan returns only a status receipt, not its log tail; collection
+starts only after terminal exit. Transport failures do not reset the budget.
+The controller-exit cause remains unresolved; do not describe it as proven sleep.

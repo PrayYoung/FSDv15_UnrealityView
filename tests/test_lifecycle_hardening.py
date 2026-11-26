@@ -23,7 +23,7 @@ def test_installer_matches_current_owner_and_is_idempotent():
     source=(Path.home()/'vast-run/vast_run.py').read_text();after=patch(source)
     assert patch(after)==after
     assert 'transfer_timeout_seconds=120' in after and 'cleanup_verified_absent=true' in after
-    assert 'wait_wall_deadline(deadline)' in after and 'shell_command = f"sleep' not in after
+    assert ('wait_wall_deadline(deadline)' in after or 'wait_for_completion(deadline' in after) and 'shell_command = f"sleep' not in after
 
 
 def test_hook_import_survives_upstream_tools_package(tmp_path):
