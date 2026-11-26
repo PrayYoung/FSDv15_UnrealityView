@@ -1,10 +1,11 @@
 # Prompt D v2: corrected stateless PixArt-LCM recipe
 
-Prepared after the IMG_0309 audit; no new GPU attempt is implied by this document.
+Authorized by IMG_0310/IMG_0311 for one new GPU attempt after full CPU preflight,
+with a1USD intended total cap and.35USD/hour host ceiling. Two final changes add
+relative target-camera ego motion and a wider RGB-training clamp.
 The already-submitted pilot remains on [the original v1 recipe](PROMPT_D_PROTOCOL_V1.md)
-and source de373d0. Do not apply these loss/initialization changes mid-run or
-interpret v1 metrics as v2 results. A corrected run needs an explicit user launch
-instruction and its own budget. This is a bundled architecture/loss experiment,
+and source de373d0. Its completed results stay untouched. Do not interpret v1
+metrics as v2 results. This is a bundled architecture/loss experiment,
 not a causal ablation of a single component. The synthetic-ablation claims in
 the supplied instructions are background supplied by the user, not independently
 verified results from this repository.
@@ -45,8 +46,8 @@ Loss=.50latent_robust+1.00RGB_robust+.80channel-normalizedVGG16.
 The requested latent normalization is mean(sqrt(delta^2+c^2)-c),c=.1. It is
 10times the v1 value at this c; v1 used the common c^2(sqrt(1+(delta/c)^2)-1)
 normalization. RGB_robust=2*Charbonnier(pred_rgb,GT,eps=.001) on[0,1],doubling
-the v1 RGB term. Clamp decoder pixels to[0,1] before RGB/VGG loss; VGG also
-clamps its inputs internally. Normalize feature vectors along channels, sum
+the v1 RGB term. Convert decoded pixels to RGB and clamp only to[-.25,1.25] for Charbonnier,
+retaining modest overshoot gradients. VGG independently clamps to[0,1]. Normalize feature vectors along channels, sum
 squared differences over channels, then average spatial/batch dimensions.
 Taps relu1_2/relu2_2/relu3_3/relu4_3 receive weights1,1,1,.5,divided by3.5.
 These are fixed-weight perceptual features, not the complete learned LPIPS model.
@@ -62,7 +63,7 @@ This bounds encoder work; augmentation is sampled from three cached jitter
 realizations plus clean input, not freshly re-encoded every update. Randomly zero
 one camera latent with probability.10. Validation uses only the clean bank.
 
-If a corrected run is later authorized: one paid attempt,1USD total intended cap,.35USD/hour hard host ceiling,7200second
+One authorized paid attempt,1USD total intended cap,.35USD/hour hard host ceiling,7200second
 workload timeout,owner watchdog,macOS idle-sleep prevention,bounded artifact sync,
 automatic destruction. No automatic scientific or paid engineering retry. Exact
 completion and observed budget must be checked from owner metadata. Laptop power
@@ -88,8 +89,8 @@ with different windows; do not represent them as matched measurements.
 Return one EMA adapter,JSON receipts/metrics,one8-scene inspection PNG set,and a
 fixed-noise diagnostic GIF with GT/codec/ArmE/Pipeline2 labels. No datasets,
 preencoded camera banks,backbone/TAESD/VGG weights or optimizer state downloaded.
-Keep v1 results under docs/results/pandaset-p2-pixart-stateless-2000/. If a v2
-run is authorized, publish it separately with its own recipe and source identity. Stop after reporting. No style,flying-view generator,Difix or batch jobs.
+Keep v1 results under docs/results/pandaset-p2-pixart-stateless-2000/ unchanged.
+Publish v2 separately under docs/results/pandaset-p2-pixart-stateless-v2-2000/. Stop after reporting. No style,flying-view generator,Difix or batch jobs.
 
 ## Reviewer pass before accepting a conclusion
 
@@ -113,4 +114,32 @@ No universal VGG scale multiplier is claimed; it depends on feature directions
 and channel counts. Real-run loss balancing still requires measured diagnostics.
 
 [CPU preflight magnitudes](PROMPT_D_V2_PREFLIGHT.json) record the scalar checks.
-Full suite after these changes:152passed,1skipped; no new GPU run was launched.
+The earlier five-fix preflight passed152tests/1skipped. Re-run the full suite
+after the final ego-motion/RGB-clamp changes before this new submission.
+
+## Final motion and comparison preflight
+
+Camera rays remain in ego(t-1). Form T_prev_from_target from the cached world
+(x,y,yaw):rotate target-minus-previous translation by inverse previous yaw,and
+use the yaw difference for relative rotation. Target camera pose is
+T_prev_from_target @ camera_to_ego[target,front]. This is a planar inter-frame
+motion approximation because the cache stores only x,y,yaw; full calibrated
+camera extrinsics remain intact. No flat-ground raycast is introduced. V2 is
+given the observed target motion; it is not a prediction with wholly unknown
+target pose. This is another bundled conditioning change alongside the losses.
+
+Re-evaluate the preserved v1 EMA adapter on the same79frames in all8val scenes,
+using its original target-local ray convention and the same fixed noise seeds.
+Require reproduction of25.1162679dB within.05dB before interpreting a comparison.
+Compute v2 VGG distance for both models instead of comparing incompatible v1
+metric magnitudes. Inspection/GIF columns:GT,codec,ArmE,v1,v2. Save the exact
+training curve and early/late five-point VGG summaries; report a flat/increasing
+VGG term honestly rather than assuming the requested decrease occurred.
+
+Stage only the seven camera/target/calibration tensors needed for train scenes,
+plus raw JPEGs. Omit unused train UVE embeddings from transfer-only safetensors;
+keep validation UVE for the ArmE comparison. Verify all retained tensors are
+unchanged and bind the derived file to its source hash. The canonical local
+recovery cache and original v1 outputs remain untouched. No test data or full
+PandaSet archive is staged or downloaded. Return one EMA checkpoint and compact
+metrics/diagnostic media only.

@@ -65,6 +65,15 @@ class StatelessPixArt(nn.Module):
         trainable={name for name,p in self.named_parameters() if p.requires_grad}
         return {name:p.detach().float().cpu().contiguous() for name,p in self.named_parameters() if name in trainable}
 
+    def restore_adapter(self,weights):
+        expected={name:p for name,p in self.named_parameters() if p.requires_grad}
+        if set(weights)!=set(expected):raise ValueError('Adapter parameter set does not match model')
+        for name,value in weights.items():
+            if value.shape!=expected[name].shape or not torch.isfinite(value).all():
+                raise ValueError('Invalid adapter tensor: '+name)
+        self.load_state_dict(weights,strict=False)
+        return self
+
     def fuse_lora(self):
         for name,module in list(self.named_modules()):
             if isinstance(module,LoRALinear):

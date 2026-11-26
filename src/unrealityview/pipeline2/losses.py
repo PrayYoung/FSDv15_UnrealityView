@@ -3,6 +3,11 @@ from torch import nn
 import torch.nn.functional as F
 
 
+def decoded_rgb_for_loss(decoded):
+    # Keep gradients for modest overshoot; VGG clamps internally to [0,1].
+    return ((decoded+1)/2).clamp(-.25,1.25)
+
+
 def pseudo_huber(prediction,target,c=.1):
     # Recipe-v2 normalization (the v1 expression was smaller by a factor c).
     return (torch.sqrt((prediction.float()-target.float()).square()+c*c)-c).mean()

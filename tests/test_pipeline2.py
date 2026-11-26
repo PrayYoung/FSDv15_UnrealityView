@@ -99,7 +99,7 @@ def test_vgg_channel_sum_squared_distance_layer_weights_and_clamp():
 def test_training_can_sample_clean_and_all_augmented_camera_banks(tmp_path,monkeypatch):
     from PIL import Image
     ds=RecoveryScenes.__new__(RecoveryScenes)
-    ds.episodes=[{'intrinsics':torch.eye(3).expand(80,6,3,3).clone(),
+    ds.episodes=[{'ego_states':torch.zeros(80,3),'intrinsics':torch.eye(3).expand(80,6,3,3).clone(),
                   'camera_to_ego':torch.eye(4).expand(80,6,4,4).clone(),
                   'chase_latents':torch.zeros(80,4,24,40)}]
     ds.directories=[tmp_path/'episode.safetensors']
@@ -113,3 +113,45 @@ def test_training_can_sample_clean_and_all_augmented_camera_banks(tmp_path,monke
     monkeypatch.setattr(torch,'rand',lambda *a,**k:torch.tensor(1.))
     cameras,*_=ds.batch([(0,2)],'cpu',train=True)
     torch.testing.assert_close(cameras[0,:,0,0,0],torch.tensor([0.,1.,2.,3.,0.,1.]))
+    stationary=ds.batch([(0,2)],'cpu')[2]
+    ds.episodes[0]['ego_states'][2,0]=1.
+    moved=ds.batch([(0,2)],'cpu')[2]
+    legacy=ds.batch([(0,2)],'cpu',target_ray_frame='target_ego_v1')[2]
+    assert not torch.allclose(stationary,moved)
+    torch.testing.assert_close(stationary,legacy)
+
+
+def test_relative_target_pose_tracks_forward_left_and_turn():
+    from unrealityview.pipeline2.data import previous_from_target
+    previous=torch.tensor([5.,7.,math.pi/2]);target=torch.tensor([5.,8.,math.pi])
+    transform=previous_from_target(previous,target)
+    torch.testing.assert_close(transform[:3,3],torch.tensor([1.,0.,0.]),atol=1e-6,rtol=0)
+    torch.testing.assert_close(transform[:2,:2],torch.tensor([[0.,-1.],[1.,0.]]),atol=1e-6,rtol=0)
+    torch.testing.assert_close(previous_from_target(previous,previous),torch.eye(4))
+    k=torch.tensor([[100.,0,112],[0,100,70],[0,0,1.]])
+    stationary=plucker_rays(k,torch.eye(4),12,20)
+    moving=plucker_rays(k,transform,12,20)
+    assert not torch.allclose(stationary,moving)
+    assert moving.shape==(240,6) and torch.isfinite(moving).all()
+
+
+def test_rgb_loss_keeps_overshoot_gradients():
+    from unrealityview.pipeline2.losses import decoded_rgb_for_loss
+    decoded=torch.tensor([-1.2,1.2],requires_grad=True)
+    pixels=decoded_rgb_for_loss(decoded)
+    torch.testing.assert_close(pixels,torch.tensor([-.1,1.1]))
+    charbonnier(pixels,torch.tensor([0.,1.])).backward()
+    assert decoded.grad.abs().gt(0).all()
+
+
+def test_train_transfer_omits_unused_uve_without_changing_data(tmp_path):
+    from safetensors.torch import save_file
+    from unrealityview.pipeline2.data import load_training_episode,TRAIN_TENSORS
+    source={'chase_latents':torch.randn(80,4,24,40),'intrinsics':torch.eye(3).expand(80,6,3,3).clone(),
+            'camera_to_ego':torch.eye(4).expand(80,6,4,4).clone(),'camera_mask':torch.ones(80,6,dtype=torch.bool),
+            'timestamps':torch.arange(80,dtype=torch.float64)/10,'camera_timestamps':torch.arange(80,dtype=torch.float64)[:,None].expand(80,6)/10,
+            'ego_states':torch.randn(80,3),'uve_tokens':torch.randn(80,6,384)}
+    path=tmp_path/'episode.safetensors';save_file(source,str(path))
+    actual=load_training_episode(path)
+    assert set(actual)==set(TRAIN_TENSORS) and 'uve_tokens' not in actual
+    for key in TRAIN_TENSORS:torch.testing.assert_close(actual[key],source[key])

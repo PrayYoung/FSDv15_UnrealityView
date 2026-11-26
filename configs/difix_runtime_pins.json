@@ -1,0 +1,11 @@
+{
+  "pipeline_url": "https://raw.githubusercontent.com/nv-tlabs/Difix3D/c76edc595586e16732c91ddee82f3a6d83a8a9cc/src/pipeline_difix.py",
+  "pipeline_sha256": "2f73e2708b3f9ce560800163554f869e5e43e3a42049f67da3609f7736cbab3a",
+  "diffusers": "0.25.1",
+  "transformers": "4.38.0",
+  "accelerate": "0.27.2",
+  "peft": "0.9.0",
+  "huggingface-hub": "0.25.1",
+  "tokenizers": "0.15.2",
+  "einops": "0.8.1"
+}

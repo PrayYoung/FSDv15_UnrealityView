@@ -79,18 +79,23 @@ def save_gif(images,path,timestamps):
     images[0].save(path,save_all=True,append_images=images[1:],duration=duration,loop=0)
 
 
-def cleanup_difix(raw,reference,pins):
+def cleanup_difix(raw,reference,pins,*,progress=None):
+    if len(raw)!=len(reference):raise ValueError('Difix raw/reference count mismatch')
+    start=time.monotonic()
     source=ROOT/'.cache/third_party/difix/src'
     sys.path.insert(0,str(source))
     from pipeline_difix import DifixPipeline
     spec=pins['difix_model']
     pipe=DifixPipeline.from_pretrained(spec['repo'],revision=spec['revision'],code_revision=spec['revision'],use_safetensors=True,trust_remote_code=True).to('cuda')
-    output=[]
-    for image,ref in zip(raw,reference):
+    if hasattr(pipe,'set_progress_bar_config'):pipe.set_progress_bar_config(disable=True)
+    if progress:progress('model_loaded',dict(seconds=time.monotonic()-start))
+    output=[];inference_start=time.monotonic()
+    for index,(image,ref) in enumerate(zip(raw,reference)):
         fixed=pipe('remove degradation',image=image,ref_image=ref,num_inference_steps=1,
                    timesteps=[199],guidance_scale=0.,width=image.width,height=image.height).images[0]
         if fixed.size!=image.size:raise ValueError('Difix changed output geometry')
         output.append(fixed.convert('RGB'))
+        if progress:progress('frame',dict(completed_frames=index+1,seconds=time.monotonic()-inference_start))
     return output
 
 

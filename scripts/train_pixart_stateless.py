@@ -6,14 +6,14 @@ from safetensors.torch import save_file
 from diffusers import PixArtTransformer2DModel,AutoencoderTiny
 from unrealityview.pipeline2.model import StatelessPixArt
 from unrealityview.pipeline2.data import RecoveryScenes
-from unrealityview.pipeline2.losses import ChannelNormalizedVGG16,three_term_loss
+from unrealityview.pipeline2.losses import ChannelNormalizedVGG16,three_term_loss,decoded_rgb_for_loss
 from unrealityview.data.cache import atomic_json
 from unrealityview.runtime.optimizer_progress import record_optimizer_progress
 
 
 def main():
     p=argparse.ArgumentParser();p.add_argument('--cache',required=True);p.add_argument('--output',required=True)
-    p.add_argument('--arm-e',required=True);p.add_argument('--steps',type=int,default=2000);p.add_argument('--batch-size',type=int,default=8)
+    p.add_argument('--arm-e',required=True);p.add_argument('--v1-adapter',required=True);p.add_argument('--steps',type=int,default=2000);p.add_argument('--batch-size',type=int,default=8)
     p.add_argument('--grad-accum',type=int,default=2);a=p.parse_args()
     if a.steps!=2000 or a.batch_size*a.grad_accum!=16:raise ValueError('Frozen pilot requires2000updates/effectivebatch16')
     if not torch.cuda.is_available():raise RuntimeError('CUDA required')
@@ -23,11 +23,11 @@ def main():
     os.environ['UNREALITY_PROGRESS_FILE']=str(output/'optimizer_progress.json')
     pins=json.loads(Path('configs/pixart_stateless_pins.json').read_text())
     atomic_json(output/'run_config.json',dict(steps=2000,effective_batch=16,batch_size=a.batch_size,grad_accum=a.grad_accum,
-        seed=42,pins=pins,recipe_version='prompt_d_corrected_v2',camera_lag=1,token_count=1200,stateless=True,latent_history=False,
+        seed=42,pins=pins,recipe_version='prompt_d_corrected_v2_ego_motion',camera_lag=1,token_count=1200,stateless=True,latent_history=False,
         lora_rank=16,lora_alpha=32,learning_rate=1.5e-4,warmup=100,ema_decay=.992,
         loss_weights=dict(pseudo_huber=.5,charbonnier=1.,channel_normalized_vgg16=.8),
-        loss_normalization=dict(latent='sqrt(delta^2+c^2)-c;c=.1',rgb='2*Charbonnier;eps=.001;clamped[0,1]',vgg='channel_unit_normalized_squared_L2;channel_sum;layer_weights1,1,1,.5/3.5'),
-        role_initialization='zeros',
+        loss_normalization=dict(latent='sqrt(delta^2+c^2)-c;c=.1',rgb='2*Charbonnier;eps=.001;trainingclamp[-.25,1.25];VGGclamp[0,1]',vgg='channel_unit_normalized_squared_L2;channel_sum;layer_weights1,1,1,.5/3.5'),
+        role_initialization='zeros',target_ray_frame='previous_ego_FLU_with_planar_target_motion',rgb_training_clamp=[-.25,1.25],
         augmentation='one clean plus three independently RGB-jittered banks,selected per camera per sample;single-camera dropout0.10',
         sdpa_backend='Flash enabled;efficient and math fallback enabled',normalized_time=1.,pretrained_timestep=999,
         expected_train_scenes=60,expected_val_scenes=8,reserved_test_access=False))
@@ -55,7 +55,7 @@ def main():
             cams,camr,tr,z,gt=train.batch(pairs,device,train=True)
             noise=torch.randn_like(z)
             with torch.autocast('cuda',dtype=torch.bfloat16):
-                pred=model(noise,cams,camr,tr);pixels=((ae.decode(pred).sample+1)/2).clamp(0,1)
+                pred=model(noise,cams,camr,tr);pixels=decoded_rgb_for_loss(ae.decode(pred).sample)
                 loss,terms=three_term_loss(pred,z,pixels,gt,vgg)
             if not torch.isfinite(loss):raise ValueError('Nonfinite training loss')
             (loss/a.grad_accum).backward()
@@ -72,7 +72,11 @@ def main():
     del optimizer,ema,params;torch.cuda.empty_cache()
     model.eval().fuse_lora()
     from unrealityview.pipeline2.evaluate import evaluate_pilot
-    evaluate_pilot(model,ae,vgg,val,device,output,Path(a.arm_e))
-    atomic_json(output/'summary.json',dict(status='completed',completed_updates=a.steps,fit_seconds=time.monotonic()-fit_start,total_seconds=time.monotonic()-start))
+    early=sum(row['vgg'] for row in curve[:5])/len(curve[:5]);late=sum(row['vgg'] for row in curve[-5:])/len(curve[-5:])
+    atomic_json(output/'loss_diagnostics.json',dict(vgg_first5_mean=early,vgg_last5_mean=late,vgg_decreased=late<early,delta=late-early,note='Different sampled training batches;not proof of monotonic or heldout improvement'))
+    evaluation_start=time.monotonic()
+    evaluate_pilot(model,ae,vgg,val,device,output,Path(a.arm_e),v1_adapter=Path(a.v1_adapter),pins=pins)
+    evaluation_seconds=time.monotonic()-evaluation_start
+    atomic_json(output/'summary.json',dict(status='completed',completed_updates=a.steps,optimizer_seconds=curve[-1]['seconds'],evaluation_seconds=evaluation_seconds,total_seconds=time.monotonic()-start))
 
 if __name__=='__main__':main()
