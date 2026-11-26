@@ -4,6 +4,12 @@ Camera-conditioned video generation with an independent waypoint planner and
 switchable visual styles. **PandaSet cameras are the active training and testing
 source.** This is an independent research prototype with no vehicle control.
 
+The [stateless PixArt v1 pilot](docs/results/pandaset-p2-pixart-stateless-2000/README.md)
+completed 2,000 updates and scored **25.12 dB** across all eight validation scenes.
+On matched frames it scored 25.10 dB versus Arm E's 21.80 dB, but its output still
+loses fine detail and remains visibly blurred. This is a research baseline, not
+a finished sharp demo. The corrected v2 recipe is prepared; no rerun is automatic.
+
 The corrected PandaSet 5,000-step pilot passed its numerical gate: **21.81 dB
 one-step validation PSNR**, beating frame copy at 18.75 dB, with an 83.5% pixel-error
 reduction from initialization. Images still show blur and ghosting; this is not a
@@ -19,17 +25,17 @@ No successful styled model result is claimed.
 
 The [completed Arm E pilot](docs/results/pandaset-v3-arme-5000/README.md) increased
 camera-conditioning sensitivity but scored 21.59 dB at its best checkpoint, below
-v2's 21.88 dB, with worse later-frame decay. The [Prompt B attempt](docs/results/chase-3dgs-040-smoke/README.md)
-has since passed80-frame native preprocessing and Gaussian initialization, but
-its progress-hook import failed before a usable reconstruction was exported.
-The latest completed attempt is closed; its reported rental estimate exceeded
-the intended budget. The linked report records that failure and the lifecycle
-corrections. A separately authorized hardened retry is pending.
+v2's 21.88 dB, with worse later-frame decay. The [scene-040 3DGS run](docs/results/chase-3dgs-040-smoke/README.md)
+completed 15,000 configured iterations, passed numerical coverage/held-out native
+view checks and exported 80 elevated frames. Visual review found warped cars and
+floaters, so those frames are **not approved as training targets or for batching**.
+Both completed rentals are verified destroyed; observed costs and prior lifecycle
+failures remain documented in the linked reports.
 
 The independent [stateless PixArt-LCM pilot](docs/PROMPT_D_PROTOCOL.md) uses six
 raw cameras from frame t-1 to predict the observed **native front camera** at t,
-with1200tokens, LoRA, calibrated rays and no previous latent input. Its CPU tests
-pass; GPU quality results remain pending. Historical pilot measurements above
+with1200tokens, LoRA, calibrated rays and no previous latent input. Its v1 GPU baseline is reported above. Corrected v2 loss and initialization
+changes pass CPU tests and remain unlaunched. Historical pilot measurements above
 use their original chunk/history protocol and are not matched stateless results.
 An external calibrated teacher is still required for elevated novel views.
 

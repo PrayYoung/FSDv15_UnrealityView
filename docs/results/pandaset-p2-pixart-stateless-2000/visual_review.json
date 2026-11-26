@@ -1,0 +1,10 @@
+{
+  "reviewed": [
+    "inspection/pandaset_016.png",
+    "inspection/pandaset_014.png"
+  ],
+  "finding": "Improved numerical alignment but visibly blurred cars,poles,trees and building details;no sharpness-success claim",
+  "accepted_for_style_training": false,
+  "accepted_as_finished_demo": false,
+  "metric_note": "VGG metric is v1 channel-mean normalized L1;do not compare its numeric magnitude with corrected v2 squared-distance metric"
+}

@@ -1,0 +1,43 @@
+{
+  "run_id": "vast-20261126T000600Z-37283-5fa20e",
+  "source_commit": "07eeeba",
+  "classification": "SUCCESS",
+  "fit_iterations": 15000,
+  "completed_upstream_updates": 15001,
+  "upstream_loop_is_inclusive": true,
+  "build_seconds": 813.8596035839983,
+  "archive_download_seconds": 746.3792118749989,
+  "stages": {
+    "preprocessing": {
+      "seconds": 66.8894697809992,
+      "status": "completed"
+    },
+    "sky_masks": {
+      "seconds": 113.36905124899931,
+      "status": "completed"
+    },
+    "fit_15000": {
+      "seconds": 1658.4700005829982,
+      "status": "completed"
+    },
+    "render_and_metrics": {
+      "seconds": 68.61603992500022,
+      "status": "completed"
+    }
+  },
+  "approximate_rental_cost_usd": 0.2892,
+  "budget_usd": 1,
+  "reported_cost_is_provider_invoice": false,
+  "instance_destroyed_at": "2026-11-26T01:20:28Z",
+  "live_absence_verified": true,
+  "artifact_manifest_verified_files": 92,
+  "rendered_frames": 80,
+  "numeric_gate_passed": true,
+  "heldout_psnr_db": 26.33056639349042,
+  "ground_alpha_min": 0.979975,
+  "whole_alpha_min": 0.9152669270833333,
+  "ego_footprint_alpha_min": 0.826171875,
+  "ingestion_completed": true,
+  "downloaded_result_bytes": 12353921,
+  "ingestion_seconds": 20.558452854998905
+}

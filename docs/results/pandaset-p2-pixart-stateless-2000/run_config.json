@@ -1,0 +1,38 @@
+{
+  "steps": 2000,
+  "effective_batch": 16,
+  "batch_size": 8,
+  "grad_accum": 2,
+  "seed": 42,
+  "pins": {
+    "transformer": {
+      "repo": "PixArt-alpha/PixArt-LCM-XL-2-1024-MS",
+      "revision": "e153060b10990994d2ed31304b3224da47fbd740"
+    },
+    "taesd": {
+      "repo": "madebyollin/taesd",
+      "revision": "614f76814bbe30edbe2e627ace1c2234c81a2c0e"
+    }
+  },
+  "camera_lag": 1,
+  "token_count": 1200,
+  "stateless": true,
+  "latent_history": false,
+  "lora_rank": 16,
+  "lora_alpha": 32,
+  "learning_rate": 0.00015,
+  "warmup": 100,
+  "ema_decay": 0.992,
+  "loss_weights": {
+    "pseudo_huber": 0.5,
+    "charbonnier": 1.0,
+    "channel_normalized_vgg16": 0.8
+  },
+  "augmentation": "two independently RGB-jittered cached banks,selected per camera per sample;single-camera dropout0.10",
+  "sdpa_backend": "FlashAttention CUDA only",
+  "normalized_time": 1.0,
+  "pretrained_timestep": 999,
+  "expected_train_scenes": 60,
+  "expected_val_scenes": 8,
+  "reserved_test_access": false
+}

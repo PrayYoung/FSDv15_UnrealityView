@@ -1,0 +1,23 @@
+{
+  "run_id": "vast-20261126T001740Z-38670-1cd39b",
+  "source_commit": "de373d0e70ae021e9f6449a86bc5300efcfcbbd2",
+  "recipe": "v1_original",
+  "classification": "SUCCESS",
+  "completed_updates": 2000,
+  "optimizer_training_seconds": 5257.015864924993,
+  "post_training_and_evaluation_seconds": 162.42784041003324,
+  "total_script_seconds": 5719.08757918817,
+  "summary_fit_seconds_includes_evaluation": true,
+  "approximate_rental_cost_usd": 0.5458,
+  "reported_cost_is_provider_invoice": false,
+  "budget_usd": 1,
+  "instance_destroyed_at": "2026-11-26T02:37:39Z",
+  "live_absence_verified": true,
+  "controller_recovery": "Original foreground PID absent; existing terminal exit0 recovered,allowlisted artifacts synced,and exact instance destroyed;no rerun",
+  "ema_adapter_sha256": "856c583b26f13a79d33f36edb9cd2d8402d23c573995f4511d740c9b4edcc4e6",
+  "ema_adapter_parameters": 19738144,
+  "ema_finite_tensors": 359,
+  "downloaded_result_bytes": 85578449,
+  "source_archive_downloaded": false,
+  "reserved_test_opened": false
+}

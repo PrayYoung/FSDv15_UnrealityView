@@ -1,6 +1,39 @@
-# Prompt B: latest engineering status
+# Prompt B: scene 040 completed; novel-view geometry still fails visual review
 
-The native-table retry on source `13083d5` completed all80 preprocessing frames,
+**Execution and numerical gates passed. Elevated renders are not yet approved as
+training targets.** The managed raw dynamic 3DGS run completed the configured 15,000
+iterations, inclusive upstream loop 15,001 updates,exported 80 RGB frames,and completed
+core ingestion. No Difix or SMPL was used.
+
+| Check | Result | Threshold |
+|---|---:|---:|
+| Held-out native-camera PSNR(42images) | 26.3306dB | >=22 |
+| Minimum whole-frame alpha | .91527 | >=.50 |
+| Minimum lower-band ground alpha | .97998 | >=.85 |
+| Minimum ego-footprint alpha | .82617 | reported,not gated |
+
+Native held-out fidelity is not a novel-view ground-truth score. The inspection
+still shows floaters,poorly reconstructed tree/wall surfaces,and warped parked
+cars. Dense opacity does not prove correct geometry. **No teacher batch,
+flying-view generator training or automatic Difix run is authorized by this pass.**
+Difix might change appearance but cannot establish missing geometric truth.
+
+[Quality](quality.json),[exact stages](timings.json),[execution/cost](completed_execution.json),
+[manual visual review](visual_review.json),[protocol](../../PROMPT_B_PROTOCOL.md).
+Build 813.86 s,verified archive download 746.38 s,preprocessing 66.89 s,sky masks 113.37 s,
+fit 1658.47 s,render/metrics 68.62 s. Reported rental estimate **0.2892 USD**; instance
+absence verified after destruction at2026-11-26T01:20:28Z. No active rental remains.
+
+![Native front versus raw elevated3DGS diagnostic](inspection.png)
+
+[Real-data raw flying-view diagnostic GIF](chase_raw.gif). All80RGB targets and
+calibration/ingestion artifacts are retained in the compact local return; Git
+contains only the report,one inspection and one GIF,not the complete frame set.
+
+## Earlier attempts and lifecycle diagnosis
+
+
+The native-table retry on source `13083d5` completed all 80 preprocessing frames,
 sky-mask generation and Gaussian initialization. The first optimizer backward
 call returned, then the diagnostic progress import failed: DriveStudio's `tools`
 package shadowed `tools.chase_3dgs`. No successful reconstruction, quality report,
@@ -10,7 +43,7 @@ not a negative reconstruction-quality result.
 The artifact transfer also failed because a login banner preceded its gzip
 stream. Exact per-stage receipts are unavailable; owner-recorded provisioning,
 setup and workload times were211s,82s and1379s. Destruction was confirmed at
-2026-11-25T23:14:42Z. The owner estimates1.3261USD rental, **above the intended1USD
+2026-11-25T23:14:42Z. The owner estimates1.3261 USD rental, **above the intended1 USD
 cap**; this is a runner estimate, not an independently reconciled invoice.
 [Sanitized execution record](native_retry_execution.json).
 

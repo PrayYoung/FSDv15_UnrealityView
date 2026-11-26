@@ -1,0 +1,18 @@
+{
+  "reviewed_frames": [
+    0,
+    39,
+    79
+  ],
+  "numeric_gate_passed": true,
+  "approved_for_teacher_batch": false,
+  "approved_for_generator_training_targets": false,
+  "findings": [
+    "Visible floaters and unstable-looking tree/wall surfaces",
+    "Parked-car shapes are warped,melted or stretched",
+    "Elevated disocclusions remain poorly reconstructed",
+    "High alpha coverage does not establish correct surface geometry"
+  ],
+  "decision": "Keep as one-scene diagnostic;no automaticDifix,batch or flying-view generator training",
+  "ego_footprint_alpha_min": 0.826171875
+}
