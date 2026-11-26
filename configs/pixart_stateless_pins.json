@@ -1,0 +1,10 @@
+{
+  "transformer": {
+    "repo": "PixArt-alpha/PixArt-LCM-XL-2-1024-MS",
+    "revision": "e153060b10990994d2ed31304b3224da47fbd740"
+  },
+  "taesd": {
+    "repo": "madebyollin/taesd",
+    "revision": "614f76814bbe30edbe2e627ace1c2234c81a2c0e"
+  }
+}

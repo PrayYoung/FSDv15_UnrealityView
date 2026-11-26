@@ -1,4 +1,31 @@
-# Prompt B: scene 040 infrastructure failure
+# Prompt B: latest engineering status
+
+The native-table retry on source `13083d5` completed all80 preprocessing frames,
+sky-mask generation and Gaussian initialization. The first optimizer backward
+call returned, then the diagnostic progress import failed: DriveStudio's `tools`
+package shadowed `tools.chase_3dgs`. No successful reconstruction, quality report,
+RGB export, GIF or ingestion receipt was returned. This is an engineering failure,
+not a negative reconstruction-quality result.
+
+The artifact transfer also failed because a login banner preceded its gzip
+stream. Exact per-stage receipts are unavailable; owner-recorded provisioning,
+setup and workload times were211s,82s and1379s. Destruction was confirmed at
+2026-11-25T23:14:42Z. The owner estimates1.3261USD rental, **above the intended1USD
+cap**; this is a runner estimate, not an independently reconciled invoice.
+[Sanitized execution record](native_retry_execution.json).
+
+The next authorized attempt fixes the import in a non-conflicting runtime
+package and hardens wall-clock deadlines, local idle-sleep prevention, binary
+artifact transport and transfer timeouts. Local CPU regressions passed, including
+an actual conflicting upstream `tools` package. The previous instance was
+explicitly verified absent before the new rental. The replacement's results
+remain pending; no Difix, batch or styled/flying-view generator training started.
+
+The independent stateless native-front PixArt pilot is described in
+[Prompt D](../../PROMPT_D_PROTOCOL.md); it does not consume synthetic flying views.
+
+## Earlier infrastructure attempt
+
 
 **No usable reconstruction results were retrieved.** The single managed attempt
 reached its running phase, then lost its connection beyond the bounded recovery
