@@ -25,6 +25,18 @@ A CPU random-tiny-UNet reference forward with the actual pinned custom VAE/UNet
 code passed before provisioning. This is API evidence,not cleanup-quality proof.
 FP32 inference follows the pinned [model/runtime guidance](https://huggingface.co/nvidia/difix_ref).
 
+The first standalone attempt stopped at CUDA preflight with error804 on a
+535.161.07 host driver and CUDA12.4 PyTorch. No inference occurred. The prepared
+fix keeps Torch2.5.1/torchvision0.20.1 and all model/code pins, uses the official
+[CUDA11.8 wheels](https://docs.pytorch.org/get-started/previous-versions/), removes
+container CUDA forward-compatibility directories from LD_LIBRARY_PATH, and runs
+CUDA preflight immediately after Torch installation, before Difix dependencies
+or model downloads. Error804 denotes an unsupported forward-compatibility
+configuration ([NVIDIA documentation](https://docs.nvidia.com/deploy/cuda-compatibility/latest/forward-compatibility.html)).
+The environment filter is CPU tested; an actual GPU rerun is still required.
+The original single paid attempt is consumed; these fixes do not authorize a
+second rental automatically.
+
 Use a fixed initial seed42 for the sequence; retain the existing function's
 per-frame stochastic behavior instead of silently introducing a different noise
 policy. Record model-load,inference,export and total wall times separately.

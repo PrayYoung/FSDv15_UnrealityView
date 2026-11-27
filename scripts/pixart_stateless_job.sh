@@ -9,3 +9,4 @@ uv run --no-sync python scripts/cuda_preflight.py
 timeout --signal=TERM --kill-after=60s 7200 uv run --no-sync python scripts/train_pixart_stateless.py \
   --cache inputs/recovery_cache --arm-e inputs/arm_e_best --v1-adapter inputs/v1_adapter.safetensors \
   --output outputs/pixart_stateless_v2_return --steps 2000 --batch-size 8 --grad-accum 2
+uv run --no-sync python scripts/seal_return.py outputs/pixart_stateless_v2_return

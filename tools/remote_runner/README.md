@@ -26,6 +26,22 @@ workload-specific limits. The runner retains artifact synchronization, bounded
 infrastructure retries, signal handling and destruction. Permanent host loss or
 force-killing the local controller cannot be made failure-free by SSH keepalives.
 
+Verified artifact retrieval is installed with
+`python tools/remote_runner/artifact_install.py --runner /path/to/vast_run.py`.
+The old owner silently skipped a nonzero SSH path probe, allowing an empty return
+to be reported as SUCCESS. Retrieval now makes up to three bounded attempts on
+the existing job, rejects missing/empty returns, checks a SHA256 manifest when
+present, and records ARTIFACT_FAILED plus the error rather than SUCCESS. Files
+are validated in temporary staging before replacing local results. This does
+not preserve the remote disk indefinitely: the existing cost deadline and
+destruction policy still apply even if all retrieval attempts fail.
+A tiny unique receipt roundtrip exercises the same SSH/archive retrieval before
+the workload starts, so an initially broken return path fails before training.
+
+The PixArt v2 and standalone Difix scripts seal their small return folders and
+also print compact metric summaries into the separately retrieved worker log.
+No dataset, pretrained weights or optimizer state is added to result downloads.
+
 Per-step training logs are not streamed into the chat. The runner quietly observes
 remote completion, retrieves its log, then retrieves outputs and destroys the
 instance. Unit tests simulate disconnects, lost acknowledgements, genuine nonzero
