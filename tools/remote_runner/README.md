@@ -38,6 +38,12 @@ destruction policy still apply even if all retrieval attempts fail.
 A tiny unique receipt roundtrip exercises the same SSH/archive retrieval before
 the workload starts, so an initially broken return path fails before training.
 
+The optional pre-rental CUDA capability filter is installed with
+`python tools/remote_runner/cuda_install.py --runner /path/to/vast_run.py`.
+Use `--min-cuda-version 12.4` for the PixArt CUDA12.4 build and11.8 for the
+standalone Difix CUDA11.8 build. The owner filters both its search query and
+returned offers before renting; the actual GPU matmul preflight is still required.
+
 The PixArt v2 and standalone Difix scripts seal their small return folders and
 also print compact metric summaries into the separately retrieved worker log.
 No dataset, pretrained weights or optimizer state is added to result downloads.

@@ -57,3 +57,8 @@ infrastructure retries. Both attempts have been consumed. CPU preparation and
 runner repair add no rental. A new paid attempt requires renewed authorization;
 the proposed per-attempt caps remain1USD for PixArt and0.60USD for Difix, with
 0.35USD/hour maximum host price. No automatic batch or additional model training.
+
+The user subsequently authorized restarting both jobs with those unchanged caps.
+One replacement per experiment was submitted with zero automatic retries and
+the pre-rental CUDA capability filter. Submission alone does not establish
+successful GPU preflight, training, artifact retrieval or visual quality.
