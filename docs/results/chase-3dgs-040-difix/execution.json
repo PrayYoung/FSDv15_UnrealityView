@@ -1,0 +1,21 @@
+{
+  "run_id": "vast-20261127T171644Z-53907-e09c98",
+  "source_commit": "a501390",
+  "runner_cuda_filter_commit": "deb1f9b",
+  "classification": "SUCCESS",
+  "sequence": "040",
+  "completed_frames": 80,
+  "torch": "2.5.1+cu118",
+  "cuda_preflight_passed": true,
+  "artifact_transfer_preflight_passed": true,
+  "artifact_manifest_verified": true,
+  "downloaded_result_bytes": 12440685,
+  "approximate_rental_cost_usd": 0.0489,
+  "reported_cost_is_provider_invoice": false,
+  "budget_usd": 0.6,
+  "instance_destroyed_at": "2026-11-27T17:31:16Z",
+  "live_absence_verified": true,
+  "archive_downloaded": false,
+  "raw_refit": false,
+  "previous_attempt": "CUDA preflight error804;no inference. This replacement completed."
+}

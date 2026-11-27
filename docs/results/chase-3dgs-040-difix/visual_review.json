@@ -1,0 +1,36 @@
+{
+  "inspected_static_panel_frames": [
+    0,
+    39,
+    79
+  ],
+  "inspected_clean_gif_samples": [
+    0,
+    20,
+    40,
+    60,
+    79
+  ],
+  "full_temporal_visual_review_complete": false,
+  "checks": {
+    "color_artifacts": {
+      "accepted": false,
+      "finding": "Colored fragments and tree/building floaters remain;cyan/purple threshold fractions did not decrease."
+    },
+    "parked_car_coherence": {
+      "accepted": false,
+      "finding": "Parked-car roofs/bodies remain warped and fused,especially early frames."
+    },
+    "layout_pose": {
+      "accepted": false,
+      "finding": "Broad street direction remains recognizable,but warped road/building edges prevent geometry approval.No calibrated novel-view ground truth.Overlay dots are identical posthoc markers,not geometry evidence."
+    },
+    "temporal_stability": {
+      "accepted": false,
+      "finding": "No stability improvement established.Raw frame-delta rises11.5%;sampled frames still show spatial defects.Full frame-by-frame temporal inspection pending."
+    }
+  },
+  "accepted_as_training_teacher": false,
+  "accepted_for_batch_generation": false,
+  "accepted_as_finished_demo": false
+}

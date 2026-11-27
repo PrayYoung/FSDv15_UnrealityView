@@ -1,0 +1,8 @@
+{
+  "input_seconds": 0.42901628790423274,
+  "cleanup_including_model_seconds": 113.40364620205946,
+  "model_load_seconds": 99.26625832892023,
+  "inference_seconds": 14.137387873139232,
+  "export_seconds": 11.526632972992957,
+  "total_seconds": 125.35931124398485
+}

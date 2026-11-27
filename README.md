@@ -32,8 +32,11 @@ v2's 21.88 dB, with worse later-frame decay. The [scene-040 3DGS run](docs/resul
 completed 15,000 configured iterations, passed numerical coverage/held-out native
 view checks and exported 80 elevated frames. Visual review found warped cars and
 floaters, so those frames are **not approved as training targets or for batching**.
-Both completed rentals are verified destroyed; observed costs and prior lifecycle
-failures remain documented in the linked reports.
+The [scene040 Difix3D replacement](docs/results/chase-3dgs-040-difix/README.md)
+completed cleanup of all80renders and returned verified artifacts, but warped cars
+and floaters remain; it is not approved as a training teacher. The associated
+completed rentals are verified destroyed; costs and lifecycle failures remain
+documented in the linked reports.
 
 The independent [stateless PixArt-LCM pilot](docs/PROMPT_D_PROTOCOL.md) uses six
 raw cameras from frame t-1 to predict the observed **native front camera** at t,

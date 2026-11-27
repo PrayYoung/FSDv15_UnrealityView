@@ -1,0 +1,34 @@
+{
+  "README.md": {
+    "bytes": 4930,
+    "sha256": "301c69bfc86102cb359c79438d50609983ea9d6afd1f777436f2cc56f2334ed0"
+  },
+  "chase_difix.gif": {
+    "bytes": 4013270,
+    "sha256": "5f6d6fc5526fc2904fecde6ce6db3f57308de09146f34c8615665740b0997d84"
+  },
+  "execution.json": {
+    "bytes": 721,
+    "sha256": "5b9af93c2314d8a832ced5846772c988b11dd09ebb7f6a453e9e6e3cafe911f1"
+  },
+  "inspection.png": {
+    "bytes": 794302,
+    "sha256": "f6e9518ece7831501e6ddccd1e2f297321b44212f533f9fb66b1d89dbd427c90"
+  },
+  "metrics.json": {
+    "bytes": 658,
+    "sha256": "1e6bde665c1bb0acf01168256bf8d8a61ca632b9e4a8ec370b04829e38a8aaf5"
+  },
+  "run_receipt.json": {
+    "bytes": 10177,
+    "sha256": "5a7969c420c1130927a0c9e4387ea58b49e02468480e459de4c6c919a3e8e996"
+  },
+  "timings.json": {
+    "bytes": 265,
+    "sha256": "f0278b05440cd99ff6c58cec986b9aaaa43696463c5e864bbed29dd6d43f4629"
+  },
+  "visual_review.json": {
+    "bytes": 1176,
+    "sha256": "9971f5bc007b7808ddbc9ed68ba5d709e8a0ed0fe6380e8fa02639f4c60a018a"
+  }
+}

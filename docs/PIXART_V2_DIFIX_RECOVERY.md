@@ -62,3 +62,14 @@ The user subsequently authorized restarting both jobs with those unchanged caps.
 One replacement per experiment was submitted with zero automatic retries and
 the pre-rental CUDA capability filter. Submission alone does not establish
 successful GPU preflight, training, artifact retrieval or visual quality.
+
+## Completed replacement outcomes
+
+Both authorized replacements completed, their critical returns were checksum
+verified, and their instances were verified absent after destruction. The
+[PixArt v2 report](results/pandaset-p2-pixart-stateless-v2-2000/README.md) records
+26.21dB validation PSNR and remaining blur/temporal limitations. The
+[scene040 Difix report](results/chase-3dgs-040-difix/README.md) records80cleaned
+frames and successful CUDA11.8 execution, but rejects the images as a training
+teacher because reconstruction distortions persist. The earlier failure evidence
+above is retained; it describes the first attempts, not the replacements.

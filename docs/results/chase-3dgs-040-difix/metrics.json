@@ -1,0 +1,16 @@
+{
+  "raw_color_proxies": {
+    "cyan_fraction_lower_band": 0.00045875,
+    "purple_fraction_lower_band": 0.0004396875
+  },
+  "clean_color_proxies": {
+    "cyan_fraction_lower_band": 0.00084125,
+    "purple_fraction_lower_band": 0.0004921875
+  },
+  "raw_frame_delta_l1": 0.04614396020770073,
+  "clean_frame_delta_l1": 0.05145641416311264,
+  "edit_residual_frame_delta_l1": 0.0237559974193573,
+  "raw_clean_pixel_l1": 0.020119400694966316,
+  "lower_band_gradient_cosine": 0.8420594827827348,
+  "note": "Color and edge proxies are descriptive,not geometry/flicker truth;native front reference is a different view. No novel-view PSNR or new alpha is claimed."
+}
