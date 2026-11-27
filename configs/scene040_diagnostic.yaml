@@ -1,0 +1,8 @@
+# Single controlled bundle; retain 800k metric LiDAR and all six cameras.
+model:
+  Background:
+    init:
+      near_randoms: 10000
+trainer:
+  optim:
+    num_iters: 20000

@@ -18,11 +18,12 @@ from tools.chase_3dgs.contract import chase_calibration,processed_front_pose,pro
 ROOT=Path(__file__).resolve().parents[2]
 
 
-def build_config(upstream,processed,sequence,scratch,iters):
+def build_config(upstream,processed,sequence,scratch,iters,overlay=None):
     from omegaconf import OmegaConf
     cfg=OmegaConf.merge(OmegaConf.load(upstream/'configs/omnire.yaml'),
         OmegaConf.load(upstream/'configs/datasets/pandaset/6cams.yaml'),
         OmegaConf.load(ROOT/'tools/chase_3dgs/omnire_pandaset_6cams_nosmpl.yaml'))
+    if overlay is not None:cfg=OmegaConf.merge(cfg,OmegaConf.load(overlay))
     del cfg['dataset']
     for key in ('SMPLNodes','CamPose'):
         if key in cfg.model:del cfg.model[key]
@@ -43,24 +44,24 @@ def timed_phase(label,action,record):
         data[label]=dict(seconds=time.monotonic()-start,status=status);atomic_json(record,data)
 
 
-def fit_scene(upstream,native,processed,sequence,scratch,iters,env,timing_record):
+def fit_scene(upstream,native,processed,sequence,scratch,iters,env,timing_record,overlay=None):
     timed_phase('preprocessing',lambda:subprocess.run([sys.executable,'datasets/preprocess.py','--dataset','pandaset',
         '--data_root',str(native),'--target_dir',str(processed),'--workers','1',
         '--scene_ids',sequence,'--process_keys','images','lidar','calib','pose','dynamic_masks','objects'],
         cwd=upstream,env=env,check=True),timing_record)
     timed_phase('sky_masks',lambda:subprocess.run([sys.executable,str(ROOT/'tools/chase_3dgs/extract_sky_masks.py'),
         '--scene',str(processed/sequence)],env=env,check=True),timing_record)
-    cfg=build_config(upstream,processed,sequence,scratch,iters)
+    cfg=build_config(upstream,processed,sequence,scratch,iters,overlay)
     timed_phase('fit_15000' if iters==15000 else 'fit',lambda:subprocess.run([sys.executable,'tools/train.py','--config_file',str(cfg),
         '--output_root',str(scratch/'fits'),'--project','chase','--run_name',sequence],
         cwd=upstream,env=env,check=True),timing_record)
     return scratch/'fits/chase'/sequence/'checkpoint_final.pth'
 
 
-def render_frame_inputs(c2w,k,time,index,device):
+def render_frame_inputs(c2w,k,time,index,device,size=(320,192)):
     import torch
     from datasets.base.pixel_source import get_rays
-    h,w=192,320
+    w,h=size
     pose=torch.as_tensor(c2w,dtype=torch.float32,device=device)
     intrinsic=torch.as_tensor(k,dtype=torch.float32,device=device)
     x,y=torch.meshgrid(torch.arange(w,device=device),torch.arange(h,device=device),indexing='xy')
@@ -79,7 +80,7 @@ def save_gif(images,path,timestamps):
     images[0].save(path,save_all=True,append_images=images[1:],duration=duration,loop=0)
 
 
-def cleanup_difix(raw,reference,pins,*,progress=None):
+def cleanup_difix(raw,reference,pins,*,progress=None,cuda_timing=False):
     if len(raw)!=len(reference):raise ValueError('Difix raw/reference count mismatch')
     start=time.monotonic()
     source=ROOT/'.cache/third_party/difix/src'
@@ -91,11 +92,17 @@ def cleanup_difix(raw,reference,pins,*,progress=None):
     if progress:progress('model_loaded',dict(seconds=time.monotonic()-start))
     output=[];inference_start=time.monotonic()
     for index,(image,ref) in enumerate(zip(raw,reference)):
+        if cuda_timing:
+            import torch
+            begin=torch.cuda.Event(enable_timing=True);end=torch.cuda.Event(enable_timing=True);begin.record()
         fixed=pipe('remove degradation',image=image,ref_image=ref,num_inference_steps=1,
                    timesteps=[199],guidance_scale=0.,width=image.width,height=image.height).images[0]
         if fixed.size!=image.size:raise ValueError('Difix changed output geometry')
         output.append(fixed.convert('RGB'))
-        if progress:progress('frame',dict(completed_frames=index+1,seconds=time.monotonic()-inference_start))
+        timing={}
+        if cuda_timing:
+            end.record();torch.cuda.synchronize();timing['cuda_elapsed_ms']=begin.elapsed_time(end)
+        if progress:progress('frame',dict(completed_frames=index+1,seconds=time.monotonic()-inference_start,**timing))
     return output
 
 

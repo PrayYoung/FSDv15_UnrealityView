@@ -1,0 +1,5 @@
+{
+  "source": {"url": "https://github.com/DepthAnything/Depth-Anything-V2.git", "commit": "a561b849ebae10a6f5ef49e26c83cbbcd36c71bf"},
+  "model": {"repo": "depth-anything/Depth-Anything-V2-Metric-VKITTI-Small", "revision": "c725b8589bdf6ab04072cab74c0467830db80d6d", "filename": "depth_anything_v2_metric_vkitti_vits.pth", "sha256": "9203e538d35255c90dda4b7fedb47ff33fe725497bcca3b1e53b3a65ee63f0cb"},
+  "encoder": "vits", "max_depth": 80, "input_size": 518
+}
