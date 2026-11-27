@@ -1,0 +1,100 @@
+{
+  "status": "completed",
+  "recipe_version": "prompt_d_corrected_v2_ego_motion",
+  "vgg_metric": "weighted_channel_sum_normalized_squared_L2_v2",
+  "val_scenes": 8,
+  "frames_per_scene": 79,
+  "variants": {
+    "all_6_cams": {
+      "psnr_db": 26.207446813583374,
+      "vgg_distance": 0.7306706762955159,
+      "sobel_edge_l1": 0.009075158271243017
+    },
+    "drop_front": {
+      "psnr_db": 17.716806173324585,
+      "vgg_distance": 1.1681512603654136,
+      "sobel_edge_l1": 0.01034685661957328
+    },
+    "swapped_scene_cams": {
+      "psnr_db": 12.637092351913452,
+      "vgg_distance": 1.310015760267837,
+      "sobel_edge_l1": 0.013594252195893022
+    },
+    "fresh_noise": {
+      "psnr_db": 26.21052646636963,
+      "vgg_distance": 0.7306389898250374,
+      "sobel_edge_l1": 0.00907686016893698
+    },
+    "codec": {
+      "psnr_db": 30.199931859970093,
+      "vgg_distance": 0.4313182352653032,
+      "sobel_edge_l1": 0.0070705754517377175
+    },
+    "v1_baseline": {
+      "psnr_db": 25.116605043411255,
+      "vgg_distance": 0.9520098189764385,
+      "sobel_edge_l1": 0.009257823681234841
+    }
+  },
+  "matched_frames_8_79": {
+    "arm_e": {
+      "psnr_db": 21.795544862747192,
+      "vgg_distance": 1.0182679891586304,
+      "sobel_edge_l1": 0.010340467645114081
+    },
+    "pipeline2": {
+      "psnr_db": 26.178893566131592,
+      "vgg_distance": 0.7320181205868721,
+      "sobel_edge_l1": 0.009080773892088069
+    },
+    "v1_baseline": {
+      "psnr_db": 25.103033781051636,
+      "vgg_distance": 0.9529345358411472,
+      "sobel_edge_l1": 0.009255228822843896
+    },
+    "codec": {
+      "psnr_db": 30.20469069480896,
+      "vgg_distance": 0.4320172439846728,
+      "sobel_edge_l1": 0.00706668640486896
+    }
+  },
+  "temporal": {
+    "all_6_cams": {
+      "frame_delta_l1": 0.020659207366406918,
+      "motion_residual_l1": 0.028347624465823174
+    },
+    "fresh_noise": {
+      "frame_delta_l1": 0.02128777070902288,
+      "motion_residual_l1": 0.028839493868872523
+    },
+    "v1_baseline": {
+      "frame_delta_l1": 0.015433354186825454,
+      "motion_residual_l1": 0.028012763941660523
+    }
+  },
+  "latency": {
+    "fused_lora_model_ms": 44.981516897678375,
+    "fused_lora_model_fps": 22.231353430671273,
+    "model_plus_decode_ms": 47.43056079993645,
+    "includes_camera_encoding": false
+  },
+  "historical_references": {
+    "codec_claim_db": 30.25,
+    "v2_db": 21.8846,
+    "arm_e_db": 21.5858,
+    "arm_e_f0_db": 24.0,
+    "note": "Historicalreferencesuseddifferentwindowselection;matchedArmEandcodecabovearemeasuredonthesameframes"
+  },
+  "differences": {
+    "drop_front": -8.490640640258789,
+    "swapped_scene_cams": -13.570354461669922
+  },
+  "v1_parity": {
+    "reference_psnr_db": 25.116267919540405,
+    "reproduced_psnr_db": 25.116605043411255,
+    "tolerance_db": 0.05,
+    "passed": true
+  },
+  "conditioning_note": "V2 target rays use observed target-frame planar ego motion;V1 retains original target-local rays. RGB lag and GT frames are matched;conditioning differs.",
+  "quality_acceptance": "Pendingmanualvisualreview;donotstartstylesorflyingviewtraining"
+}

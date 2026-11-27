@@ -4,11 +4,14 @@ Camera-conditioned video generation with an independent waypoint planner and
 switchable visual styles. **PandaSet cameras are the active training and testing
 source.** This is an independent research prototype with no vehicle control.
 
-The [stateless PixArt v1 pilot](docs/results/pandaset-p2-pixart-stateless-2000/README.md)
-completed 2,000 updates and scored **25.12 dB** across all eight validation scenes.
-On matched frames it scored 25.10 dB versus Arm E's 21.80 dB, but its output still
-loses fine detail and remains visibly blurred. This is a research baseline, not
-a finished sharp demo. The corrected v2 recipe is prepared; no rerun is automatic.
+The [stateless PixArt v2 pilot](docs/results/pandaset-p2-pixart-stateless-v2-2000/README.md)
+completed 2,000 updates and scored **26.21 dB** across eight validation scenes,
+versus the preserved v1 adapter's reproduced **25.12 dB**. Perceptual distance
+fell 23.25%; static inspections show less blur, but fine detail remains weak and
+temporal consistency did not improve under the measured proxies. V2 also uses
+observed target-frame planar motion, so this is a bundled recipe/conditioning
+comparison. The report includes one real-data diagnostic GIF and all comparison
+panels. It is a native-front result; flying-camera and style quality remain unapproved.
 
 The corrected PandaSet 5,000-step pilot passed its numerical gate: **21.81 dB
 one-step validation PSNR**, beating frame copy at 18.75 dB, with an 83.5% pixel-error
@@ -34,8 +37,8 @@ failures remain documented in the linked reports.
 
 The independent [stateless PixArt-LCM pilot](docs/PROMPT_D_PROTOCOL.md) uses six
 raw cameras from frame t-1 to predict the observed **native front camera** at t,
-with1200tokens, LoRA, calibrated rays and no previous latent input. Its v1 GPU baseline is reported above. Corrected v2 loss and initialization
-changes pass CPU tests and remain unlaunched. Historical pilot measurements above
+with1200tokens, LoRA, calibrated rays and no previous latent input. Its completed v2 GPU result is reported above; the
+[v1 baseline](docs/results/pandaset-p2-pixart-stateless-2000/README.md) is preserved. Historical pilot measurements above
 use their original chunk/history protocol and are not matched stateless results.
 An external calibrated teacher is still required for elevated novel views.
 

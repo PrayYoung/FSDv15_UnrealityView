@@ -1,0 +1,50 @@
+{
+  "steps": 2000,
+  "effective_batch": 16,
+  "batch_size": 8,
+  "grad_accum": 2,
+  "seed": 42,
+  "pins": {
+    "transformer": {
+      "repo": "PixArt-alpha/PixArt-LCM-XL-2-1024-MS",
+      "revision": "e153060b10990994d2ed31304b3224da47fbd740"
+    },
+    "taesd": {
+      "repo": "madebyollin/taesd",
+      "revision": "614f76814bbe30edbe2e627ace1c2234c81a2c0e"
+    }
+  },
+  "recipe_version": "prompt_d_corrected_v2_ego_motion",
+  "camera_lag": 1,
+  "token_count": 1200,
+  "stateless": true,
+  "latent_history": false,
+  "lora_rank": 16,
+  "lora_alpha": 32,
+  "learning_rate": 0.00015,
+  "warmup": 100,
+  "ema_decay": 0.992,
+  "loss_weights": {
+    "pseudo_huber": 0.5,
+    "charbonnier": 1.0,
+    "channel_normalized_vgg16": 0.8
+  },
+  "loss_normalization": {
+    "latent": "sqrt(delta^2+c^2)-c;c=.1",
+    "rgb": "2*Charbonnier;eps=.001;trainingclamp[-.25,1.25];VGGclamp[0,1]",
+    "vgg": "channel_unit_normalized_squared_L2;channel_sum;layer_weights1,1,1,.5/3.5"
+  },
+  "role_initialization": "zeros",
+  "target_ray_frame": "previous_ego_FLU_with_planar_target_motion",
+  "rgb_training_clamp": [
+    -0.25,
+    1.25
+  ],
+  "augmentation": "one clean plus three independently RGB-jittered banks,selected per camera per sample;single-camera dropout0.10",
+  "sdpa_backend": "Flash enabled;efficient and math fallback enabled",
+  "normalized_time": 1.0,
+  "pretrained_timestep": 999,
+  "expected_train_scenes": 60,
+  "expected_val_scenes": 8,
+  "reserved_test_access": false
+}

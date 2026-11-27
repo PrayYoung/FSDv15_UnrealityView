@@ -1,0 +1,7 @@
+{
+  "vgg_first5_mean": 1.2610686659812926,
+  "vgg_last5_mean": 0.7222441673278809,
+  "vgg_decreased": true,
+  "delta": -0.5388244986534118,
+  "note": "Different sampled training batches;not proof of monotonic or heldout improvement"
+}

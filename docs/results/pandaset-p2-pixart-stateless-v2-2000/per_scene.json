@@ -1,0 +1,610 @@
+[
+  {
+    "source_id": "pandaset/056",
+    "frames": 79,
+    "variants": {
+      "all_6_cams": {
+        "psnr_db": 26.83433723449707,
+        "vgg_distance": 0.7482987340492538,
+        "sobel_edge_l1": 0.00846829442189464
+      },
+      "drop_front": {
+        "psnr_db": 18.2254695892334,
+        "vgg_distance": 1.1315807511534872,
+        "sobel_edge_l1": 0.009433780454947978
+      },
+      "swapped_scene_cams": {
+        "psnr_db": 12.67630672454834,
+        "vgg_distance": 1.3323435632488396,
+        "sobel_edge_l1": 0.013575308991572525
+      },
+      "fresh_noise": {
+        "psnr_db": 26.860197067260742,
+        "vgg_distance": 0.7483573910556262,
+        "sobel_edge_l1": 0.008469195706369002
+      },
+      "codec": {
+        "psnr_db": 30.557369232177734,
+        "vgg_distance": 0.42874844843828225,
+        "sobel_edge_l1": 0.006344938969027393
+      },
+      "v1_baseline": {
+        "psnr_db": 26.027128219604492,
+        "vgg_distance": 0.974254158478749,
+        "sobel_edge_l1": 0.008339199626558944
+      }
+    },
+    "matched_frames_8_79": {
+      "arm_e": {
+        "psnr_db": 22.2750244140625,
+        "vgg_distance": 1.046257111761305,
+        "sobel_edge_l1": 0.009675536511672867
+      },
+      "pipeline2": {
+        "psnr_db": 26.77255630493164,
+        "vgg_distance": 0.7506275706821017,
+        "sobel_edge_l1": 0.008539050093127621
+      },
+      "v1_baseline": {
+        "psnr_db": 25.99365234375,
+        "vgg_distance": 0.9772311713960435,
+        "sobel_edge_l1": 0.008398594282981422
+      },
+      "codec": {
+        "psnr_db": 30.520748138427734,
+        "vgg_distance": 0.4315088457531399,
+        "sobel_edge_l1": 0.006401687601788176
+      },
+      "note": "ArmEusesgroundtruthprevious8framelatents;Pipeline2hasnohistoryinput"
+    },
+    "temporal": {
+      "all_6_cams": {
+        "frame_delta_l1": 0.02037876844406128,
+        "motion_residual_l1": 0.028339849784970284,
+        "consecutive_frames": 79
+      },
+      "fresh_noise": {
+        "frame_delta_l1": 0.020920151844620705,
+        "motion_residual_l1": 0.028718838468194008,
+        "consecutive_frames": 79
+      },
+      "v1_baseline": {
+        "frame_delta_l1": 0.014364288188517094,
+        "motion_residual_l1": 0.026425829157233238,
+        "consecutive_frames": 79
+      }
+    }
+  },
+  {
+    "source_id": "pandaset/095",
+    "frames": 79,
+    "variants": {
+      "all_6_cams": {
+        "psnr_db": 24.775846481323242,
+        "vgg_distance": 0.8283264433281331,
+        "sobel_edge_l1": 0.011630997344662872
+      },
+      "drop_front": {
+        "psnr_db": 15.476303100585938,
+        "vgg_distance": 1.260824536975426,
+        "sobel_edge_l1": 0.012741358585278445
+      },
+      "swapped_scene_cams": {
+        "psnr_db": 10.029478073120117,
+        "vgg_distance": 1.4425009096725077,
+        "sobel_edge_l1": 0.014583448938365225
+      },
+      "fresh_noise": {
+        "psnr_db": 24.792654037475586,
+        "vgg_distance": 0.8281759891328933,
+        "sobel_edge_l1": 0.011615387930334368
+      },
+      "codec": {
+        "psnr_db": 28.349077224731445,
+        "vgg_distance": 0.5013171902185753,
+        "sobel_edge_l1": 0.009806372213495684
+      },
+      "v1_baseline": {
+        "psnr_db": 23.903409957885742,
+        "vgg_distance": 1.020261915424202,
+        "sobel_edge_l1": 0.011615807308426386
+      }
+    },
+    "matched_frames_8_79": {
+      "arm_e": {
+        "psnr_db": 20.30821418762207,
+        "vgg_distance": 1.0819644398159451,
+        "sobel_edge_l1": 0.01259562818126546
+      },
+      "pipeline2": {
+        "psnr_db": 24.767208099365234,
+        "vgg_distance": 0.8265205224355062,
+        "sobel_edge_l1": 0.011576057515210576
+      },
+      "v1_baseline": {
+        "psnr_db": 23.94209861755371,
+        "vgg_distance": 1.0168629553582933,
+        "sobel_edge_l1": 0.01154195030944215
+      },
+      "codec": {
+        "psnr_db": 28.33114242553711,
+        "vgg_distance": 0.5009606215688918,
+        "sobel_edge_l1": 0.009771189341942469
+      },
+      "note": "ArmEusesgroundtruthprevious8framelatents;Pipeline2hasnohistoryinput"
+    },
+    "temporal": {
+      "all_6_cams": {
+        "frame_delta_l1": 0.028346499428153038,
+        "motion_residual_l1": 0.039213038980960846,
+        "consecutive_frames": 79
+      },
+      "fresh_noise": {
+        "frame_delta_l1": 0.028783774003386497,
+        "motion_residual_l1": 0.039530180394649506,
+        "consecutive_frames": 79
+      },
+      "v1_baseline": {
+        "frame_delta_l1": 0.023306116461753845,
+        "motion_residual_l1": 0.0401260070502758,
+        "consecutive_frames": 79
+      }
+    }
+  },
+  {
+    "source_id": "pandaset/074",
+    "frames": 79,
+    "variants": {
+      "all_6_cams": {
+        "psnr_db": 27.85218048095703,
+        "vgg_distance": 0.6890344876277296,
+        "sobel_edge_l1": 0.006741043816827521
+      },
+      "drop_front": {
+        "psnr_db": 21.232162475585938,
+        "vgg_distance": 1.1370713107193573,
+        "sobel_edge_l1": 0.0074372055197629745
+      },
+      "swapped_scene_cams": {
+        "psnr_db": 18.3322811126709,
+        "vgg_distance": 1.2340436826778363,
+        "sobel_edge_l1": 0.00940995762431169
+      },
+      "fresh_noise": {
+        "psnr_db": 27.864940643310547,
+        "vgg_distance": 0.6890495049802563,
+        "sobel_edge_l1": 0.0067451973858324785
+      },
+      "codec": {
+        "psnr_db": 30.504579544067383,
+        "vgg_distance": 0.4322759011123754,
+        "sobel_edge_l1": 0.005824841505883238
+      },
+      "v1_baseline": {
+        "psnr_db": 26.56332778930664,
+        "vgg_distance": 0.8905284978166411,
+        "sobel_edge_l1": 0.006868293202376064
+      }
+    },
+    "matched_frames_8_79": {
+      "arm_e": {
+        "psnr_db": 23.473691940307617,
+        "vgg_distance": 0.9677282902929518,
+        "sobel_edge_l1": 0.007428342786928018
+      },
+      "pipeline2": {
+        "psnr_db": 27.8885498046875,
+        "vgg_distance": 0.6892377204365201,
+        "sobel_edge_l1": 0.0067648570984601974
+      },
+      "v1_baseline": {
+        "psnr_db": 26.566665649414062,
+        "vgg_distance": 0.8906847370995415,
+        "sobel_edge_l1": 0.006894927782317002
+      },
+      "codec": {
+        "psnr_db": 30.45076560974121,
+        "vgg_distance": 0.4340195390913222,
+        "sobel_edge_l1": 0.005866645059237878
+      },
+      "note": "ArmEusesgroundtruthprevious8framelatents;Pipeline2hasnohistoryinput"
+    },
+    "temporal": {
+      "all_6_cams": {
+        "frame_delta_l1": 0.012276090681552887,
+        "motion_residual_l1": 0.01804361864924431,
+        "consecutive_frames": 79
+      },
+      "fresh_noise": {
+        "frame_delta_l1": 0.012991566210985184,
+        "motion_residual_l1": 0.018552465364336967,
+        "consecutive_frames": 79
+      },
+      "v1_baseline": {
+        "frame_delta_l1": 0.008819269947707653,
+        "motion_residual_l1": 0.01677468977868557,
+        "consecutive_frames": 79
+      }
+    }
+  },
+  {
+    "source_id": "pandaset/071",
+    "frames": 79,
+    "variants": {
+      "all_6_cams": {
+        "psnr_db": 27.77542495727539,
+        "vgg_distance": 0.7322727177716508,
+        "sobel_edge_l1": 0.006637044846304232
+      },
+      "drop_front": {
+        "psnr_db": 21.371944427490234,
+        "vgg_distance": 1.1387793021866037,
+        "sobel_edge_l1": 0.007244555597912662
+      },
+      "swapped_scene_cams": {
+        "psnr_db": 7.592723846435547,
+        "vgg_distance": 1.409352663197095,
+        "sobel_edge_l1": 0.012931593540537207
+      },
+      "fresh_noise": {
+        "psnr_db": 27.756669998168945,
+        "vgg_distance": 0.7322230595576612,
+        "sobel_edge_l1": 0.006644858265460669
+      },
+      "codec": {
+        "psnr_db": 33.035587310791016,
+        "vgg_distance": 0.38328043343145635,
+        "sobel_edge_l1": 0.004769149837614615
+      },
+      "v1_baseline": {
+        "psnr_db": 26.74945640563965,
+        "vgg_distance": 0.9419669093964975,
+        "sobel_edge_l1": 0.006664114190807826
+      }
+    },
+    "matched_frames_8_79": {
+      "arm_e": {
+        "psnr_db": 23.166120529174805,
+        "vgg_distance": 1.0595492786831326,
+        "sobel_edge_l1": 0.007386722239769167
+      },
+      "pipeline2": {
+        "psnr_db": 27.81464385986328,
+        "vgg_distance": 0.7359264824125502,
+        "sobel_edge_l1": 0.006619941339724594
+      },
+      "v1_baseline": {
+        "psnr_db": 26.799053192138672,
+        "vgg_distance": 0.9458936386638217,
+        "sobel_edge_l1": 0.006629200910942422
+      },
+      "codec": {
+        "psnr_db": 33.07864761352539,
+        "vgg_distance": 0.3835243946976132,
+        "sobel_edge_l1": 0.0047338006811009515
+      },
+      "note": "ArmEusesgroundtruthprevious8framelatents;Pipeline2hasnohistoryinput"
+    },
+    "temporal": {
+      "all_6_cams": {
+        "frame_delta_l1": 0.018865685909986496,
+        "motion_residual_l1": 0.02684444934129715,
+        "consecutive_frames": 79
+      },
+      "fresh_noise": {
+        "frame_delta_l1": 0.019198717549443245,
+        "motion_residual_l1": 0.027117175981402397,
+        "consecutive_frames": 79
+      },
+      "v1_baseline": {
+        "frame_delta_l1": 0.013875167816877365,
+        "motion_residual_l1": 0.026954129338264465,
+        "consecutive_frames": 79
+      }
+    }
+  },
+  {
+    "source_id": "pandaset/093",
+    "frames": 79,
+    "variants": {
+      "all_6_cams": {
+        "psnr_db": 25.144657135009766,
+        "vgg_distance": 0.7300955721094639,
+        "sobel_edge_l1": 0.009654601216552
+      },
+      "drop_front": {
+        "psnr_db": 16.101839065551758,
+        "vgg_distance": 1.1717836585225938,
+        "sobel_edge_l1": 0.011129828641497636
+      },
+      "swapped_scene_cams": {
+        "psnr_db": 11.07565689086914,
+        "vgg_distance": 1.35549226290063,
+        "sobel_edge_l1": 0.014221881669533403
+      },
+      "fresh_noise": {
+        "psnr_db": 25.156627655029297,
+        "vgg_distance": 0.7292918163009837,
+        "sobel_edge_l1": 0.009654091877414834
+      },
+      "codec": {
+        "psnr_db": 29.28282928466797,
+        "vgg_distance": 0.4614707797388487,
+        "sobel_edge_l1": 0.007711649324179073
+      },
+      "v1_baseline": {
+        "psnr_db": 24.306507110595703,
+        "vgg_distance": 0.9348086450673356,
+        "sobel_edge_l1": 0.00985700608808783
+      }
+    },
+    "matched_frames_8_79": {
+      "arm_e": {
+        "psnr_db": 20.80910301208496,
+        "vgg_distance": 0.9802164766523573,
+        "sobel_edge_l1": 0.011141507679389583
+      },
+      "pipeline2": {
+        "psnr_db": 25.001192092895508,
+        "vgg_distance": 0.7315625482135348,
+        "sobel_edge_l1": 0.009726143442094326
+      },
+      "v1_baseline": {
+        "psnr_db": 24.175495147705078,
+        "vgg_distance": 0.93463310930464,
+        "sobel_edge_l1": 0.009901340016060405
+      },
+      "codec": {
+        "psnr_db": 29.22384262084961,
+        "vgg_distance": 0.4617499179310269,
+        "sobel_edge_l1": 0.007757313859959443
+      },
+      "note": "ArmEusesgroundtruthprevious8framelatents;Pipeline2hasnohistoryinput"
+    },
+    "temporal": {
+      "all_6_cams": {
+        "frame_delta_l1": 0.025598837062716484,
+        "motion_residual_l1": 0.03325262665748596,
+        "consecutive_frames": 79
+      },
+      "fresh_noise": {
+        "frame_delta_l1": 0.026154059916734695,
+        "motion_residual_l1": 0.033673565834760666,
+        "consecutive_frames": 79
+      },
+      "v1_baseline": {
+        "frame_delta_l1": 0.021502172574400902,
+        "motion_residual_l1": 0.033659689128398895,
+        "consecutive_frames": 79
+      }
+    }
+  },
+  {
+    "source_id": "pandaset/047",
+    "frames": 79,
+    "variants": {
+      "all_6_cams": {
+        "psnr_db": 26.873191833496094,
+        "vgg_distance": 0.7891916896723494,
+        "sobel_edge_l1": 0.009725406105759778
+      },
+      "drop_front": {
+        "psnr_db": 16.15803337097168,
+        "vgg_distance": 1.2069280419168593,
+        "sobel_edge_l1": 0.011154002592533449
+      },
+      "swapped_scene_cams": {
+        "psnr_db": 12.291790962219238,
+        "vgg_distance": 1.28704247293593,
+        "sobel_edge_l1": 0.01523611902058879
+      },
+      "fresh_noise": {
+        "psnr_db": 26.862329483032227,
+        "vgg_distance": 0.7895245665236365,
+        "sobel_edge_l1": 0.00973977608299708
+      },
+      "codec": {
+        "psnr_db": 30.254892349243164,
+        "vgg_distance": 0.4656522858746444,
+        "sobel_edge_l1": 0.007716247187102143
+      },
+      "v1_baseline": {
+        "psnr_db": 25.744047164916992,
+        "vgg_distance": 1.021448253830777,
+        "sobel_edge_l1": 0.00989707278771491
+      }
+    },
+    "matched_frames_8_79": {
+      "arm_e": {
+        "psnr_db": 22.328393936157227,
+        "vgg_distance": 1.1063175466325548,
+        "sobel_edge_l1": 0.010769199372993575
+      },
+      "pipeline2": {
+        "psnr_db": 26.955535888671875,
+        "vgg_distance": 0.7918847335709466,
+        "sobel_edge_l1": 0.0096139180370503
+      },
+      "v1_baseline": {
+        "psnr_db": 25.802270889282227,
+        "vgg_distance": 1.0228016508950128,
+        "sobel_edge_l1": 0.00979777228915029
+      },
+      "codec": {
+        "psnr_db": 30.31829071044922,
+        "vgg_distance": 0.4657754401365916,
+        "sobel_edge_l1": 0.007628905379937755
+      },
+      "note": "ArmEusesgroundtruthprevious8framelatents;Pipeline2hasnohistoryinput"
+    },
+    "temporal": {
+      "all_6_cams": {
+        "frame_delta_l1": 0.02085999771952629,
+        "motion_residual_l1": 0.030368709936738014,
+        "consecutive_frames": 79
+      },
+      "fresh_noise": {
+        "frame_delta_l1": 0.02148955501616001,
+        "motion_residual_l1": 0.03087296523153782,
+        "consecutive_frames": 79
+      },
+      "v1_baseline": {
+        "frame_delta_l1": 0.014192386530339718,
+        "motion_residual_l1": 0.029853075742721558,
+        "consecutive_frames": 79
+      }
+    }
+  },
+  {
+    "source_id": "pandaset/016",
+    "frames": 79,
+    "variants": {
+      "all_6_cams": {
+        "psnr_db": 24.812192916870117,
+        "vgg_distance": 0.6242947797232037,
+        "sobel_edge_l1": 0.010142620181358314
+      },
+      "drop_front": {
+        "psnr_db": 16.164396286010742,
+        "vgg_distance": 1.112547079219094,
+        "sobel_edge_l1": 0.0122069486452243
+      },
+      "swapped_scene_cams": {
+        "psnr_db": 14.824654579162598,
+        "vgg_distance": 1.1611274812794938,
+        "sobel_edge_l1": 0.014957811259016206
+      },
+      "fresh_noise": {
+        "psnr_db": 24.816823959350586,
+        "vgg_distance": 0.6247120046917396,
+        "sobel_edge_l1": 0.010133202953995028
+      },
+      "codec": {
+        "psnr_db": 29.44835090637207,
+        "vgg_distance": 0.37654806843286825,
+        "sobel_edge_l1": 0.007475728334128102
+      },
+      "v1_baseline": {
+        "psnr_db": 23.346145629882812,
+        "vgg_distance": 0.8780793049667455,
+        "sobel_edge_l1": 0.010838817392440536
+      }
+    },
+    "matched_frames_8_79": {
+      "arm_e": {
+        "psnr_db": 20.58469009399414,
+        "vgg_distance": 0.9147972663243612,
+        "sobel_edge_l1": 0.012435393097500006
+      },
+      "pipeline2": {
+        "psnr_db": 24.77617073059082,
+        "vgg_distance": 0.6235961980289884,
+        "sobel_edge_l1": 0.010150416547225581
+      },
+      "v1_baseline": {
+        "psnr_db": 23.305416107177734,
+        "vgg_distance": 0.8789213763342963,
+        "sobel_edge_l1": 0.010867764448954
+      },
+      "codec": {
+        "psnr_db": 29.48175048828125,
+        "vgg_distance": 0.3760474357340071,
+        "sobel_edge_l1": 0.007464601606544521
+      },
+      "note": "ArmEusesgroundtruthprevious8framelatents;Pipeline2hasnohistoryinput"
+    },
+    "temporal": {
+      "all_6_cams": {
+        "frame_delta_l1": 0.021377695724368095,
+        "motion_residual_l1": 0.02716737799346447,
+        "consecutive_frames": 79
+      },
+      "fresh_noise": {
+        "frame_delta_l1": 0.02214796654880047,
+        "motion_residual_l1": 0.027837267145514488,
+        "consecutive_frames": 79
+      },
+      "v1_baseline": {
+        "frame_delta_l1": 0.015534252859652042,
+        "motion_residual_l1": 0.027541162446141243,
+        "consecutive_frames": 79
+      }
+    }
+  },
+  {
+    "source_id": "pandaset/014",
+    "frames": 79,
+    "variants": {
+      "all_6_cams": {
+        "psnr_db": 25.59174346923828,
+        "vgg_distance": 0.7038509860823426,
+        "sobel_edge_l1": 0.009601258236584784
+      },
+      "drop_front": {
+        "psnr_db": 17.004301071166992,
+        "vgg_distance": 1.1856954022298885,
+        "sobel_edge_l1": 0.011427172919428802
+      },
+      "swapped_scene_cams": {
+        "psnr_db": 14.273846626281738,
+        "vgg_distance": 1.2582230462303645,
+        "sobel_edge_l1": 0.013837896523219121
+      },
+      "fresh_noise": {
+        "psnr_db": 25.5739688873291,
+        "vgg_distance": 0.703777586357503,
+        "sobel_edge_l1": 0.009613171149092384
+      },
+      "codec": {
+        "psnr_db": 30.16676902770996,
+        "vgg_distance": 0.4012527748753753,
+        "sobel_edge_l1": 0.006915676242471496
+      },
+      "v1_baseline": {
+        "psnr_db": 24.292818069458008,
+        "vgg_distance": 0.9547308668305602,
+        "sobel_edge_l1": 0.00998227885346624
+      }
+    },
+    "matched_frames_8_79": {
+      "arm_e": {
+        "psnr_db": 21.41912078857422,
+        "vgg_distance": 0.9893135031064352,
+        "sobel_edge_l1": 0.01129141129139397
+      },
+      "pipeline2": {
+        "psnr_db": 25.455291748046875,
+        "vgg_distance": 0.7067891889148288,
+        "sobel_edge_l1": 0.009655807063811354
+      },
+      "v1_baseline": {
+        "psnr_db": 24.2396183013916,
+        "vgg_distance": 0.9564476476775275,
+        "sobel_edge_l1": 0.010010280542903476
+      },
+      "codec": {
+        "psnr_db": 30.232337951660156,
+        "vgg_distance": 0.4025517569647895,
+        "sobel_edge_l1": 0.006909347708440489
+      },
+      "note": "ArmEusesgroundtruthprevious8framelatents;Pipeline2hasnohistoryinput"
+    },
+    "temporal": {
+      "all_6_cams": {
+        "frame_delta_l1": 0.01757008396089077,
+        "motion_residual_l1": 0.023551324382424355,
+        "consecutive_frames": 79
+      },
+      "fresh_noise": {
+        "frame_delta_l1": 0.01861637458205223,
+        "motion_residual_l1": 0.024413492530584335,
+        "consecutive_frames": 79
+      },
+      "v1_baseline": {
+        "frame_delta_l1": 0.011873179115355015,
+        "motion_residual_l1": 0.022767528891563416,
+        "consecutive_frames": 79
+      }
+    }
+  }
+]

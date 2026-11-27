@@ -1,0 +1,19 @@
+{
+  "reviewed": [
+    "inspection/pandaset_014.png",
+    "inspection/pandaset_016.png",
+    "inspection/pandaset_047.png",
+    "inspection/pandaset_056.png",
+    "inspection/pandaset_071.png",
+    "inspection/pandaset_074.png",
+    "inspection/pandaset_093.png",
+    "inspection/pandaset_095.png"
+  ],
+  "scope": "Eight static comparison panels;not a complete frame-by-frame temporal GIF review",
+  "finding": "V2 restores more recognizable vehicles,road markings and scene structure than v1 in the inspected panels;fine textures,thin objects and night details remain smoothed or smeared.",
+  "accepted_for_style_training": false,
+  "accepted_as_finished_demo": false,
+  "accepted_for_flying_camera_training": false,
+  "temporal_note": "Raw frame-delta is higher than v1;GT-motion-residual slightly worse. Raw smoothness can reward blur;no temporal improvement claim.",
+  "conditioning_note": "Observed target-frame planar ego motion is supplied to v2;v1 uses its preserved target-local rays. Multiple recipe changes preclude single-component attribution."
+}
