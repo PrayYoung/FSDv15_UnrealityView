@@ -1,0 +1,56 @@
+{
+  "projections": {
+    "camera_only_A_640x384": {
+      "mean_hole_fraction": 0.30456287895931916,
+      "max_hole_fraction": 0.3302205204963684,
+      "median_projection_wall_ms": 2.5690285256132483
+    },
+    "camera_only_A_512x320": {
+      "mean_hole_fraction": 0.26474500754300284,
+      "max_hole_fraction": 0.30155640840530396,
+      "median_projection_wall_ms": 2.503355033695698
+    },
+    "camera_only_B_640x384": {
+      "mean_hole_fraction": 0.3045814913861892,
+      "max_hole_fraction": 0.3264159560203552,
+      "median_projection_wall_ms": 2.28422146756202
+    },
+    "camera_only_B_512x320": {
+      "mean_hole_fraction": 0.26371000707149506,
+      "max_hole_fraction": 0.2882140874862671,
+      "median_projection_wall_ms": 2.504460047930479
+    },
+    "lidar_anchored_A_640x384": {
+      "mean_hole_fraction": 0.29440351707093854,
+      "max_hole_fraction": 0.33500975370407104,
+      "median_projection_wall_ms": 2.329209935851395
+    },
+    "lidar_anchored_A_512x320": {
+      "mean_hole_fraction": 0.26000355885309334,
+      "max_hole_fraction": 0.31231075525283813,
+      "median_projection_wall_ms": 2.5362843880429864
+    },
+    "lidar_anchored_B_640x384": {
+      "mean_hole_fraction": 0.2959870827548644,
+      "max_hole_fraction": 0.3245401382446289,
+      "median_projection_wall_ms": 2.3083859123289585
+    },
+    "lidar_anchored_B_512x320": {
+      "mean_hole_fraction": 0.259220425696934,
+      "max_hole_fraction": 0.2947998046875,
+      "median_projection_wall_ms": 2.5329793570563197
+    }
+  },
+  "latency": {
+    "depth_six_camera_median_ms": 157.00324205681682,
+    "depth_six_camera_cuda_median_ms": 156.96640014648438,
+    "overlap_median_wall_ms": 6.221986492164433,
+    "camera_image_loading_median_ms": 129.55501105170697,
+    "input_upload_median_ms": 2.6844199746847153,
+    "depth_preprocess_median_ms": 55.662974482402205,
+    "difix_mean_per_frame_ms": 576.7300303668628
+  },
+  "lidar_anchor_fallback_count": 0,
+  "real_time_target_met": false,
+  "teacher_approved": false
+}

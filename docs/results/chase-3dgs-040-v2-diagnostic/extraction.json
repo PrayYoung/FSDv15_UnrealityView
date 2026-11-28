@@ -1,0 +1,19 @@
+{
+  "archive_sha256": "6e2f978fe8e98a8708ca00acae86415096868eccc2effe9826db57514582433e",
+  "scenes": [
+    "040"
+  ],
+  "bytes": 758196430,
+  "archive_member_bytes": 427419193,
+  "validated_frames": {
+    "camera/front_camera": 80,
+    "camera/front_left_camera": 80,
+    "camera/front_right_camera": 80,
+    "camera/left_camera": 80,
+    "camera/right_camera": 80,
+    "camera/back_camera": 80,
+    "lidar": 80,
+    "annotations/cuboids": 80
+  },
+  "extraction_seconds": 3.7340956069529057
+}

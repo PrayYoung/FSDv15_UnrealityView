@@ -1,0 +1,142 @@
+{
+  "summary.json": {
+    "bytes": 2024,
+    "sha256": "29ea03005572eb04b2807197ef46f95f2bdc6a27cea94184715caedc9bba9a69"
+  },
+  "inspection.png": {
+    "bytes": 3091901,
+    "sha256": "b6c408ed8c53c7923fb3167e784f195d12bee201cbcb710331ea2ea7519e27bb"
+  },
+  "explicit3d_chase.gif": {
+    "bytes": 3737842,
+    "sha256": "85cfa61c63f553bce8670286b55039add4a44816a9389e091a19f197e363fa06"
+  },
+  "source_manifest.json": {
+    "bytes": 14514,
+    "sha256": "7de1a99edbe625e7ec0ad5d3c8f0589c9df7e8c602ffa668762540fc38817d6b"
+  },
+  "calibration.json": {
+    "bytes": 221545,
+    "sha256": "ee890064ffd2ff7a24f0ecf8a4127174ff6b5c1e54888dc4cf3b62335d541be5"
+  },
+  "projection_metrics.json": {
+    "bytes": 226979,
+    "sha256": "219b96ada8f38bb767b466408a309ac62a07c738499b564490bb75cfd1d6ae87"
+  },
+  "archive_record.json": {
+    "bytes": 356,
+    "sha256": "06c82c798aff7abf89522064ef05b4ab03ce5e1d3649ad0bebf7f5db1fc5cea6"
+  },
+  "inspection_poseA.png": {
+    "bytes": 2667316,
+    "sha256": "c4fa378c7271cfa19ecce87084c0c6286e7b6ac4171b05bbee4806394044b630"
+  },
+  "critic_review.json": {
+    "bytes": 627,
+    "sha256": "7fbb7638ff45ff3f301a0fcfd7f33f4cf1ef1c4cb0b61c8a319686ec83a5fc92"
+  },
+  "README.md": {
+    "bytes": 5509,
+    "sha256": "e93c020ea4fd4144df45d76d61bb0951603b43feca7f9de5c0c95c1faa66b646"
+  },
+  "visual_review.json": {
+    "bytes": 1096,
+    "sha256": "1ffe8326e3b3bc51bcd66d448d924698474c78dc0bcafd98bb07a44e082dbea2"
+  },
+  "extraction.json": {
+    "bytes": 494,
+    "sha256": "88491cfe2fa6214dc95d51c13810aa0aedbbd2b4c1a30527b3e9dc249ea76894"
+  },
+  "orbit.html": {
+    "bytes": 1077,
+    "sha256": "8d5d5a436dc300054ce6c82a251af7f5bf679249487f7f14ef8bd276a02c229d"
+  },
+  "cleanup_metrics.json": {
+    "bytes": 9685,
+    "sha256": "66842782accb968cd74d64bdb38d3ef047e6caf40dc0c6e900d6339d6886e868"
+  },
+  "execution.json": {
+    "bytes": 652,
+    "sha256": "b2e36b3f237cd75e700688d8f29b81e12b664c588a628f3ac7a9ad6afdc4beac"
+  },
+  "orbit/camera_only_-25_raw.png": {
+    "bytes": 105840,
+    "sha256": "e40fa1b283aca2feffebc337d760e73e73e5346d09b6ed43af349a13f8d6f7dd"
+  },
+  "orbit/camera_only_+25_raw.png": {
+    "bytes": 107528,
+    "sha256": "8ae76e723ff935beb1d3cde0a12c15ebc84b22e031902421723ebf4a02647e64"
+  },
+  "orbit/lidar_anchored_+25_difix.png": {
+    "bytes": 111166,
+    "sha256": "5acbccba8bb7b9d613933e971fb61f94072e93973fdd066f980c128946ade646"
+  },
+  "orbit/camera_only_+00_difix.png": {
+    "bytes": 110675,
+    "sha256": "31d2563a9534c5b93924f5b4b3ddedc6d2ddc72076bbcecf0b8d736855e60ba7"
+  },
+  "orbit/camera_only_+00_raw.png": {
+    "bytes": 104901,
+    "sha256": "30d9db36c35962a451088f06e5c39f3f2fc854edf501f1a828727421fa98dc7b"
+  },
+  "orbit/lidar_anchored_-25_difix.png": {
+    "bytes": 110884,
+    "sha256": "7f9c9bd5b7fc07b375009efb94f233a788ad34bb6955493fec6634dfdb3ff023"
+  },
+  "orbit/camera_only_-25_difix.png": {
+    "bytes": 109871,
+    "sha256": "3d8d61687fbf11e72b1a7586b560c8d060b1b9e2105b0c5157cdc35ffe5dd3da"
+  },
+  "orbit/lidar_anchored_+00_difix.png": {
+    "bytes": 111235,
+    "sha256": "6aef21899e47c46c878c4889904d5d2a0c43492fffc49e3801c1719b1afdbf2c"
+  },
+  "orbit/lidar_anchored_+25_raw.png": {
+    "bytes": 108767,
+    "sha256": "f55e18046182cd92bc960915a66df5c63a850d96033f5ad963e13a4a1b68cd6b"
+  },
+  "orbit/lidar_anchored_-25_raw.png": {
+    "bytes": 106201,
+    "sha256": "5a62d8cfaca0ef63a2800f639755c8dfacb1e2e7b2181cb028169cb76609e885"
+  },
+  "orbit/camera_only_+25_difix.png": {
+    "bytes": 110336,
+    "sha256": "f05f401a4d30364810f9a460d69a1c289bcb5d6936224fde86f69ea7d6053674"
+  },
+  "orbit/lidar_anchored_+00_raw.png": {
+    "bytes": 106310,
+    "sha256": "8a273fa713c72e4996b8a2ecf2dbb9158679e2be83770c5b83015206b9372ff1"
+  },
+  "native_samples/lidar_anchored_B_raw/00040.png": {
+    "bytes": 380776,
+    "sha256": "06b9668132a7b4b554d5fb787d46a461af051a2a0729318841d1b17f338f742f"
+  },
+  "native_samples/lidar_anchored_B_raw/00025.png": {
+    "bytes": 369011,
+    "sha256": "6420e0038715887609aca5a34f54f2a63656703cc6086988f410194e16347ade"
+  },
+  "native_samples/camera_only_B_raw/00040.png": {
+    "bytes": 373928,
+    "sha256": "f91f2c145d317453a3ce3b1f10c465be23b283fd5d22be97c5b4802820f2fc42"
+  },
+  "native_samples/camera_only_B_raw/00025.png": {
+    "bytes": 369526,
+    "sha256": "a1bbfeda57fb2a37a5a8231fe22eae0b2cc9bd81f2ee5053000f85990a5c6c90"
+  },
+  "native_samples/camera_only_B_difix/00040.png": {
+    "bytes": 422066,
+    "sha256": "f703caed3ba1979d4a70121ba501ace39a54945f01cb1f92734826d5f60326d2"
+  },
+  "native_samples/camera_only_B_difix/00025.png": {
+    "bytes": 431732,
+    "sha256": "5032c5f2f935eb05b324541d33060bcf988ccc5fe5da08a842801decd9da5d19"
+  },
+  "native_samples/lidar_anchored_B_difix/00040.png": {
+    "bytes": 427889,
+    "sha256": "cf7daf974fda4a41dbfdaacff939b243b12b8110b78f62ff8b899d577e70d687"
+  },
+  "native_samples/lidar_anchored_B_difix/00025.png": {
+    "bytes": 419938,
+    "sha256": "1f1ba1b7a3c41f09e42d9e348fa615b663667a8916bc352bd323c31bb0827837"
+  }
+}

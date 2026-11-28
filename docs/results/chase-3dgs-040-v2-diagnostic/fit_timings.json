@@ -1,0 +1,14 @@
+{
+  "preprocessing": {
+    "seconds": 67.91088736522943,
+    "status": "completed"
+  },
+  "sky_masks": {
+    "seconds": 114.59737933892757,
+    "status": "completed"
+  },
+  "fit": {
+    "seconds": 2260.386349329725,
+    "status": "completed"
+  }
+}

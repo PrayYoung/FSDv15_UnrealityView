@@ -1,0 +1,19 @@
+{
+  "inspected_comparison_frames": [
+    12,
+    25,
+    40,
+    55,
+    70
+  ],
+  "full_frame_by_frame_temporal_review_complete": false,
+  "accepted_for_prompt3": false,
+  "accepted_as_verified_novel_view_ground_truth": false,
+  "overall": "PoseB plus higher-resolution Difix is the most promising visual candidate;temporal/human approval still required.",
+  "checks": {
+    "color_and_floaters": "Strong appearance cleanup in the inspected panels;poseB avoids the prominent poseA canopy fragment nearframe40.",
+    "cars": "Cleaner more recognizable parked cars afterDifix,but raw cars remain warped and generated shapes are not geometrically validated.",
+    "layout": "Broad road/crosswalk/building structure is clearer;some road/surface smear and local defects persist.",
+    "temporal": "PoseB rawdelta.03896 versusclean.04158;this does not establish flicker reduction.Fullsequencevisualreviewpending."
+  }
+}

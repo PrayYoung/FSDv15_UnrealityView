@@ -38,6 +38,15 @@ and floaters remain; it is not approved as a training teacher. The associated
 completed rentals are verified destroyed; costs and lifecycle failures remain
 documented in the linked reports.
 
+The [new scene040 paired-pose diagnostic](docs/results/chase-3dgs-040-v2-diagnostic/README.md)
+passed its26dB native-view gate at **26.43dB**. Lower poseB plus640x384Difix looks
+cleaner in the inspected panels;full temporal/human review is still required.
+The [zero-training explicit3D proof](docs/results/pandaset-explicit3d-040-proof/README.md)
+completed both depth variants and orbit samples,but camera-only poseB has **30.46%**
+whole-frame projection holes,including near-ego gaps. Six-camera depth took about
+157ms and Difix577ms/image in this configuration,so20–30fps is not established.
+Both rentals are verified destroyed;Prompt3 remains on hold.
+
 The independent [stateless PixArt-LCM pilot](docs/PROMPT_D_PROTOCOL.md) uses six
 raw cameras from frame t-1 to predict the observed **native front camera** at t,
 with1200tokens, LoRA, calibrated rays and no previous latent input. Its completed v2 GPU result is reported above; the

@@ -1,0 +1,78 @@
+{
+  "inspection.png": {
+    "bytes": 2512482,
+    "sha256": "26d202f02daeb2b6be6b95dba55145a3aceb6cd447430ca343845e01629e52ef"
+  },
+  "native_quality.json": {
+    "bytes": 149,
+    "sha256": "24cc113dc2fcaa9d4fcecd6578d979c5cae04f332ada15b46eeb87f66bf63e09"
+  },
+  "render_metrics.json": {
+    "bytes": 13824,
+    "sha256": "466e301b326d706d3dc20e355f4b97dc9770b98f6ddc709954725320964c33c3"
+  },
+  "source_manifest.json": {
+    "bytes": 14514,
+    "sha256": "7de1a99edbe625e7ec0ad5d3c8f0589c9df7e8c602ffa668762540fc38817d6b"
+  },
+  "calibration.json": {
+    "bytes": 109248,
+    "sha256": "ad18b3be480ca6d0297b9beade398b7269221b2935796606f7bee148637277c9"
+  },
+  "archive_record.json": {
+    "bytes": 355,
+    "sha256": "a7197d88e12b63c1f4d0a06e9d03355de17cdc1a4ae10f49003f421569668aa4"
+  },
+  "critic_review.json": {
+    "bytes": 576,
+    "sha256": "8344bbf110e88f14173b3629f90b94cb5f76f048e62731c05aa5a491f869569e"
+  },
+  "fit_timings.json": {
+    "bytes": 248,
+    "sha256": "f030819c6351787400e1b708012832535a39b4dd1b2f5225e62d5cb43ef118ef"
+  },
+  "README.md": {
+    "bytes": 4447,
+    "sha256": "e3ad3fbfe763d9603fde3b97422e9ebc49f9830a0617c02c65a320ec45aeb799"
+  },
+  "chase_poseB_difix.gif": {
+    "bytes": 3731275,
+    "sha256": "a9266e262fc6af2e66b132acc78363722dac68e5fbcf070354a1489b64bdad00"
+  },
+  "visual_review.json": {
+    "bytes": 915,
+    "sha256": "5c0f8f4dd848d1811d6e51ec540ebd6d2b13668b40bf2ff3b05bfe79f9e19819"
+  },
+  "trajectory_check.json": {
+    "bytes": 2108,
+    "sha256": "773cc00f413f6633defb1f50c82a5a9f6ae7e1e86ea41dd950754062da1d426f"
+  },
+  "extraction.json": {
+    "bytes": 494,
+    "sha256": "e308dda069c81ed7754c8e91c1de8dc955a1a37d89e3789c233f72a77931b813"
+  },
+  "cleanup_metrics.json": {
+    "bytes": 5234,
+    "sha256": "2fe911dafc2431f7ee3b4712dae30f77cdc6f00ac4f95b35edf0afcb1031c44b"
+  },
+  "execution.json": {
+    "bytes": 654,
+    "sha256": "2abebe0a16a10253d262f8adc8daed26f4bfddb7ccd18738d2d52105e2751e9b"
+  },
+  "native_samples/pose_B_difix/00040.png": {
+    "bytes": 351848,
+    "sha256": "03d0dccd1459011edaf4bfad11e088a94b31e9ab1dbd55e24d1e8974bb6c4d10"
+  },
+  "native_samples/pose_B_difix/00025.png": {
+    "bytes": 351608,
+    "sha256": "1bac3877a8c2b5d8c465168d59531d240779d4d9885b387aba7708615ccae186"
+  },
+  "native_samples/pose_B_raw/00040.png": {
+    "bytes": 301878,
+    "sha256": "3df4af0dc182ca44d2020ede57566239565e5221eccf94d26eddd0c62cdf170b"
+  },
+  "native_samples/pose_B_raw/00025.png": {
+    "bytes": 302491,
+    "sha256": "45e23f0f3b8bfd6a36945402bafc1ff5b5f94cfb9b507f67b55f0f18f71ade30"
+  }
+}

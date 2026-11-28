@@ -104,3 +104,13 @@ geometry; account for bundled changes, unknown novel-view truth and temporal
 blur bias; compare both poses on identical fitted weights/depth; report failed
 native gates/anchor fallbacks honestly; withhold Prompt3 until human visual review.
 No corporate GCP actions are authorized by the quoted screenshot side question.
+
+## Completed outcomes
+
+Both one-attempt diagnostics completed and returned checksum-verified artifacts.
+The [refit report](results/chase-3dgs-040-v2-diagnostic/README.md) passes the native
+PSNR gate and identifies poseB cleanup as a visual candidate,pending full sequence
+review. The [explicit proof](results/pandaset-explicit3d-040-proof/README.md) records
+coverage gaps and depth/cleanup runtime that do not meet the proposed live target.
+Estimated combined rental cost is0.3999USD;both instances are verified destroyed.
+No Prompt3 batch or training is approved.

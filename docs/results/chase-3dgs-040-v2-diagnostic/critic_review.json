@@ -1,0 +1,14 @@
+{
+  "method": "Separate claim-versus-evidence reviewer pass;not an independent human or external review",
+  "engineering_result": "Exit0,expectedoutputs,checksumsanddestructionverified",
+  "quality_acceptance": false,
+  "confounders": [
+    "No calibrated novel-view groundtruth",
+    "Full temporal visual inspection pending",
+    "Cleanup can invent plausible detail"
+  ],
+  "scope_specific": [
+    "Bundled density,iteration,resolution andframe changes prevent causal attribution;poseA/B use same checkpoint"
+  ],
+  "decision": "Publish bounded evidence;withholdPrompt3"
+}

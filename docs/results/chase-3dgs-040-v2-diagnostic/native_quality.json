@@ -1,0 +1,7 @@
+{
+  "heldout_psnr_db": 26.43480083751186,
+  "heldout_samples": 42,
+  "threshold_db": 26.0,
+  "passed": true,
+  "not_novel_view_ground_truth": true
+}

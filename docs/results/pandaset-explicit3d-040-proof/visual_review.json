@@ -1,0 +1,24 @@
+{
+  "inspected_comparison_frames": [
+    12,
+    25,
+    40,
+    55,
+    70
+  ],
+  "full_frame_by_frame_temporal_review_complete": false,
+  "accepted_for_prompt3": false,
+  "accepted_as_verified_novel_view_ground_truth": false,
+  "overall": "Projection works and preserves recognizable source texture,but coverage,parallax seams and cleanup latency fail the proposed finished/live proof.",
+  "checks": {
+    "coverage": "Large lower-center blind region plus foreground/tree/edge gaps remain.This includes near-ego coverage;30percent whole-frame holes must not be read as30percent missingroad.",
+    "cars": "Some source textures remain sharp,but stretched/fragmented cars and projection seams remain.",
+    "layout": "Scene structure and three-angle parallax are visible;rough depths,unobserved regions and splat discretization remain obvious.Difix does not complete the large holes.",
+    "temporal": "All four groups have higher RGB frame-delta afterDifix;not a groundtruthmotion/flicker metric.Fullsequencevisualreviewpending."
+  },
+  "inspected_orbit_degrees": [
+    -25,
+    0,
+    25
+  ]
+}
