@@ -97,16 +97,19 @@ def test_campaign_budget_and_failure_gates_prevent_unauthorized_advance():
         remaining_budget(dict(chunks=[dict(attempts=[dict(approx_cost_usd=None)])]),dict(attempts=[]))
 
 
-def test_terminal_check_uses_only_canonical_status_and_requires_verified_absence(monkeypatch,tmp_path):
+@pytest.mark.parametrize('status',['DESTROYED','INFRA_FAILURE'])
+def test_terminal_check_uses_only_canonical_status_and_requires_verified_absence(monkeypatch,tmp_path,status):
     from types import SimpleNamespace
     import io
-    metadata=tmp_path/'metadata.json';metadata.write_text(json.dumps(dict(status='DESTROYED',instance_destroyed_at='time')))
+    metadata=tmp_path/'metadata.json';metadata.write_text(json.dumps(dict(status=status,instance_destroyed_at='time')))
     calls=[]
     def run(argv,**kwargs):
         calls.append(argv);return SimpleNamespace(returncode=0,stdout=f'cleanup_verified_absent=true\napprox_cost_usd=$0.8\nmetadata={metadata}\n',stderr='')
     monkeypatch.setattr('tools.chase_3dgs.flying_campaign.subprocess.run',run)
     path,m,cost=terminal_receipt('vast-run','existing-run',io.StringIO())
     assert calls==[['vast-run','status','existing-run','--verify-destroyed']] and cost==.8
+    metadata.write_text(json.dumps(dict(status=status,instance_destroyed_at=None)))
+    with pytest.raises(RuntimeError,match='Nonterminal'):terminal_receipt('vast-run','existing-run',io.StringIO())
 
 
 def test_report_publication_never_copies_dataset_or_private_runtime(monkeypatch,tmp_path):

@@ -15,6 +15,12 @@ from tools.chase_3dgs.flying_plan import validate_selection
 def now():return datetime.now(timezone.utc).isoformat()
 
 
+def recorded_terminal(meta):
+    # Failure classification and rental destruction are separate facts.
+    return bool(meta.get('instance_destroyed_at') and meta.get('status') in
+                ('DESTROYED','INFRA_FAILURE','WORKLOAD_FAILURE','ARTIFACT_FAILURE'))
+
+
 def remaining_budget(campaign,chunk):
     if any(a.get('approx_cost_usd') is None for c in campaign['chunks'] for a in c.get('attempts',[])):
         raise RuntimeError('Previous rental cost is unknown;no new paid job launched')
@@ -58,7 +64,7 @@ def terminal_receipt(cli,run_id,log):
     cost=re.search(r'^approx_cost_usd=\$([0-9.]+)$',result.stdout,re.MULTILINE)
     if not path or not cost:raise RuntimeError('Missing canonical terminal receipt')
     metadata_path=Path(path[1]);meta=json.loads(metadata_path.read_text())
-    if meta.get('status')!='DESTROYED' or not meta.get('instance_destroyed_at'):raise RuntimeError('Nonterminal lease state')
+    if not recorded_terminal(meta):raise RuntimeError('Nonterminal lease state')
     return metadata_path,meta,float(cost[1])
 
 
@@ -85,7 +91,7 @@ def run(state_path,resume=False):
                         # Resume a completed existing CLI result without resubmitting.
                         if last.get('run_id') and not last.get('terminal_processed'):
                             recorded=Path(last['metadata_path']) if last.get('metadata_path') else None
-                            if recorded is None or not recorded.exists() or json.loads(recorded.read_text()).get('status')!='DESTROYED':
+                            if recorded is None or not recorded.exists() or not recorded_terminal(json.loads(recorded.read_text())):
                                 raise RuntimeError('Existing canonical run is not recorded destroyed;no duplicate submission or lifecycle polling')
                             metadata_path,meta,cost=terminal_receipt(cli,last['run_id'],log)
                             last.update(metadata_path=str(metadata_path),classification=meta.get('final_classification'),approx_cost_usd=cost,destroyed_verified=True,terminal_processed=True)
@@ -97,7 +103,7 @@ def run(state_path,resume=False):
                         attempt=dict(source_commit=campaign['source_commit'],started_at=now(),budget_usd=budget,staging_root=str(root),terminal_processed=False)
                         chunk.setdefault('attempts',[]).append(attempt);chunk['state']='launching';save()
                         argv=[cli,'run','--project-root',str(root),'--gpu-model','RTX 3090','--min-reliability','0.99','--min-cuda-version','12.4','--preferred-price','0.20','--max-price','0.35','--disk-gb','120','--max-infra-retries','0','--max-cost-usd',str(budget),'--remote-setup-command-file','scripts/flying_export_setup.sh','--sync-path','outputs/flying_cache_return','--command-file','scripts/flying_export_job.sh','--discard-snapshot-after-upload']
-                        for host in (102063,47374,78246,173122):argv+=['--exclude-host-id',str(host)]
+                        for host in sorted({102063,47374,78246,173122,*campaign.get('excluded_host_ids',[])}):argv+=['--exclude-host-id',str(host)]
                         env={**os.environ,'VAST_RUN_PROGRESS_PATH':'outputs/flying_cache_return/progress.json'}
                         process=subprocess.Popen(argv,cwd=root,env=env,stdout=subprocess.PIPE,stderr=subprocess.STDOUT,text=True,bufsize=1)
                         attempt['owner_cli_pid']=process.pid;save()
@@ -116,7 +122,10 @@ def run(state_path,resume=False):
                         metadata_path,meta,cost=terminal_receipt(cli,attempt['run_id'],log)
                         attempt.update(metadata_path=str(metadata_path),classification=meta.get('final_classification'),approx_cost_usd=cost,destroyed_verified=True,terminal_processed=True)
                         chunk['result_dir']=str(Path(meta['outputs_dir'])/'outputs/flying_cache_return');save()
-                    attempt=chunk['attempts'][-1];result=Path(chunk['result_dir']);validate_return(result)
+                    attempt=chunk['attempts'][-1];result=Path(chunk['result_dir'])
+                    # Provisioning can fail before any workload artifact exists.
+                    # Successful workloads still require the full return manifest.
+                    if attempt['classification']=='SUCCESS' or result.exists():validate_return(result)
                     summary_path=result/'chunk_summary.json'
                     summary=json.loads(summary_path.read_text()) if summary_path.exists() else {}
                     if summary and summary['recipe_hash']!=campaign['recipe_hash']:raise RuntimeError('Returned recipe mismatch')

@@ -133,3 +133,9 @@ CPU reviewer checks:strict priority and immutable observed pixels;single-pass
 neighbor fill with no large-hole flood;correct letterbox calibration;frozen split
 composition;codec/latent/manifest corruption rejection;terminal cleanup checks;
 per-chunk and aggregate accounting;public report contains no dataset/private data.
+
+## First chunk and infrastructure recovery
+
+Chunk 1 exported all four scenes and passed every numeric gate in 3 h 56 min, with estimated rental cost $0.9196. Native held-out PSNR was 26.438 (040), 24.844 (006), 30.124 (067), and 25.584 dB (047). Minimum raw lower-band alpha was at least 0.993575. Across the four scenes, mean whole-image holes decreased from 30.87% (single timestamp), to 14.60% (two), 8.38% (three), and 2.54% (after pinhole fill). Filled pixels are inferred colors, not additional observations; rough-view warping and seams remain visible. Native-view PSNR does not establish novel-view geometry correctness.
+
+Chunk 2's first rental timed out during provider startup without running a workload. The runner verified its destruction and estimated cost at $0.0492. The campaign incorrectly required the status label `DESTROYED`, although the runner preserves `INFRA_FAILURE` alongside a destruction timestamp and verified absence. The controller now treats classification and cleanup separately, tests both status cases, and still refuses advance without canonical verified absence. One bounded infrastructure retry excludes the failed host and deducts the failed attempt from the original $2 chunk / $6 aggregate caps. The scientific recipe and completed caches are unchanged.
