@@ -1,0 +1,23 @@
+{
+  "inspected_frames": [
+    12,
+    25,
+    40,
+    55,
+    70
+  ],
+  "inspected_variants": [
+    518,
+    392
+  ],
+  "full_temporal_visual_review_complete": false,
+  "findings": [
+    "Two-timestamp coverage visibly reduces the large lower-center blind region",
+    "Substantial central gap,sparse edges,warped surfaces and seams remain",
+    "Current-projection pixel identity verified exactly;not a general moving-object ghosting guarantee",
+    "GPU-resident processing remains below20fps;JPEG I/O makes this offline loop slower"
+  ],
+  "step2_automatically_approved": false,
+  "step3_approved": false,
+  "decision": "Partial success;publish for visual judgment before any12-scene export. No automatic new GPU attempt."
+}

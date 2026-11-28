@@ -1,0 +1,4865 @@
+{
+  "frames": [
+    {
+      "index": 12,
+      "past_index": 7,
+      "lag_seconds": 0.4998350143432617,
+      "past_depth_cache_hit": true,
+      "camera_load_ms": 152.49239699915051,
+      "input_upload_ms": 0.7054760062601417,
+      "frame_wall_with_file_io_ms": 225.6408040120732,
+      "camera_timestamp_offsets": [
+        0.0,
+        -0.010794878005981445,
+        0.01077890396118164,
+        -0.03134799003601074,
+        0.0312809944152832,
+        0.0499420166015625
+      ],
+      "camera_scales": [
+        1.0,
+        0.6191867589950562,
+        0.649846613407135,
+        0.6357014179229736,
+        0.6078052520751953,
+        0.5106895565986633
+      ],
+      "overlap_edges": [
+        {
+          "a": 0,
+          "b": 1,
+          "samples": 1026
+        },
+        {
+          "a": 0,
+          "b": 2,
+          "samples": 960
+        },
+        {
+          "a": 1,
+          "b": 3,
+          "samples": 2132
+        },
+        {
+          "a": 2,
+          "b": 4,
+          "samples": 2178
+        },
+        {
+          "a": 3,
+          "b": 5,
+          "samples": 206
+        }
+      ],
+      "single": {
+        "whole": 0.3065592050552368,
+        "lower_band": 0.40213125944137573
+      },
+      "two_timestamp": {
+        "whole": 0.14533281326293945,
+        "lower_band": 0.19027501344680786
+      },
+      "newly_filled_fraction": 0.16122640669345856,
+      "live_covered_max_rgb_deviation": 0.0,
+      "preprocess_ms": 0.3184640109539032,
+      "depth_ms": 59.052032470703125,
+      "alignment_ms": 8.103936195373535,
+      "gpu_resident_total_ms": 72.36812591552734,
+      "gpu_resident_wall_ms": 72.39714701427147,
+      "project_current_ms": 2.4487359523773193,
+      "project_past_ms": 2.360032081604004,
+      "composite_ms": 0.07481600344181061
+    },
+    {
+      "index": 13,
+      "past_index": 8,
+      "lag_seconds": 0.49982714653015137,
+      "past_depth_cache_hit": true,
+      "camera_load_ms": 153.5863919998519,
+      "input_upload_ms": 0.7039179909043014,
+      "frame_wall_with_file_io_ms": 226.745280000614,
+      "camera_timestamp_offsets": [
+        0.0,
+        -0.010796070098876953,
+        0.010779857635498047,
+        -0.03135108947753906,
+        0.0312809944152832,
+        0.04993891716003418
+      ],
+      "camera_scales": [
+        1.0,
+        0.6098704934120178,
+        0.6537078022956848,
+        0.6180258989334106,
+        0.6137316226959229,
+        0.5009391903877258
+      ],
+      "overlap_edges": [
+        {
+          "a": 0,
+          "b": 1,
+          "samples": 1027
+        },
+        {
+          "a": 0,
+          "b": 2,
+          "samples": 968
+        },
+        {
+          "a": 1,
+          "b": 3,
+          "samples": 2130
+        },
+        {
+          "a": 2,
+          "b": 4,
+          "samples": 2179
+        },
+        {
+          "a": 3,
+          "b": 5,
+          "samples": 210
+        }
+      ],
+      "single": {
+        "whole": 0.3028320074081421,
+        "lower_band": 0.4013937711715698
+      },
+      "two_timestamp": {
+        "whole": 0.14360344409942627,
+        "lower_band": 0.1943187713623047
+      },
+      "newly_filled_fraction": 0.15922851860523224,
+      "live_covered_max_rgb_deviation": 0.0,
+      "preprocess_ms": 0.3181439936161041,
+      "depth_ms": 59.066368103027344,
+      "alignment_ms": 8.136704444885254,
+      "gpu_resident_total_ms": 72.3759994506836,
+      "gpu_resident_wall_ms": 72.40517501486465,
+      "project_current_ms": 2.4136641025543213,
+      "project_past_ms": 2.357151985168457,
+      "composite_ms": 0.07398399710655212
+    },
+    {
+      "index": 14,
+      "past_index": 9,
+      "lag_seconds": 0.4998328685760498,
+      "past_depth_cache_hit": true,
+      "camera_load_ms": 153.12906299368478,
+      "input_upload_ms": 0.7028100080788136,
+      "frame_wall_with_file_io_ms": 226.52424898114987,
+      "camera_timestamp_offsets": [
+        0.0,
+        -0.010796070098876953,
+        0.010779142379760742,
+        -0.031349897384643555,
+        0.0312809944152832,
+        0.04994010925292969
+      ],
+      "camera_scales": [
+        1.0,
+        0.5969623327255249,
+        0.7015169262886047,
+        0.6050543785095215,
+        0.6625367403030396,
+        0.4470950663089752
+      ],
+      "overlap_edges": [
+        {
+          "a": 0,
+          "b": 1,
+          "samples": 1023
+        },
+        {
+          "a": 0,
+          "b": 2,
+          "samples": 973
+        },
+        {
+          "a": 1,
+          "b": 3,
+          "samples": 2129
+        },
+        {
+          "a": 2,
+          "b": 4,
+          "samples": 2182
+        },
+        {
+          "a": 3,
+          "b": 5,
+          "samples": 206
+        }
+      ],
+      "single": {
+        "whole": 0.2875528335571289,
+        "lower_band": 0.3831562399864197
+      },
+      "two_timestamp": {
+        "whole": 0.13479000329971313,
+        "lower_band": 0.188143789768219
+      },
+      "newly_filled_fraction": 0.15276286005973816,
+      "live_covered_max_rgb_deviation": 0.0,
+      "preprocess_ms": 0.3184640109539032,
+      "depth_ms": 59.14316940307617,
+      "alignment_ms": 8.270848274230957,
+      "gpu_resident_total_ms": 72.6138916015625,
+      "gpu_resident_wall_ms": 72.64365901937708,
+      "project_current_ms": 2.4494080543518066,
+      "project_past_ms": 2.348031997680664,
+      "composite_ms": 0.07388799637556076
+    },
+    {
+      "index": 15,
+      "past_index": 10,
+      "lag_seconds": 0.49983811378479004,
+      "past_depth_cache_hit": true,
+      "camera_load_ms": 154.98397799092345,
+      "input_upload_ms": 0.7065600075293332,
+      "frame_wall_with_file_io_ms": 228.22218600776978,
+      "camera_timestamp_offsets": [
+        0.0,
+        -0.010795116424560547,
+        0.010779857635498047,
+        -0.03135204315185547,
+        0.03128194808959961,
+        0.049939870834350586
+      ],
+      "camera_scales": [
+        1.0,
+        0.5654932856559753,
+        0.7072606682777405,
+        0.5845080018043518,
+        0.6744214296340942,
+        0.39959070086479187
+      ],
+      "overlap_edges": [
+        {
+          "a": 0,
+          "b": 1,
+          "samples": 1020
+        },
+        {
+          "a": 0,
+          "b": 2,
+          "samples": 975
+        },
+        {
+          "a": 1,
+          "b": 3,
+          "samples": 2133
+        },
+        {
+          "a": 2,
+          "b": 4,
+          "samples": 2176
+        },
+        {
+          "a": 3,
+          "b": 5,
+          "samples": 197
+        }
+      ],
+      "single": {
+        "whole": 0.2842569351196289,
+        "lower_band": 0.37290626764297485
+      },
+      "two_timestamp": {
+        "whole": 0.13177484273910522,
+        "lower_band": 0.18389379978179932
+      },
+      "newly_filled_fraction": 0.15248210728168488,
+      "live_covered_max_rgb_deviation": 0.0,
+      "preprocess_ms": 0.32051199674606323,
+      "depth_ms": 59.12575912475586,
+      "alignment_ms": 8.118271827697754,
+      "gpu_resident_total_ms": 72.4510726928711,
+      "gpu_resident_wall_ms": 72.4813359847758,
+      "project_current_ms": 2.4535040855407715,
+      "project_past_ms": 2.3490560054779053,
+      "composite_ms": 0.07372800260782242
+    },
+    {
+      "index": 16,
+      "past_index": 11,
+      "lag_seconds": 0.49984312057495117,
+      "past_depth_cache_hit": true,
+      "camera_load_ms": 155.4833099944517,
+      "input_upload_ms": 0.7076140027493238,
+      "frame_wall_with_file_io_ms": 228.6976239993237,
+      "camera_timestamp_offsets": [
+        0.0,
+        -0.010796070098876953,
+        0.010779857635498047,
+        -0.03134894371032715,
+        0.03128194808959961,
+        0.049942970275878906
+      ],
+      "camera_scales": [
+        1.0,
+        0.5709630846977234,
+        0.6400436162948608,
+        0.6062747836112976,
+        0.634297788143158,
+        0.34806445240974426
+      ],
+      "overlap_edges": [
+        {
+          "a": 0,
+          "b": 1,
+          "samples": 1021
+        },
+        {
+          "a": 0,
+          "b": 2,
+          "samples": 975
+        },
+        {
+          "a": 1,
+          "b": 3,
+          "samples": 2135
+        },
+        {
+          "a": 2,
+          "b": 4,
+          "samples": 2180
+        },
+        {
+          "a": 3,
+          "b": 5,
+          "samples": 195
+        }
+      ],
+      "single": {
+        "whole": 0.2898152470588684,
+        "lower_band": 0.38347500562667847
+      },
+      "two_timestamp": {
+        "whole": 0.13573402166366577,
+        "lower_band": 0.19168126583099365
+      },
+      "newly_filled_fraction": 0.15408122539520264,
+      "live_covered_max_rgb_deviation": 0.0,
+      "preprocess_ms": 0.3164159953594208,
+      "depth_ms": 59.13600158691406,
+      "alignment_ms": 8.09164810180664,
+      "gpu_resident_total_ms": 72.42752075195312,
+      "gpu_resident_wall_ms": 72.45817498187535,
+      "project_current_ms": 2.4401919841766357,
+      "project_past_ms": 2.358272075653076,
+      "composite_ms": 0.07494399696588516
+    },
+    {
+      "index": 17,
+      "past_index": 12,
+      "lag_seconds": 0.4998750686645508,
+      "past_depth_cache_hit": true,
+      "camera_load_ms": 155.37909397971816,
+      "input_upload_ms": 0.6991710106376559,
+      "frame_wall_with_file_io_ms": 228.44137900392525,
+      "camera_timestamp_offsets": [
+        0.0,
+        -0.01079702377319336,
+        0.010782957077026367,
+        -0.031358957290649414,
+        0.03129005432128906,
+        0.049954891204833984
+      ],
+      "camera_scales": [
+        1.0,
+        0.5532375574111938,
+        0.6400812864303589,
+        0.6043139100074768,
+        0.5980505347251892,
+        0.3294951617717743
+      ],
+      "overlap_edges": [
+        {
+          "a": 0,
+          "b": 1,
+          "samples": 1017
+        },
+        {
+          "a": 0,
+          "b": 2,
+          "samples": 973
+        },
+        {
+          "a": 1,
+          "b": 3,
+          "samples": 2138
+        },
+        {
+          "a": 2,
+          "b": 4,
+          "samples": 2186
+        },
+        {
+          "a": 3,
+          "b": 5,
+          "samples": 187
+        }
+      ],
+      "single": {
+        "whole": 0.29726558923721313,
+        "lower_band": 0.38756877183914185
+      },
+      "two_timestamp": {
+        "whole": 0.13939201831817627,
+        "lower_band": 0.19523125886917114
+      },
+      "newly_filled_fraction": 0.15787354111671448,
+      "live_covered_max_rgb_deviation": 0.0,
+      "preprocess_ms": 0.3164159953594208,
+      "depth_ms": 59.015167236328125,
+      "alignment_ms": 8.053759574890137,
+      "gpu_resident_total_ms": 72.28518676757812,
+      "gpu_resident_wall_ms": 72.31437700102106,
+      "project_current_ms": 2.4698879718780518,
+      "project_past_ms": 2.347007989883423,
+      "composite_ms": 0.0729919970035553
+    },
+    {
+      "index": 18,
+      "past_index": 13,
+      "lag_seconds": 0.49990391731262207,
+      "past_depth_cache_hit": true,
+      "camera_load_ms": 154.93110599345528,
+      "input_upload_ms": 0.7122450042515993,
+      "frame_wall_with_file_io_ms": 228.1194640090689,
+      "camera_timestamp_offsets": [
+        0.0,
+        -0.010797977447509766,
+        0.010784149169921875,
+        -0.031362056732177734,
+        0.03129005432128906,
+        0.049952030181884766
+      ],
+      "camera_scales": [
+        1.0,
+        0.5531772971153259,
+        0.6172469258308411,
+        0.5914360880851746,
+        0.586419403553009,
+        0.47590261697769165
+      ],
+      "overlap_edges": [
+        {
+          "a": 0,
+          "b": 1,
+          "samples": 1022
+        },
+        {
+          "a": 0,
+          "b": 2,
+          "samples": 974
+        },
+        {
+          "a": 1,
+          "b": 3,
+          "samples": 2139
+        },
+        {
+          "a": 2,
+          "b": 4,
+          "samples": 2184
+        },
+        {
+          "a": 3,
+          "b": 5,
+          "samples": 187
+        }
+      ],
+      "single": {
+        "whole": 0.29674071073532104,
+        "lower_band": 0.3804374933242798
+      },
+      "two_timestamp": {
+        "whole": 0.14239907264709473,
+        "lower_band": 0.19133126735687256
+      },
+      "newly_filled_fraction": 0.15434163808822632,
+      "live_covered_max_rgb_deviation": 0.0,
+      "preprocess_ms": 0.317440003156662,
+      "depth_ms": 59.096065521240234,
+      "alignment_ms": 8.086527824401855,
+      "gpu_resident_total_ms": 72.3957748413086,
+      "gpu_resident_wall_ms": 72.42593300179578,
+      "project_current_ms": 2.448575973510742,
+      "project_past_ms": 2.3632960319519043,
+      "composite_ms": 0.07398399710655212
+    },
+    {
+      "index": 19,
+      "past_index": 14,
+      "lag_seconds": 0.499920129776001,
+      "past_depth_cache_hit": true,
+      "camera_load_ms": 156.32208599708974,
+      "input_upload_ms": 0.7038970070425421,
+      "frame_wall_with_file_io_ms": 229.52404100215062,
+      "camera_timestamp_offsets": [
+        0.0,
+        -0.010795116424560547,
+        0.01077890396118164,
+        -0.031350135803222656,
+        0.03127694129943848,
+        0.04993081092834473
+      ],
+      "camera_scales": [
+        1.0,
+        0.537929117679596,
+        0.6200953722000122,
+        0.5869609713554382,
+        0.6427753567695618,
+        0.44503340125083923
+      ],
+      "overlap_edges": [
+        {
+          "a": 0,
+          "b": 1,
+          "samples": 1023
+        },
+        {
+          "a": 0,
+          "b": 2,
+          "samples": 974
+        },
+        {
+          "a": 1,
+          "b": 3,
+          "samples": 2142
+        },
+        {
+          "a": 2,
+          "b": 4,
+          "samples": 2184
+        },
+        {
+          "a": 3,
+          "b": 5,
+          "samples": 190
+        }
+      ],
+      "single": {
+        "whole": 0.30491942167282104,
+        "lower_band": 0.38430625200271606
+      },
+      "two_timestamp": {
+        "whole": 0.14463293552398682,
+        "lower_band": 0.19050002098083496
+      },
+      "newly_filled_fraction": 0.16028647124767303,
+      "live_covered_max_rgb_deviation": 0.0,
+      "preprocess_ms": 0.3184320032596588,
+      "depth_ms": 59.14521789550781,
+      "alignment_ms": 8.09887981414795,
+      "gpu_resident_total_ms": 72.41964721679688,
+      "gpu_resident_wall_ms": 72.44914100738242,
+      "project_current_ms": 2.4165759086608887,
+      "project_past_ms": 2.3576319217681885,
+      "composite_ms": 0.07344000041484833
+    },
+    {
+      "index": 20,
+      "past_index": 15,
+      "lag_seconds": 0.4998948574066162,
+      "past_depth_cache_hit": true,
+      "camera_load_ms": 155.26448201853782,
+      "input_upload_ms": 0.7062889926601201,
+      "frame_wall_with_file_io_ms": 228.4817780018784,
+      "camera_timestamp_offsets": [
+        0.0,
+        -0.010792016983032227,
+        0.010776996612548828,
+        -0.0313410758972168,
+        0.03127408027648926,
+        0.04993009567260742
+      ],
+      "camera_scales": [
+        1.0,
+        0.5498267412185669,
+        0.5604493021965027,
+        0.5945395827293396,
+        0.5636134743690491,
+        0.47322186827659607
+      ],
+      "overlap_edges": [
+        {
+          "a": 0,
+          "b": 1,
+          "samples": 1025
+        },
+        {
+          "a": 0,
+          "b": 2,
+          "samples": 977
+        },
+        {
+          "a": 1,
+          "b": 3,
+          "samples": 2148
+        },
+        {
+          "a": 2,
+          "b": 4,
+          "samples": 2186
+        },
+        {
+          "a": 3,
+          "b": 5,
+          "samples": 194
+        }
+      ],
+      "single": {
+        "whole": 0.31325680017471313,
+        "lower_band": 0.40025001764297485
+      },
+      "two_timestamp": {
+        "whole": 0.15241694450378418,
+        "lower_band": 0.19946879148483276
+      },
+      "newly_filled_fraction": 0.16083985567092896,
+      "live_covered_max_rgb_deviation": 0.0,
+      "preprocess_ms": 0.317440003156662,
+      "depth_ms": 59.112449645996094,
+      "alignment_ms": 8.130559921264648,
+      "gpu_resident_total_ms": 72.43366241455078,
+      "gpu_resident_wall_ms": 72.46249300078489,
+      "project_current_ms": 2.426208019256592,
+      "project_past_ms": 2.363039970397949,
+      "composite_ms": 0.07391999661922455
+    },
+    {
+      "index": 21,
+      "past_index": 16,
+      "lag_seconds": 0.49988293647766113,
+      "past_depth_cache_hit": true,
+      "camera_load_ms": 160.52753399708308,
+      "input_upload_ms": 0.7044500089250505,
+      "frame_wall_with_file_io_ms": 233.91202100901864,
+      "camera_timestamp_offsets": [
+        0.0,
+        -0.010793924331665039,
+        0.010779142379760742,
+        -0.031347036361694336,
+        0.03127694129943848,
+        0.04993295669555664
+      ],
+      "camera_scales": [
+        1.0,
+        0.5514422059059143,
+        0.5856145024299622,
+        0.5926374793052673,
+        0.5794528126716614,
+        0.4101504385471344
+      ],
+      "overlap_edges": [
+        {
+          "a": 0,
+          "b": 1,
+          "samples": 1035
+        },
+        {
+          "a": 0,
+          "b": 2,
+          "samples": 977
+        },
+        {
+          "a": 1,
+          "b": 3,
+          "samples": 2149
+        },
+        {
+          "a": 2,
+          "b": 4,
+          "samples": 2181
+        },
+        {
+          "a": 3,
+          "b": 5,
+          "samples": 193
+        }
+      ],
+      "single": {
+        "whole": 0.2991088628768921,
+        "lower_band": 0.37726879119873047
+      },
+      "two_timestamp": {
+        "whole": 0.1447509527206421,
+        "lower_band": 0.18280625343322754
+      },
+      "newly_filled_fraction": 0.1543579250574112,
+      "live_covered_max_rgb_deviation": 0.0,
+      "preprocess_ms": 0.317440003156662,
+      "depth_ms": 59.203582763671875,
+      "alignment_ms": 8.136832237243652,
+      "gpu_resident_total_ms": 72.59564971923828,
+      "gpu_resident_wall_ms": 72.63008301379159,
+      "project_current_ms": 2.448256015777588,
+      "project_past_ms": 2.4043519496917725,
+      "composite_ms": 0.07577600330114365
+    },
+    {
+      "index": 22,
+      "past_index": 17,
+      "lag_seconds": 0.49985694885253906,
+      "past_depth_cache_hit": true,
+      "camera_load_ms": 156.09071997459978,
+      "input_upload_ms": 0.7101209776010364,
+      "frame_wall_with_file_io_ms": 230.73655797634274,
+      "camera_timestamp_offsets": [
+        0.0,
+        -0.010795116424560547,
+        0.01077890396118164,
+        -0.03134799003601074,
+        0.0312800407409668,
+        0.04993891716003418
+      ],
+      "camera_scales": [
+        1.0,
+        0.5835959911346436,
+        0.5683702230453491,
+        0.6118835210800171,
+        0.6006038784980774,
+        0.42597246170043945
+      ],
+      "overlap_edges": [
+        {
+          "a": 0,
+          "b": 1,
+          "samples": 1038
+        },
+        {
+          "a": 0,
+          "b": 2,
+          "samples": 977
+        },
+        {
+          "a": 1,
+          "b": 3,
+          "samples": 2131
+        },
+        {
+          "a": 2,
+          "b": 4,
+          "samples": 2189
+        },
+        {
+          "a": 3,
+          "b": 5,
+          "samples": 202
+        }
+      ],
+      "single": {
+        "whole": 0.29053544998168945,
+        "lower_band": 0.37043750286102295
+      },
+      "two_timestamp": {
+        "whole": 0.1367390751838684,
+        "lower_band": 0.17158126831054688
+      },
+      "newly_filled_fraction": 0.15379638969898224,
+      "live_covered_max_rgb_deviation": 0.0,
+      "preprocess_ms": 0.3184320032596588,
+      "depth_ms": 59.15647888183594,
+      "alignment_ms": 9.161727905273438,
+      "gpu_resident_total_ms": 73.85187530517578,
+      "gpu_resident_wall_ms": 73.88637599069625,
+      "project_current_ms": 2.598912000656128,
+      "project_past_ms": 2.5232319831848145,
+      "composite_ms": 0.08284799754619598
+    },
+    {
+      "index": 23,
+      "past_index": 18,
+      "lag_seconds": 0.4998281002044678,
+      "past_depth_cache_hit": true,
+      "camera_load_ms": 164.10113897291012,
+      "input_upload_ms": 0.7153819897212088,
+      "frame_wall_with_file_io_ms": 237.82270797528327,
+      "camera_timestamp_offsets": [
+        0.0,
+        -0.010796070098876953,
+        0.010782957077026367,
+        -0.031352996826171875,
+        0.031286001205444336,
+        0.049945831298828125
+      ],
+      "camera_scales": [
+        1.0,
+        0.5500138401985168,
+        0.5562087297439575,
+        0.5978718996047974,
+        0.5782604217529297,
+        0.37852537631988525
+      ],
+      "overlap_edges": [
+        {
+          "a": 0,
+          "b": 1,
+          "samples": 1034
+        },
+        {
+          "a": 0,
+          "b": 2,
+          "samples": 977
+        },
+        {
+          "a": 1,
+          "b": 3,
+          "samples": 2142
+        },
+        {
+          "a": 2,
+          "b": 4,
+          "samples": 2201
+        },
+        {
+          "a": 3,
+          "b": 5,
+          "samples": 202
+        }
+      ],
+      "single": {
+        "whole": 0.2815755009651184,
+        "lower_band": 0.36525624990463257
+      },
+      "two_timestamp": {
+        "whole": 0.13314205408096313,
+        "lower_band": 0.16946876049041748
+      },
+      "newly_filled_fraction": 0.14843343198299408,
+      "live_covered_max_rgb_deviation": 0.0,
+      "preprocess_ms": 0.3222399950027466,
+      "depth_ms": 59.15340805053711,
+      "alignment_ms": 8.553471565246582,
+      "gpu_resident_total_ms": 72.92208099365234,
+      "gpu_resident_wall_ms": 72.9551250115037,
+      "project_current_ms": 2.4557440280914307,
+      "project_past_ms": 2.3539841175079346,
+      "composite_ms": 0.07372800260782242
+    },
+    {
+      "index": 24,
+      "past_index": 19,
+      "lag_seconds": 0.4998199939727783,
+      "past_depth_cache_hit": true,
+      "camera_load_ms": 155.92041198397055,
+      "input_upload_ms": 0.7490380085073411,
+      "frame_wall_with_file_io_ms": 229.20858400175348,
+      "camera_timestamp_offsets": [
+        0.0,
+        -0.010795116424560547,
+        0.010779857635498047,
+        -0.03134918212890625,
+        0.0312809944152832,
+        0.04993891716003418
+      ],
+      "camera_scales": [
+        1.0,
+        0.5252087712287903,
+        0.5653890371322632,
+        0.5886240601539612,
+        0.5710886120796204,
+        0.35784751176834106
+      ],
+      "overlap_edges": [
+        {
+          "a": 0,
+          "b": 1,
+          "samples": 1034
+        },
+        {
+          "a": 0,
+          "b": 2,
+          "samples": 977
+        },
+        {
+          "a": 1,
+          "b": 3,
+          "samples": 2142
+        },
+        {
+          "a": 2,
+          "b": 4,
+          "samples": 2202
+        },
+        {
+          "a": 3,
+          "b": 5,
+          "samples": 192
+        }
+      ],
+      "single": {
+        "whole": 0.27529698610305786,
+        "lower_band": 0.3524875044822693
+      },
+      "two_timestamp": {
+        "whole": 0.12664788961410522,
+        "lower_band": 0.16255003213882446
+      },
+      "newly_filled_fraction": 0.14864909648895264,
+      "live_covered_max_rgb_deviation": 0.0,
+      "preprocess_ms": 0.34508800506591797,
+      "depth_ms": 59.08992004394531,
+      "alignment_ms": 8.141823768615723,
+      "gpu_resident_total_ms": 72.44518280029297,
+      "gpu_resident_wall_ms": 72.48027497553267,
+      "project_current_ms": 2.4456639289855957,
+      "project_past_ms": 2.3396799564361572,
+      "composite_ms": 0.07379200309515
+    },
+    {
+      "index": 25,
+      "past_index": 20,
+      "lag_seconds": 0.49984192848205566,
+      "past_depth_cache_hit": true,
+      "camera_load_ms": 156.53186501003802,
+      "input_upload_ms": 0.7033489819150418,
+      "frame_wall_with_file_io_ms": 229.89029600284994,
+      "camera_timestamp_offsets": [
+        0.0,
+        -0.010793924331665039,
+        0.010780096054077148,
+        -0.031349897384643555,
+        0.03128218650817871,
+        0.04994010925292969
+      ],
+      "camera_scales": [
+        1.0,
+        0.5174328088760376,
+        0.6076958179473877,
+        0.5782101154327393,
+        0.6508594155311584,
+        0.3538929224014282
+      ],
+      "overlap_edges": [
+        {
+          "a": 0,
+          "b": 1,
+          "samples": 1037
+        },
+        {
+          "a": 0,
+          "b": 2,
+          "samples": 978
+        },
+        {
+          "a": 1,
+          "b": 3,
+          "samples": 2140
+        },
+        {
+          "a": 2,
+          "b": 4,
+          "samples": 2201
+        },
+        {
+          "a": 3,
+          "b": 5,
+          "samples": 189
+        }
+      ],
+      "single": {
+        "whole": 0.28500568866729736,
+        "lower_band": 0.3601187467575073
+      },
+      "two_timestamp": {
+        "whole": 0.1287434697151184,
+        "lower_band": 0.1650937795639038
+      },
+      "newly_filled_fraction": 0.15626221895217896,
+      "live_covered_max_rgb_deviation": 0.0,
+      "preprocess_ms": 0.3184640109539032,
+      "depth_ms": 59.13292694091797,
+      "alignment_ms": 8.238080024719238,
+      "gpu_resident_total_ms": 72.57292938232422,
+      "gpu_resident_wall_ms": 72.60543701704592,
+      "project_current_ms": 2.449568033218384,
+      "project_past_ms": 2.35097599029541,
+      "composite_ms": 0.07369600236415863
+    },
+    {
+      "index": 26,
+      "past_index": 21,
+      "lag_seconds": 0.49985599517822266,
+      "past_depth_cache_hit": true,
+      "camera_load_ms": 155.76634200988337,
+      "input_upload_ms": 0.713822984835133,
+      "frame_wall_with_file_io_ms": 229.12908598664217,
+      "camera_timestamp_offsets": [
+        0.0,
+        -0.010793924331665039,
+        0.010781049728393555,
+        -0.031349897384643555,
+        0.0312800407409668,
+        0.04993915557861328
+      ],
+      "camera_scales": [
+        1.0,
+        0.5207650661468506,
+        0.5736399292945862,
+        0.6053891777992249,
+        0.6176184415817261,
+        0.40342363715171814
+      ],
+      "overlap_edges": [
+        {
+          "a": 0,
+          "b": 1,
+          "samples": 1042
+        },
+        {
+          "a": 0,
+          "b": 2,
+          "samples": 981
+        },
+        {
+          "a": 1,
+          "b": 3,
+          "samples": 2149
+        },
+        {
+          "a": 2,
+          "b": 4,
+          "samples": 2202
+        },
+        {
+          "a": 3,
+          "b": 5,
+          "samples": 192
+        }
+      ],
+      "single": {
+        "whole": 0.2854735851287842,
+        "lower_band": 0.3567187786102295
+      },
+      "two_timestamp": {
+        "whole": 0.1288655400276184,
+        "lower_band": 0.1652500033378601
+      },
+      "newly_filled_fraction": 0.15660807490348816,
+      "live_covered_max_rgb_deviation": 0.0,
+      "preprocess_ms": 0.317440003156662,
+      "depth_ms": 59.14112091064453,
+      "alignment_ms": 8.248319625854492,
+      "gpu_resident_total_ms": 72.56687927246094,
+      "gpu_resident_wall_ms": 72.59970100130886,
+      "project_current_ms": 2.4268798828125,
+      "project_past_ms": 2.3480958938598633,
+      "composite_ms": 0.07571200281381607
+    },
+    {
+      "index": 27,
+      "past_index": 22,
+      "lag_seconds": 0.49986910820007324,
+      "past_depth_cache_hit": true,
+      "camera_load_ms": 158.84926199214533,
+      "input_upload_ms": 0.7123159884940833,
+      "frame_wall_with_file_io_ms": 231.98015100206248,
+      "camera_timestamp_offsets": [
+        0.0,
+        -0.010796070098876953,
+        0.010780811309814453,
+        -0.031352996826171875,
+        0.031286001205444336,
+        0.04994797706604004
+      ],
+      "camera_scales": [
+        1.0,
+        0.5023309588432312,
+        0.635676383972168,
+        0.5971226692199707,
+        0.6532078385353088,
+        0.36379045248031616
+      ],
+      "overlap_edges": [
+        {
+          "a": 0,
+          "b": 1,
+          "samples": 1046
+        },
+        {
+          "a": 0,
+          "b": 2,
+          "samples": 980
+        },
+        {
+          "a": 1,
+          "b": 3,
+          "samples": 2147
+        },
+        {
+          "a": 2,
+          "b": 4,
+          "samples": 2203
+        },
+        {
+          "a": 3,
+          "b": 5,
+          "samples": 199
+        }
+      ],
+      "single": {
+        "whole": 0.2868245244026184,
+        "lower_band": 0.35725629329681396
+      },
+      "two_timestamp": {
+        "whole": 0.1290649175643921,
+        "lower_band": 0.16655629873275757
+      },
+      "newly_filled_fraction": 0.15775960683822632,
+      "live_covered_max_rgb_deviation": 0.0,
+      "preprocess_ms": 0.317440003156662,
+      "depth_ms": 59.07455825805664,
+      "alignment_ms": 8.079392433166504,
+      "gpu_resident_total_ms": 72.33878326416016,
+      "gpu_resident_wall_ms": 72.36836600350216,
+      "project_current_ms": 2.4260799884796143,
+      "project_past_ms": 2.358016014099121,
+      "composite_ms": 0.07372800260782242
+    },
+    {
+      "index": 28,
+      "past_index": 23,
+      "lag_seconds": 0.49987292289733887,
+      "past_depth_cache_hit": true,
+      "camera_load_ms": 153.7245149957016,
+      "input_upload_ms": 0.7138049986679107,
+      "frame_wall_with_file_io_ms": 227.02553999261,
+      "camera_timestamp_offsets": [
+        0.0,
+        -0.010796070098876953,
+        0.010782003402709961,
+        -0.031349897384643555,
+        0.03128194808959961,
+        0.049941062927246094
+      ],
+      "camera_scales": [
+        1.0,
+        0.47438865900039673,
+        0.6181497573852539,
+        0.5456170439720154,
+        0.6288984417915344,
+        0.37073665857315063
+      ],
+      "overlap_edges": [
+        {
+          "a": 0,
+          "b": 1,
+          "samples": 1042
+        },
+        {
+          "a": 0,
+          "b": 2,
+          "samples": 981
+        },
+        {
+          "a": 1,
+          "b": 3,
+          "samples": 2145
+        },
+        {
+          "a": 2,
+          "b": 4,
+          "samples": 2202
+        },
+        {
+          "a": 3,
+          "b": 5,
+          "samples": 206
+        }
+      ],
+      "single": {
+        "whole": 0.2822224497795105,
+        "lower_band": 0.35215628147125244
+      },
+      "two_timestamp": {
+        "whole": 0.12665605545043945,
+        "lower_band": 0.16426879167556763
+      },
+      "newly_filled_fraction": 0.15556640923023224,
+      "live_covered_max_rgb_deviation": 0.0,
+      "preprocess_ms": 0.317440003156662,
+      "depth_ms": 59.1278076171875,
+      "alignment_ms": 8.19916820526123,
+      "gpu_resident_total_ms": 72.50431823730469,
+      "gpu_resident_wall_ms": 72.53597001545131,
+      "project_current_ms": 2.427903890609741,
+      "project_past_ms": 2.3419198989868164,
+      "composite_ms": 0.08019199967384338
+    },
+    {
+      "index": 29,
+      "past_index": 24,
+      "lag_seconds": 0.49986982345581055,
+      "past_depth_cache_hit": true,
+      "camera_load_ms": 154.08181998645887,
+      "input_upload_ms": 0.7147809956222773,
+      "frame_wall_with_file_io_ms": 227.34970098827034,
+      "camera_timestamp_offsets": [
+        0.0,
+        -0.01079702377319336,
+        0.010780096054077148,
+        -0.03135085105895996,
+        0.03128218650817871,
+        0.04994010925292969
+      ],
+      "camera_scales": [
+        1.0,
+        0.48252981901168823,
+        0.6346539258956909,
+        0.5609363317489624,
+        0.6514350175857544,
+        0.3738439381122589
+      ],
+      "overlap_edges": [
+        {
+          "a": 0,
+          "b": 1,
+          "samples": 1049
+        },
+        {
+          "a": 0,
+          "b": 2,
+          "samples": 981
+        },
+        {
+          "a": 1,
+          "b": 3,
+          "samples": 2147
+        },
+        {
+          "a": 2,
+          "b": 4,
+          "samples": 2202
+        },
+        {
+          "a": 3,
+          "b": 5,
+          "samples": 205
+        }
+      ],
+      "single": {
+        "whole": 0.2869994640350342,
+        "lower_band": 0.3617062568664551
+      },
+      "two_timestamp": {
+        "whole": 0.13124996423721313,
+        "lower_band": 0.1696312427520752
+      },
+      "newly_filled_fraction": 0.15574951469898224,
+      "live_covered_max_rgb_deviation": 0.0,
+      "preprocess_ms": 0.3164159953594208,
+      "depth_ms": 59.14009475708008,
+      "alignment_ms": 8.066047668457031,
+      "gpu_resident_total_ms": 72.47273254394531,
+      "gpu_resident_wall_ms": 72.50526899588294,
+      "project_current_ms": 2.4872961044311523,
+      "project_past_ms": 2.3797760009765625,
+      "composite_ms": 0.07388799637556076
+    },
+    {
+      "index": 30,
+      "past_index": 25,
+      "lag_seconds": 0.49987220764160156,
+      "past_depth_cache_hit": true,
+      "camera_load_ms": 154.86710000550374,
+      "input_upload_ms": 0.7124529802240431,
+      "frame_wall_with_file_io_ms": 228.04695600643754,
+      "camera_timestamp_offsets": [
+        0.0,
+        -0.010795116424560547,
+        0.010782003402709961,
+        -0.03135108947753906,
+        0.031286001205444336,
+        0.04994797706604004
+      ],
+      "camera_scales": [
+        1.0,
+        0.5001510381698608,
+        0.6145206093788147,
+        0.5909429788589478,
+        0.6315147280693054,
+        0.3860185444355011
+      ],
+      "overlap_edges": [
+        {
+          "a": 0,
+          "b": 1,
+          "samples": 1048
+        },
+        {
+          "a": 0,
+          "b": 2,
+          "samples": 981
+        },
+        {
+          "a": 1,
+          "b": 3,
+          "samples": 2145
+        },
+        {
+          "a": 2,
+          "b": 4,
+          "samples": 2201
+        },
+        {
+          "a": 3,
+          "b": 5,
+          "samples": 206
+        }
+      ],
+      "single": {
+        "whole": 0.2851073741912842,
+        "lower_band": 0.36730629205703735
+      },
+      "two_timestamp": {
+        "whole": 0.13295894861221313,
+        "lower_band": 0.17427504062652588
+      },
+      "newly_filled_fraction": 0.15214844048023224,
+      "live_covered_max_rgb_deviation": 0.0,
+      "preprocess_ms": 0.3184320032596588,
+      "depth_ms": 59.125728607177734,
+      "alignment_ms": 8.074048042297363,
+      "gpu_resident_total_ms": 72.3875503540039,
+      "gpu_resident_wall_ms": 72.4173650087323,
+      "project_current_ms": 2.4445440769195557,
+      "project_past_ms": 2.3416318893432617,
+      "composite_ms": 0.07382400333881378
+    },
+    {
+      "index": 31,
+      "past_index": 26,
+      "lag_seconds": 0.4998910427093506,
+      "past_depth_cache_hit": true,
+      "camera_load_ms": 153.72206599568017,
+      "input_upload_ms": 0.7125849951989949,
+      "frame_wall_with_file_io_ms": 226.9380009965971,
+      "camera_timestamp_offsets": [
+        0.0,
+        -0.010797977447509766,
+        0.010782003402709961,
+        -0.0313570499420166,
+        0.031286001205444336,
+        0.04994797706604004
+      ],
+      "camera_scales": [
+        1.0,
+        0.5081539154052734,
+        0.6270415186882019,
+        0.5891278386116028,
+        0.6305741667747498,
+        0.37732890248298645
+      ],
+      "overlap_edges": [
+        {
+          "a": 0,
+          "b": 1,
+          "samples": 1045
+        },
+        {
+          "a": 0,
+          "b": 2,
+          "samples": 983
+        },
+        {
+          "a": 1,
+          "b": 3,
+          "samples": 2145
+        },
+        {
+          "a": 2,
+          "b": 4,
+          "samples": 2201
+        },
+        {
+          "a": 3,
+          "b": 5,
+          "samples": 204
+        }
+      ],
+      "single": {
+        "whole": 0.2823526859283447,
+        "lower_band": 0.3648812770843506
+      },
+      "two_timestamp": {
+        "whole": 0.1311401128768921,
+        "lower_band": 0.17160004377365112
+      },
+      "newly_filled_fraction": 0.15121257305145264,
+      "live_covered_max_rgb_deviation": 0.0,
+      "preprocess_ms": 0.3192639946937561,
+      "depth_ms": 59.216896057128906,
+      "alignment_ms": 8.039423942565918,
+      "gpu_resident_total_ms": 72.42422485351562,
+      "gpu_resident_wall_ms": 72.45384200359695,
+      "project_current_ms": 2.4138879776000977,
+      "project_past_ms": 2.351072072982788,
+      "composite_ms": 0.07446400076150894
+    },
+    {
+      "index": 32,
+      "past_index": 27,
+      "lag_seconds": 0.4999058246612549,
+      "past_depth_cache_hit": true,
+      "camera_load_ms": 154.23892199760303,
+      "input_upload_ms": 0.7171329925768077,
+      "frame_wall_with_file_io_ms": 227.2012599860318,
+      "camera_timestamp_offsets": [
+        0.0,
+        -0.010797977447509766,
+        0.010782957077026367,
+        -0.0313570499420166,
+        0.031291961669921875,
+        0.049957990646362305
+      ],
+      "camera_scales": [
+        1.0,
+        0.4948737621307373,
+        0.5856990814208984,
+        0.5569677352905273,
+        0.5952770709991455,
+        0.38363516330718994
+      ],
+      "overlap_edges": [
+        {
+          "a": 0,
+          "b": 1,
+          "samples": 1039
+        },
+        {
+          "a": 0,
+          "b": 2,
+          "samples": 985
+        },
+        {
+          "a": 1,
+          "b": 3,
+          "samples": 2152
+        },
+        {
+          "a": 2,
+          "b": 4,
+          "samples": 2201
+        },
+        {
+          "a": 3,
+          "b": 5,
+          "samples": 208
+        }
+      ],
+      "single": {
+        "whole": 0.28058671951293945,
+        "lower_band": 0.36484378576278687
+      },
+      "two_timestamp": {
+        "whole": 0.13260900974273682,
+        "lower_band": 0.17278754711151123
+      },
+      "newly_filled_fraction": 0.14797770977020264,
+      "live_covered_max_rgb_deviation": 0.0,
+      "preprocess_ms": 0.3164159953594208,
+      "depth_ms": 59.05100631713867,
+      "alignment_ms": 7.932928085327148,
+      "gpu_resident_total_ms": 72.16742706298828,
+      "gpu_resident_wall_ms": 72.19680299749598,
+      "project_current_ms": 2.441215991973877,
+      "project_past_ms": 2.3440639972686768,
+      "composite_ms": 0.07257600128650665
+    },
+    {
+      "index": 33,
+      "past_index": 28,
+      "lag_seconds": 0.4999370574951172,
+      "past_depth_cache_hit": true,
+      "camera_load_ms": 152.81586899072863,
+      "input_upload_ms": 0.7143040129449219,
+      "frame_wall_with_file_io_ms": 225.83264199784026,
+      "camera_timestamp_offsets": [
+        0.0,
+        -0.010801076889038086,
+        0.010783910751342773,
+        -0.03136301040649414,
+        0.0312960147857666,
+        0.04996299743652344
+      ],
+      "camera_scales": [
+        1.0,
+        0.5220004320144653,
+        0.5811574459075928,
+        0.606871485710144,
+        0.5794875621795654,
+        0.43965455889701843
+      ],
+      "overlap_edges": [
+        {
+          "a": 0,
+          "b": 1,
+          "samples": 1039
+        },
+        {
+          "a": 0,
+          "b": 2,
+          "samples": 986
+        },
+        {
+          "a": 1,
+          "b": 3,
+          "samples": 2155
+        },
+        {
+          "a": 2,
+          "b": 4,
+          "samples": 2201
+        },
+        {
+          "a": 3,
+          "b": 5,
+          "samples": 208
+        }
+      ],
+      "single": {
+        "whole": 0.2800333499908447,
+        "lower_band": 0.37113749980926514
+      },
+      "two_timestamp": {
+        "whole": 0.13011062145233154,
+        "lower_band": 0.17582499980926514
+      },
+      "newly_filled_fraction": 0.1499226987361908,
+      "live_covered_max_rgb_deviation": 0.0,
+      "preprocess_ms": 0.31539198756217957,
+      "depth_ms": 59.054080963134766,
+      "alignment_ms": 7.997439861297607,
+      "gpu_resident_total_ms": 72.22281646728516,
+      "gpu_resident_wall_ms": 72.25439100875519,
+      "project_current_ms": 2.4197120666503906,
+      "project_past_ms": 2.3541760444641113,
+      "composite_ms": 0.0727040022611618
+    },
+    {
+      "index": 34,
+      "past_index": 29,
+      "lag_seconds": 0.49997806549072266,
+      "past_depth_cache_hit": true,
+      "camera_load_ms": 151.86045499285683,
+      "input_upload_ms": 0.7085010001901537,
+      "frame_wall_with_file_io_ms": 224.81919100391679,
+      "camera_timestamp_offsets": [
+        0.0,
+        -0.010797977447509766,
+        0.010786056518554688,
+        -0.031362056732177734,
+        0.0312960147857666,
+        0.049963951110839844
+      ],
+      "camera_scales": [
+        1.0,
+        0.5208967328071594,
+        0.5819539427757263,
+        0.5779884457588196,
+        0.5865588188171387,
+        0.4113287031650543
+      ],
+      "overlap_edges": [
+        {
+          "a": 0,
+          "b": 1,
+          "samples": 1038
+        },
+        {
+          "a": 0,
+          "b": 2,
+          "samples": 986
+        },
+        {
+          "a": 1,
+          "b": 3,
+          "samples": 2160
+        },
+        {
+          "a": 2,
+          "b": 4,
+          "samples": 2201
+        },
+        {
+          "a": 3,
+          "b": 5,
+          "samples": 205
+        }
+      ],
+      "single": {
+        "whole": 0.28640949726104736,
+        "lower_band": 0.3713812828063965
+      },
+      "two_timestamp": {
+        "whole": 0.13314610719680786,
+        "lower_band": 0.17733126878738403
+      },
+      "newly_filled_fraction": 0.15326336026191711,
+      "live_covered_max_rgb_deviation": 0.0,
+      "preprocess_ms": 0.3164159953594208,
+      "depth_ms": 59.075584411621094,
+      "alignment_ms": 7.944191932678223,
+      "gpu_resident_total_ms": 72.17356872558594,
+      "gpu_resident_wall_ms": 72.20259797759354,
+      "project_current_ms": 2.417664051055908,
+      "project_past_ms": 2.3380799293518066,
+      "composite_ms": 0.07241600006818771
+    },
+    {
+      "index": 35,
+      "past_index": 30,
+      "lag_seconds": 0.500032901763916,
+      "past_depth_cache_hit": true,
+      "camera_load_ms": 150.84607701282948,
+      "input_upload_ms": 0.7148289878387004,
+      "frame_wall_with_file_io_ms": 223.79261802416295,
+      "camera_timestamp_offsets": [
+        0.0,
+        -0.010802030563354492,
+        0.0107879638671875,
+        -0.031371116638183594,
+        0.03130388259887695,
+        0.049974918365478516
+      ],
+      "camera_scales": [
+        1.0,
+        0.5523290634155273,
+        0.5510507225990295,
+        0.5887612104415894,
+        0.5722591280937195,
+        0.46448248624801636
+      ],
+      "overlap_edges": [
+        {
+          "a": 0,
+          "b": 1,
+          "samples": 1043
+        },
+        {
+          "a": 0,
+          "b": 2,
+          "samples": 987
+        },
+        {
+          "a": 1,
+          "b": 3,
+          "samples": 2161
+        },
+        {
+          "a": 2,
+          "b": 4,
+          "samples": 2201
+        },
+        {
+          "a": 3,
+          "b": 5,
+          "samples": 203
+        }
+      ],
+      "single": {
+        "whole": 0.2874552011489868,
+        "lower_band": 0.3709750175476074
+      },
+      "two_timestamp": {
+        "whole": 0.13214516639709473,
+        "lower_band": 0.17771250009536743
+      },
+      "newly_filled_fraction": 0.15531006455421448,
+      "live_covered_max_rgb_deviation": 0.0,
+      "preprocess_ms": 0.31721600890159607,
+      "depth_ms": 59.06022262573242,
+      "alignment_ms": 7.957503795623779,
+      "gpu_resident_total_ms": 72.15593719482422,
+      "gpu_resident_wall_ms": 72.18514799023978,
+      "project_current_ms": 2.4094719886779785,
+      "project_past_ms": 2.3306241035461426,
+      "composite_ms": 0.07168000191450119
+    },
+    {
+      "index": 36,
+      "past_index": 31,
+      "lag_seconds": 0.5000829696655273,
+      "past_depth_cache_hit": true,
+      "camera_load_ms": 150.70050800568424,
+      "input_upload_ms": 0.7023250218480825,
+      "frame_wall_with_file_io_ms": 223.84771099314094,
+      "camera_timestamp_offsets": [
+        0.0,
+        -0.010802984237670898,
+        0.0107879638671875,
+        -0.03137087821960449,
+        0.03130602836608887,
+        0.049978017807006836
+      ],
+      "camera_scales": [
+        1.0,
+        0.5467599034309387,
+        0.5487797260284424,
+        0.6051514744758606,
+        0.5875486731529236,
+        0.49687331914901733
+      ],
+      "overlap_edges": [
+        {
+          "a": 0,
+          "b": 1,
+          "samples": 1041
+        },
+        {
+          "a": 0,
+          "b": 2,
+          "samples": 987
+        },
+        {
+          "a": 1,
+          "b": 3,
+          "samples": 2160
+        },
+        {
+          "a": 2,
+          "b": 4,
+          "samples": 2200
+        },
+        {
+          "a": 3,
+          "b": 5,
+          "samples": 204
+        }
+      ],
+      "single": {
+        "whole": 0.28793537616729736,
+        "lower_band": 0.36733126640319824
+      },
+      "two_timestamp": {
+        "whole": 0.1322224736213684,
+        "lower_band": 0.17788130044937134
+      },
+      "newly_filled_fraction": 0.15571290254592896,
+      "live_covered_max_rgb_deviation": 0.0,
+      "preprocess_ms": 0.317440003156662,
+      "depth_ms": 59.042049407958984,
+      "alignment_ms": 7.95417594909668,
+      "gpu_resident_total_ms": 72.35584259033203,
+      "gpu_resident_wall_ms": 72.39632197888568,
+      "project_current_ms": 2.427903890609741,
+      "project_past_ms": 2.4535040855407715,
+      "composite_ms": 0.14028799533843994
+    },
+    {
+      "index": 37,
+      "past_index": 32,
+      "lag_seconds": 0.5001370906829834,
+      "past_depth_cache_hit": true,
+      "camera_load_ms": 154.652122000698,
+      "input_upload_ms": 0.8205519989132881,
+      "frame_wall_with_file_io_ms": 227.77195199159905,
+      "camera_timestamp_offsets": [
+        0.0,
+        -0.010802030563354492,
+        0.0107879638671875,
+        -0.031371116638183594,
+        0.03130197525024414,
+        0.0499730110168457
+      ],
+      "camera_scales": [
+        1.0,
+        0.5417503714561462,
+        0.5274428129196167,
+        0.5829225182533264,
+        0.583694338798523,
+        0.47983041405677795
+      ],
+      "overlap_edges": [
+        {
+          "a": 0,
+          "b": 1,
+          "samples": 1044
+        },
+        {
+          "a": 0,
+          "b": 2,
+          "samples": 986
+        },
+        {
+          "a": 1,
+          "b": 3,
+          "samples": 2160
+        },
+        {
+          "a": 2,
+          "b": 4,
+          "samples": 2203
+        },
+        {
+          "a": 3,
+          "b": 5,
+          "samples": 206
+        }
+      ],
+      "single": {
+        "whole": 0.2887532114982605,
+        "lower_band": 0.3644000291824341
+      },
+      "two_timestamp": {
+        "whole": 0.13562417030334473,
+        "lower_band": 0.17916250228881836
+      },
+      "newly_filled_fraction": 0.15312907099723816,
+      "live_covered_max_rgb_deviation": 0.0,
+      "preprocess_ms": 0.3161599934101105,
+      "depth_ms": 59.12371063232422,
+      "alignment_ms": 7.940095901489258,
+      "gpu_resident_total_ms": 72.22150421142578,
+      "gpu_resident_wall_ms": 72.2508370236028,
+      "project_current_ms": 2.420736074447632,
+      "project_past_ms": 2.340127944946289,
+      "composite_ms": 0.0713919997215271
+    },
+    {
+      "index": 38,
+      "past_index": 33,
+      "lag_seconds": 0.5001628398895264,
+      "past_depth_cache_hit": true,
+      "camera_load_ms": 153.61663399380632,
+      "input_upload_ms": 0.7072589942254126,
+      "frame_wall_with_file_io_ms": 226.64163599256426,
+      "camera_timestamp_offsets": [
+        0.0,
+        -0.010802984237670898,
+        0.010786056518554688,
+        -0.031369924545288086,
+        0.03129911422729492,
+        0.04996919631958008
+      ],
+      "camera_scales": [
+        1.0,
+        0.5328459143638611,
+        0.5428395867347717,
+        0.5599521994590759,
+        0.6172834038734436,
+        0.5279562473297119
+      ],
+      "overlap_edges": [
+        {
+          "a": 0,
+          "b": 1,
+          "samples": 1047
+        },
+        {
+          "a": 0,
+          "b": 2,
+          "samples": 986
+        },
+        {
+          "a": 1,
+          "b": 3,
+          "samples": 2160
+        },
+        {
+          "a": 2,
+          "b": 4,
+          "samples": 2203
+        },
+        {
+          "a": 3,
+          "b": 5,
+          "samples": 193
+        }
+      ],
+      "single": {
+        "whole": 0.3012206554412842,
+        "lower_band": 0.37121254205703735
+      },
+      "two_timestamp": {
+        "whole": 0.1446899175643921,
+        "lower_band": 0.18728750944137573
+      },
+      "newly_filled_fraction": 0.15653076767921448,
+      "live_covered_max_rgb_deviation": 0.0,
+      "preprocess_ms": 0.319487988948822,
+      "depth_ms": 59.11040115356445,
+      "alignment_ms": 7.974912166595459,
+      "gpu_resident_total_ms": 72.23910522460938,
+      "gpu_resident_wall_ms": 72.26868200814351,
+      "project_current_ms": 2.4127678871154785,
+      "project_past_ms": 2.340640068054199,
+      "composite_ms": 0.07168000191450119
+    },
+    {
+      "index": 39,
+      "past_index": 34,
+      "lag_seconds": 0.5001780986785889,
+      "past_depth_cache_hit": true,
+      "camera_load_ms": 152.91521698236465,
+      "input_upload_ms": 0.7051680004224181,
+      "frame_wall_with_file_io_ms": 225.91209699749015,
+      "camera_timestamp_offsets": [
+        0.0,
+        -0.010801076889038086,
+        0.010785818099975586,
+        -0.03136897087097168,
+        0.031301021575927734,
+        0.04997396469116211
+      ],
+      "camera_scales": [
+        1.0,
+        0.5198282599449158,
+        0.5400927662849426,
+        0.5453735589981079,
+        0.6153783798217773,
+        0.5439943075180054
+      ],
+      "overlap_edges": [
+        {
+          "a": 0,
+          "b": 1,
+          "samples": 1048
+        },
+        {
+          "a": 0,
+          "b": 2,
+          "samples": 989
+        },
+        {
+          "a": 1,
+          "b": 3,
+          "samples": 2160
+        },
+        {
+          "a": 2,
+          "b": 4,
+          "samples": 2203
+        },
+        {
+          "a": 3,
+          "b": 5,
+          "samples": 197
+        }
+      ],
+      "single": {
+        "whole": 0.3100341558456421,
+        "lower_band": 0.375837504863739
+      },
+      "two_timestamp": {
+        "whole": 0.15026038885116577,
+        "lower_band": 0.19151878356933594
+      },
+      "newly_filled_fraction": 0.15977376699447632,
+      "live_covered_max_rgb_deviation": 0.0,
+      "preprocess_ms": 0.319487988948822,
+      "depth_ms": 59.05510330200195,
+      "alignment_ms": 8.004639625549316,
+      "gpu_resident_total_ms": 72.21453094482422,
+      "gpu_resident_wall_ms": 72.24379098624922,
+      "project_current_ms": 2.4135360717773438,
+      "project_past_ms": 2.3399040699005127,
+      "composite_ms": 0.0719359964132309
+    },
+    {
+      "index": 40,
+      "past_index": 35,
+      "lag_seconds": 0.5001928806304932,
+      "past_depth_cache_hit": true,
+      "camera_load_ms": 151.31295699393377,
+      "input_upload_ms": 0.7073439774103463,
+      "frame_wall_with_file_io_ms": 224.3486609950196,
+      "camera_timestamp_offsets": [
+        0.0,
+        -0.010802984237670898,
+        0.010790109634399414,
+        -0.031372785568237305,
+        0.03130602836608887,
+        0.04998207092285156
+      ],
+      "camera_scales": [
+        1.0,
+        0.5275371074676514,
+        0.5522627234458923,
+        0.5709583163261414,
+        0.6349083185195923,
+        0.5374916791915894
+      ],
+      "overlap_edges": [
+        {
+          "a": 0,
+          "b": 1,
+          "samples": 1049
+        },
+        {
+          "a": 0,
+          "b": 2,
+          "samples": 991
+        },
+        {
+          "a": 1,
+          "b": 3,
+          "samples": 2161
+        },
+        {
+          "a": 2,
+          "b": 4,
+          "samples": 2204
+        },
+        {
+          "a": 3,
+          "b": 5,
+          "samples": 202
+        }
+      ],
+      "single": {
+        "whole": 0.3108682632446289,
+        "lower_band": 0.376731276512146
+      },
+      "two_timestamp": {
+        "whole": 0.1514648199081421,
+        "lower_band": 0.19346874952316284
+      },
+      "newly_filled_fraction": 0.1594034880399704,
+      "live_covered_max_rgb_deviation": 0.0,
+      "preprocess_ms": 0.317440003156662,
+      "depth_ms": 59.0827522277832,
+      "alignment_ms": 8.004608154296875,
+      "gpu_resident_total_ms": 72.24729919433594,
+      "gpu_resident_wall_ms": 72.27870199130848,
+      "project_current_ms": 2.4169600009918213,
+      "project_past_ms": 2.3415679931640625,
+      "composite_ms": 0.07382400333881378
+    },
+    {
+      "index": 41,
+      "past_index": 36,
+      "lag_seconds": 0.5002069473266602,
+      "past_depth_cache_hit": true,
+      "camera_load_ms": 152.39077602745965,
+      "input_upload_ms": 0.6935109850019217,
+      "frame_wall_with_file_io_ms": 225.36399200907908,
+      "camera_timestamp_offsets": [
+        0.0,
+        -0.010803937911987305,
+        0.010790109634399414,
+        -0.03137493133544922,
+        0.03130507469177246,
+        0.049978017807006836
+      ],
+      "camera_scales": [
+        1.0,
+        0.49861404299736023,
+        0.5921939015388489,
+        0.5377111434936523,
+        0.6980246901512146,
+        0.43738606572151184
+      ],
+      "overlap_edges": [
+        {
+          "a": 0,
+          "b": 1,
+          "samples": 1045
+        },
+        {
+          "a": 0,
+          "b": 2,
+          "samples": 991
+        },
+        {
+          "a": 1,
+          "b": 3,
+          "samples": 2162
+        },
+        {
+          "a": 2,
+          "b": 4,
+          "samples": 2203
+        },
+        {
+          "a": 3,
+          "b": 5,
+          "samples": 200
+        }
+      ],
+      "single": {
+        "whole": 0.31682533025741577,
+        "lower_band": 0.3783875107765198
+      },
+      "two_timestamp": {
+        "whole": 0.15666908025741577,
+        "lower_band": 0.1937187910079956
+      },
+      "newly_filled_fraction": 0.1601562649011612,
+      "live_covered_max_rgb_deviation": 0.0,
+      "preprocess_ms": 0.32051199674606323,
+      "depth_ms": 59.07072067260742,
+      "alignment_ms": 7.976704120635986,
+      "gpu_resident_total_ms": 72.20252990722656,
+      "gpu_resident_wall_ms": 72.23242401960306,
+      "project_current_ms": 2.4135680198669434,
+      "project_past_ms": 2.338047981262207,
+      "composite_ms": 0.07347200065851212
+    },
+    {
+      "index": 42,
+      "past_index": 37,
+      "lag_seconds": 0.5002069473266602,
+      "past_depth_cache_hit": true,
+      "camera_load_ms": 153.8048049842473,
+      "input_upload_ms": 0.701426004525274,
+      "frame_wall_with_file_io_ms": 226.85585799627006,
+      "camera_timestamp_offsets": [
+        0.0,
+        -0.010802984237670898,
+        0.0107879638671875,
+        -0.03137087821960449,
+        0.03130507469177246,
+        0.049978017807006836
+      ],
+      "camera_scales": [
+        1.0,
+        0.5182988047599792,
+        0.6064128279685974,
+        0.5769439935684204,
+        0.6830796599388123,
+        0.4834458529949188
+      ],
+      "overlap_edges": [
+        {
+          "a": 0,
+          "b": 1,
+          "samples": 1049
+        },
+        {
+          "a": 0,
+          "b": 2,
+          "samples": 993
+        },
+        {
+          "a": 1,
+          "b": 3,
+          "samples": 2157
+        },
+        {
+          "a": 2,
+          "b": 4,
+          "samples": 2198
+        },
+        {
+          "a": 3,
+          "b": 5,
+          "samples": 199
+        }
+      ],
+      "single": {
+        "whole": 0.32329100370407104,
+        "lower_band": 0.3872750401496887
+      },
+      "two_timestamp": {
+        "whole": 0.16155189275741577,
+        "lower_band": 0.19710004329681396
+      },
+      "newly_filled_fraction": 0.16173909604549408,
+      "live_covered_max_rgb_deviation": 0.0,
+      "preprocess_ms": 0.31539198756217957,
+      "depth_ms": 59.16672134399414,
+      "alignment_ms": 7.964672088623047,
+      "gpu_resident_total_ms": 72.2718734741211,
+      "gpu_resident_wall_ms": 72.30143999913707,
+      "project_current_ms": 2.3941121101379395,
+      "project_past_ms": 2.3492159843444824,
+      "composite_ms": 0.07152000069618225
+    },
+    {
+      "index": 43,
+      "past_index": 38,
+      "lag_seconds": 0.5002131462097168,
+      "past_depth_cache_hit": true,
+      "camera_load_ms": 153.70036999229342,
+      "input_upload_ms": 0.702353980159387,
+      "frame_wall_with_file_io_ms": 226.70072701293975,
+      "camera_timestamp_offsets": [
+        0.0,
+        -0.010802030563354492,
+        0.010788917541503906,
+        -0.031371116638183594,
+        0.03130292892456055,
+        0.0499730110168457
+      ],
+      "camera_scales": [
+        1.0,
+        0.5234454274177551,
+        0.5735718011856079,
+        0.5938411951065063,
+        0.6217949986457825,
+        0.4913284182548523
+      ],
+      "overlap_edges": [
+        {
+          "a": 0,
+          "b": 1,
+          "samples": 1048
+        },
+        {
+          "a": 0,
+          "b": 2,
+          "samples": 995
+        },
+        {
+          "a": 1,
+          "b": 3,
+          "samples": 2154
+        },
+        {
+          "a": 2,
+          "b": 4,
+          "samples": 2201
+        },
+        {
+          "a": 3,
+          "b": 5,
+          "samples": 199
+        }
+      ],
+      "single": {
+        "whole": 0.3215290904045105,
+        "lower_band": 0.3859500288963318
+      },
+      "two_timestamp": {
+        "whole": 0.16346025466918945,
+        "lower_band": 0.19564378261566162
+      },
+      "newly_filled_fraction": 0.15806885063648224,
+      "live_covered_max_rgb_deviation": 0.0,
+      "preprocess_ms": 0.3171840012073517,
+      "depth_ms": 59.046913146972656,
+      "alignment_ms": 8.035327911376953,
+      "gpu_resident_total_ms": 72.2195816040039,
+      "gpu_resident_wall_ms": 72.24939099978656,
+      "project_current_ms": 2.4024319648742676,
+      "project_past_ms": 2.335616111755371,
+      "composite_ms": 0.07280000299215317
+    },
+    {
+      "index": 44,
+      "past_index": 39,
+      "lag_seconds": 0.5002179145812988,
+      "past_depth_cache_hit": true,
+      "camera_load_ms": 153.21725598187186,
+      "input_upload_ms": 0.7058120099827647,
+      "frame_wall_with_file_io_ms": 226.184364000801,
+      "camera_timestamp_offsets": [
+        0.0,
+        -0.010802030563354492,
+        0.0107879638671875,
+        -0.03136897087097168,
+        0.03130197525024414,
+        0.0499730110168457
+      ],
+      "camera_scales": [
+        1.0,
+        0.5051573514938354,
+        0.584313690662384,
+        0.584123432636261,
+        0.6375577449798584,
+        0.49464380741119385
+      ],
+      "overlap_edges": [
+        {
+          "a": 0,
+          "b": 1,
+          "samples": 1045
+        },
+        {
+          "a": 0,
+          "b": 2,
+          "samples": 994
+        },
+        {
+          "a": 1,
+          "b": 3,
+          "samples": 2165
+        },
+        {
+          "a": 2,
+          "b": 4,
+          "samples": 2200
+        },
+        {
+          "a": 3,
+          "b": 5,
+          "samples": 200
+        }
+      ],
+      "single": {
+        "whole": 0.31576740741729736,
+        "lower_band": 0.37783128023147583
+      },
+      "two_timestamp": {
+        "whole": 0.16163325309753418,
+        "lower_band": 0.19136875867843628
+      },
+      "newly_filled_fraction": 0.1541341245174408,
+      "live_covered_max_rgb_deviation": 0.0,
+      "preprocess_ms": 0.317440003156662,
+      "depth_ms": 59.026432037353516,
+      "alignment_ms": 7.996416091918945,
+      "gpu_resident_total_ms": 72.1819839477539,
+      "gpu_resident_wall_ms": 72.21243000822142,
+      "project_current_ms": 2.4197120666503906,
+      "project_past_ms": 2.3398399353027344,
+      "composite_ms": 0.07276800274848938
+    },
+    {
+      "index": 45,
+      "past_index": 40,
+      "lag_seconds": 0.5002171993255615,
+      "past_depth_cache_hit": true,
+      "camera_load_ms": 153.7002149852924,
+      "input_upload_ms": 0.6945389905013144,
+      "frame_wall_with_file_io_ms": 226.75033000996336,
+      "camera_timestamp_offsets": [
+        0.0,
+        -0.010805130004882812,
+        0.010789871215820312,
+        -0.03137612342834473,
+        0.031308889389038086,
+        0.04998493194580078
+      ],
+      "camera_scales": [
+        1.0,
+        0.5106742978096008,
+        0.5636392831802368,
+        0.585446834564209,
+        0.6163523197174072,
+        0.4481502175331116
+      ],
+      "overlap_edges": [
+        {
+          "a": 0,
+          "b": 1,
+          "samples": 1047
+        },
+        {
+          "a": 0,
+          "b": 2,
+          "samples": 993
+        },
+        {
+          "a": 1,
+          "b": 3,
+          "samples": 2165
+        },
+        {
+          "a": 2,
+          "b": 4,
+          "samples": 2203
+        },
+        {
+          "a": 3,
+          "b": 5,
+          "samples": 200
+        }
+      ],
+      "single": {
+        "whole": 0.31991779804229736,
+        "lower_band": 0.3804500102996826
+      },
+      "two_timestamp": {
+        "whole": 0.1691609025001526,
+        "lower_band": 0.19884377717971802
+      },
+      "newly_filled_fraction": 0.1507568508386612,
+      "live_covered_max_rgb_deviation": 0.0,
+      "preprocess_ms": 0.3164159953594208,
+      "depth_ms": 59.11040115356445,
+      "alignment_ms": 8.014847755432129,
+      "gpu_resident_total_ms": 72.27597045898438,
+      "gpu_resident_wall_ms": 72.30654297745787,
+      "project_current_ms": 2.406399965286255,
+      "project_past_ms": 2.3449599742889404,
+      "composite_ms": 0.07372800260782242
+    },
+    {
+      "index": 46,
+      "past_index": 41,
+      "lag_seconds": 0.5002291202545166,
+      "past_depth_cache_hit": true,
+      "camera_load_ms": 153.4481119888369,
+      "input_upload_ms": 0.7057999901007861,
+      "frame_wall_with_file_io_ms": 226.56974699930288,
+      "camera_timestamp_offsets": [
+        0.0,
+        -0.010806083679199219,
+        0.01079106330871582,
+        -0.03138113021850586,
+        0.03131103515625,
+        0.049987077713012695
+      ],
+      "camera_scales": [
+        1.0,
+        0.5448306202888489,
+        0.5908259153366089,
+        0.589181125164032,
+        0.6531654596328735,
+        0.5038590431213379
+      ],
+      "overlap_edges": [
+        {
+          "a": 0,
+          "b": 1,
+          "samples": 1050
+        },
+        {
+          "a": 0,
+          "b": 2,
+          "samples": 993
+        },
+        {
+          "a": 1,
+          "b": 3,
+          "samples": 2155
+        },
+        {
+          "a": 2,
+          "b": 4,
+          "samples": 2205
+        },
+        {
+          "a": 3,
+          "b": 5,
+          "samples": 203
+        }
+      ],
+      "single": {
+        "whole": 0.32480061054229736,
+        "lower_band": 0.38888752460479736
+      },
+      "two_timestamp": {
+        "whole": 0.17624914646148682,
+        "lower_band": 0.21402502059936523
+      },
+      "newly_filled_fraction": 0.14855143427848816,
+      "live_covered_max_rgb_deviation": 0.0,
+      "preprocess_ms": 0.31679999828338623,
+      "depth_ms": 59.14380645751953,
+      "alignment_ms": 8.057855606079102,
+      "gpu_resident_total_ms": 72.33740997314453,
+      "gpu_resident_wall_ms": 72.36816998920403,
+      "project_current_ms": 2.3941121101379395,
+      "project_past_ms": 2.341887950897217,
+      "composite_ms": 0.07283200323581696
+    },
+    {
+      "index": 47,
+      "past_index": 42,
+      "lag_seconds": 0.500244140625,
+      "past_depth_cache_hit": true,
+      "camera_load_ms": 156.5201299963519,
+      "input_upload_ms": 0.8545919845346361,
+      "frame_wall_with_file_io_ms": 230.4396010003984,
+      "camera_timestamp_offsets": [
+        0.0,
+        -0.010804176330566406,
+        0.010788917541503906,
+        -0.031374216079711914,
+        0.03130388259887695,
+        0.04997587203979492
+      ],
+      "camera_scales": [
+        1.0,
+        0.5296307802200317,
+        0.5678591132164001,
+        0.5412417054176331,
+        0.6164392232894897,
+        0.47948572039604187
+      ],
+      "overlap_edges": [
+        {
+          "a": 0,
+          "b": 1,
+          "samples": 1049
+        },
+        {
+          "a": 0,
+          "b": 2,
+          "samples": 995
+        },
+        {
+          "a": 1,
+          "b": 3,
+          "samples": 2147
+        },
+        {
+          "a": 2,
+          "b": 4,
+          "samples": 2200
+        },
+        {
+          "a": 3,
+          "b": 5,
+          "samples": 210
+        }
+      ],
+      "single": {
+        "whole": 0.3061645030975342,
+        "lower_band": 0.3773062825202942
+      },
+      "two_timestamp": {
+        "whole": 0.17473137378692627,
+        "lower_band": 0.22074377536773682
+      },
+      "newly_filled_fraction": 0.13143311440944672,
+      "live_covered_max_rgb_deviation": 0.0,
+      "preprocess_ms": 0.35199999809265137,
+      "depth_ms": 59.17184066772461,
+      "alignment_ms": 8.49612808227539,
+      "gpu_resident_total_ms": 72.94745635986328,
+      "gpu_resident_wall_ms": 73.00121101434343,
+      "project_current_ms": 2.452575922012329,
+      "project_past_ms": 2.3858559131622314,
+      "composite_ms": 0.07811199873685837
+    },
+    {
+      "index": 48,
+      "past_index": 43,
+      "lag_seconds": 0.5002388954162598,
+      "past_depth_cache_hit": true,
+      "camera_load_ms": 158.13053600140847,
+      "input_upload_ms": 0.7135490013752133,
+      "frame_wall_with_file_io_ms": 231.27752597793005,
+      "camera_timestamp_offsets": [
+        0.0,
+        -0.010800838470458984,
+        0.010787010192871094,
+        -0.03136801719665527,
+        0.03130006790161133,
+        0.04996800422668457
+      ],
+      "camera_scales": [
+        1.0,
+        0.5589745044708252,
+        0.5838079452514648,
+        0.5823721885681152,
+        0.6320120692253113,
+        0.5107395648956299
+      ],
+      "overlap_edges": [
+        {
+          "a": 0,
+          "b": 1,
+          "samples": 1050
+        },
+        {
+          "a": 0,
+          "b": 2,
+          "samples": 992
+        },
+        {
+          "a": 1,
+          "b": 3,
+          "samples": 2145
+        },
+        {
+          "a": 2,
+          "b": 4,
+          "samples": 2206
+        },
+        {
+          "a": 3,
+          "b": 5,
+          "samples": 213
+        }
+      ],
+      "single": {
+        "whole": 0.29409581422805786,
+        "lower_band": 0.3750874996185303
+      },
+      "two_timestamp": {
+        "whole": 0.1687377691268921,
+        "lower_band": 0.222337543964386
+      },
+      "newly_filled_fraction": 0.12535807490348816,
+      "live_covered_max_rgb_deviation": 0.0,
+      "preprocess_ms": 0.3176319897174835,
+      "depth_ms": 59.12044906616211,
+      "alignment_ms": 7.930880069732666,
+      "gpu_resident_total_ms": 72.35276794433594,
+      "gpu_resident_wall_ms": 72.38512701587752,
+      "project_current_ms": 2.4698879718780518,
+      "project_past_ms": 2.427903890609741,
+      "composite_ms": 0.07577600330114365
+    },
+    {
+      "index": 49,
+      "past_index": 44,
+      "lag_seconds": 0.5002219676971436,
+      "past_depth_cache_hit": true,
+      "camera_load_ms": 155.5780060007237,
+      "input_upload_ms": 0.6944449851289392,
+      "frame_wall_with_file_io_ms": 228.67305699037388,
+      "camera_timestamp_offsets": [
+        0.0,
+        -0.010798931121826172,
+        0.010784149169921875,
+        -0.031362056732177734,
+        0.03129315376281738,
+        0.049957990646362305
+      ],
+      "camera_scales": [
+        1.0,
+        0.5681896805763245,
+        0.5449227690696716,
+        0.6135339736938477,
+        0.5828061103820801,
+        0.5549453496932983
+      ],
+      "overlap_edges": [
+        {
+          "a": 0,
+          "b": 1,
+          "samples": 1046
+        },
+        {
+          "a": 0,
+          "b": 2,
+          "samples": 992
+        },
+        {
+          "a": 1,
+          "b": 3,
+          "samples": 2149
+        },
+        {
+          "a": 2,
+          "b": 4,
+          "samples": 2200
+        },
+        {
+          "a": 3,
+          "b": 5,
+          "samples": 209
+        }
+      ],
+      "single": {
+        "whole": 0.29354244470596313,
+        "lower_band": 0.3785000443458557
+      },
+      "two_timestamp": {
+        "whole": 0.1691609025001526,
+        "lower_band": 0.22471874952316284
+      },
+      "newly_filled_fraction": 0.12438151985406876,
+      "live_covered_max_rgb_deviation": 0.0,
+      "preprocess_ms": 0.317440003156662,
+      "depth_ms": 59.10220718383789,
+      "alignment_ms": 8.051712036132812,
+      "gpu_resident_total_ms": 72.3220443725586,
+      "gpu_resident_wall_ms": 72.35227699857205,
+      "project_current_ms": 2.417664051055908,
+      "project_past_ms": 2.3500800132751465,
+      "composite_ms": 0.07372800260782242
+    },
+    {
+      "index": 50,
+      "past_index": 45,
+      "lag_seconds": 0.5001909732818604,
+      "past_depth_cache_hit": true,
+      "camera_load_ms": 153.89784600120038,
+      "input_upload_ms": 0.7048999832477421,
+      "frame_wall_with_file_io_ms": 226.8858530151192,
+      "camera_timestamp_offsets": [
+        0.0,
+        -0.010801076889038086,
+        0.010785818099975586,
+        -0.03136396408081055,
+        0.03129982948303223,
+        0.04996895790100098
+      ],
+      "camera_scales": [
+        1.0,
+        0.5449923276901245,
+        0.6005390882492065,
+        0.6019299626350403,
+        0.6139803528785706,
+        0.5537163615226746
+      ],
+      "overlap_edges": [
+        {
+          "a": 0,
+          "b": 1,
+          "samples": 1046
+        },
+        {
+          "a": 0,
+          "b": 2,
+          "samples": 989
+        },
+        {
+          "a": 1,
+          "b": 3,
+          "samples": 2162
+        },
+        {
+          "a": 2,
+          "b": 4,
+          "samples": 2205
+        },
+        {
+          "a": 3,
+          "b": 5,
+          "samples": 206
+        }
+      ],
+      "single": {
+        "whole": 0.30730384588241577,
+        "lower_band": 0.3858937621116638
+      },
+      "two_timestamp": {
+        "whole": 0.1757161021232605,
+        "lower_band": 0.23051249980926514
+      },
+      "newly_filled_fraction": 0.13158772885799408,
+      "live_covered_max_rgb_deviation": 0.0,
+      "preprocess_ms": 0.319487988948822,
+      "depth_ms": 59.14009475708008,
+      "alignment_ms": 7.931903839111328,
+      "gpu_resident_total_ms": 72.20326232910156,
+      "gpu_resident_wall_ms": 72.23450799938291,
+      "project_current_ms": 2.392064094543457,
+      "project_past_ms": 2.3371200561523438,
+      "composite_ms": 0.07337599992752075
+    },
+    {
+      "index": 51,
+      "past_index": 46,
+      "lag_seconds": 0.5001459121704102,
+      "past_depth_cache_hit": true,
+      "camera_load_ms": 154.52289301902056,
+      "input_upload_ms": 0.7002040219958872,
+      "frame_wall_with_file_io_ms": 227.47220101882704,
+      "camera_timestamp_offsets": [
+        0.0,
+        -0.010798931121826172,
+        0.010786056518554688,
+        -0.03136301040649414,
+        0.03129410743713379,
+        0.04995894432067871
+      ],
+      "camera_scales": [
+        1.0,
+        0.554095983505249,
+        0.6351169943809509,
+        0.6299752593040466,
+        0.6568081974983215,
+        0.6049185395240784
+      ],
+      "overlap_edges": [
+        {
+          "a": 0,
+          "b": 1,
+          "samples": 1037
+        },
+        {
+          "a": 0,
+          "b": 2,
+          "samples": 990
+        },
+        {
+          "a": 1,
+          "b": 3,
+          "samples": 2167
+        },
+        {
+          "a": 2,
+          "b": 4,
+          "samples": 2204
+        },
+        {
+          "a": 3,
+          "b": 5,
+          "samples": 205
+        }
+      ],
+      "single": {
+        "whole": 0.3245605230331421,
+        "lower_band": 0.3960062861442566
+      },
+      "two_timestamp": {
+        "whole": 0.18713372945785522,
+        "lower_band": 0.23945003747940063
+      },
+      "newly_filled_fraction": 0.13742676377296448,
+      "live_covered_max_rgb_deviation": 0.0,
+      "preprocess_ms": 0.317440003156662,
+      "depth_ms": 59.050750732421875,
+      "alignment_ms": 7.955455780029297,
+      "gpu_resident_total_ms": 72.17040252685547,
+      "gpu_resident_wall_ms": 72.20145201426931,
+      "project_current_ms": 2.421760082244873,
+      "project_past_ms": 2.342911958694458,
+      "composite_ms": 0.0727040022611618
+    },
+    {
+      "index": 52,
+      "past_index": 47,
+      "lag_seconds": 0.500093936920166,
+      "past_depth_cache_hit": true,
+      "camera_load_ms": 153.47188399755396,
+      "input_upload_ms": 0.6965450011193752,
+      "frame_wall_with_file_io_ms": 226.3623189937789,
+      "camera_timestamp_offsets": [
+        0.0,
+        -0.010799169540405273,
+        0.010782957077026367,
+        -0.031358957290649414,
+        0.031288862228393555,
+        0.049954891204833984
+      ],
+      "camera_scales": [
+        1.0,
+        0.5060595273971558,
+        0.604861319065094,
+        0.6043261289596558,
+        0.6258891224861145,
+        0.5944553017616272
+      ],
+      "overlap_edges": [
+        {
+          "a": 0,
+          "b": 1,
+          "samples": 1034
+        },
+        {
+          "a": 0,
+          "b": 2,
+          "samples": 990
+        },
+        {
+          "a": 1,
+          "b": 3,
+          "samples": 2155
+        },
+        {
+          "a": 2,
+          "b": 4,
+          "samples": 2203
+        },
+        {
+          "a": 3,
+          "b": 5,
+          "samples": 210
+        }
+      ],
+      "single": {
+        "whole": 0.32166337966918945,
+        "lower_band": 0.3950687646865845
+      },
+      "two_timestamp": {
+        "whole": 0.18664544820785522,
+        "lower_band": 0.24143749475479126
+      },
+      "newly_filled_fraction": 0.13501791656017303,
+      "live_covered_max_rgb_deviation": 0.0,
+      "preprocess_ms": 0.317440003156662,
+      "depth_ms": 59.12371063232422,
+      "alignment_ms": 7.878655910491943,
+      "gpu_resident_total_ms": 72.11622619628906,
+      "gpu_resident_wall_ms": 72.14604699402116,
+      "project_current_ms": 2.3808000087738037,
+      "project_past_ms": 2.333695888519287,
+      "composite_ms": 0.0727040022611618
+    },
+    {
+      "index": 53,
+      "past_index": 48,
+      "lag_seconds": 0.5000650882720947,
+      "past_depth_cache_hit": true,
+      "camera_load_ms": 153.85637400322594,
+      "input_upload_ms": 0.7142790127545595,
+      "frame_wall_with_file_io_ms": 226.91282199230045,
+      "camera_timestamp_offsets": [
+        0.0,
+        -0.01080012321472168,
+        0.01078486442565918,
+        -0.03136491775512695,
+        0.031295061111450195,
+        0.049961090087890625
+      ],
+      "camera_scales": [
+        1.0,
+        0.5141526460647583,
+        0.6218979954719543,
+        0.5478902459144592,
+        0.6395527124404907,
+        0.5503512620925903
+      ],
+      "overlap_edges": [
+        {
+          "a": 0,
+          "b": 1,
+          "samples": 1034
+        },
+        {
+          "a": 0,
+          "b": 2,
+          "samples": 991
+        },
+        {
+          "a": 1,
+          "b": 3,
+          "samples": 2141
+        },
+        {
+          "a": 2,
+          "b": 4,
+          "samples": 2203
+        },
+        {
+          "a": 3,
+          "b": 5,
+          "samples": 218
+        }
+      ],
+      "single": {
+        "whole": 0.32791340351104736,
+        "lower_band": 0.3967125415802002
+      },
+      "two_timestamp": {
+        "whole": 0.19241124391555786,
+        "lower_band": 0.24426251649856567
+      },
+      "newly_filled_fraction": 0.13550212979316711,
+      "live_covered_max_rgb_deviation": 0.0,
+      "preprocess_ms": 0.317440003156662,
+      "depth_ms": 59.10732650756836,
+      "alignment_ms": 8.011775970458984,
+      "gpu_resident_total_ms": 72.26300811767578,
+      "gpu_resident_wall_ms": 72.29384197853506,
+      "project_current_ms": 2.4002559185028076,
+      "project_past_ms": 2.342911958694458,
+      "composite_ms": 0.07372800260782242
+    },
+    {
+      "index": 54,
+      "past_index": 49,
+      "lag_seconds": 0.5000550746917725,
+      "past_depth_cache_hit": true,
+      "camera_load_ms": 154.10928800702095,
+      "input_upload_ms": 0.6954179843887687,
+      "frame_wall_with_file_io_ms": 227.19454602338374,
+      "camera_timestamp_offsets": [
+        0.0,
+        -0.01079702377319336,
+        0.010782957077026367,
+        -0.03135800361633301,
+        0.03128504753112793,
+        0.04994487762451172
+      ],
+      "camera_scales": [
+        1.0,
+        0.5256532430648804,
+        0.627336323261261,
+        0.5823956727981567,
+        0.6223081946372986,
+        0.5858580470085144
+      ],
+      "overlap_edges": [
+        {
+          "a": 0,
+          "b": 1,
+          "samples": 1034
+        },
+        {
+          "a": 0,
+          "b": 2,
+          "samples": 991
+        },
+        {
+          "a": 1,
+          "b": 3,
+          "samples": 2144
+        },
+        {
+          "a": 2,
+          "b": 4,
+          "samples": 2202
+        },
+        {
+          "a": 3,
+          "b": 5,
+          "samples": 222
+        }
+      ],
+      "single": {
+        "whole": 0.3277180790901184,
+        "lower_band": 0.39638751745224
+      },
+      "two_timestamp": {
+        "whole": 0.1912597417831421,
+        "lower_band": 0.243149995803833
+      },
+      "newly_filled_fraction": 0.13645833730697632,
+      "live_covered_max_rgb_deviation": 0.0,
+      "preprocess_ms": 0.31539198756217957,
+      "depth_ms": 59.10732650756836,
+      "alignment_ms": 7.993343830108643,
+      "gpu_resident_total_ms": 72.30976104736328,
+      "gpu_resident_wall_ms": 72.34033301938325,
+      "project_current_ms": 2.3951361179351807,
+      "project_past_ms": 2.416640043258667,
+      "composite_ms": 0.0727040022611618
+    },
+    {
+      "index": 55,
+      "past_index": 50,
+      "lag_seconds": 0.5000159740447998,
+      "past_depth_cache_hit": true,
+      "camera_load_ms": 154.5880289922934,
+      "input_upload_ms": 0.6907909992150962,
+      "frame_wall_with_file_io_ms": 227.80992998741567,
+      "camera_timestamp_offsets": [
+        0.0,
+        -0.010795116424560547,
+        0.01077890396118164,
+        -0.031347036361694336,
+        0.0312800407409668,
+        0.04993891716003418
+      ],
+      "camera_scales": [
+        1.0,
+        0.5172287225723267,
+        0.5973362326622009,
+        0.5700591206550598,
+        0.5962986946105957,
+        0.61466383934021
+      ],
+      "overlap_edges": [
+        {
+          "a": 0,
+          "b": 1,
+          "samples": 1033
+        },
+        {
+          "a": 0,
+          "b": 2,
+          "samples": 990
+        },
+        {
+          "a": 1,
+          "b": 3,
+          "samples": 2135
+        },
+        {
+          "a": 2,
+          "b": 4,
+          "samples": 2202
+        },
+        {
+          "a": 3,
+          "b": 5,
+          "samples": 222
+        }
+      ],
+      "single": {
+        "whole": 0.3228271007537842,
+        "lower_band": 0.3921562433242798
+      },
+      "two_timestamp": {
+        "whole": 0.19656163454055786,
+        "lower_band": 0.2543500065803528
+      },
+      "newly_filled_fraction": 0.12626546621322632,
+      "live_covered_max_rgb_deviation": 0.0,
+      "preprocess_ms": 0.317440003156662,
+      "depth_ms": 59.09427261352539,
+      "alignment_ms": 8.198911666870117,
+      "gpu_resident_total_ms": 72.4510726928711,
+      "gpu_resident_wall_ms": 72.48293099110015,
+      "project_current_ms": 2.4157121181488037,
+      "project_past_ms": 2.341792106628418,
+      "composite_ms": 0.07372800260782242
+    },
+    {
+      "index": 56,
+      "past_index": 51,
+      "lag_seconds": 0.4999711513519287,
+      "past_depth_cache_hit": true,
+      "camera_load_ms": 156.37830799096264,
+      "input_upload_ms": 0.6898120045661926,
+      "frame_wall_with_file_io_ms": 229.19683199143037,
+      "camera_timestamp_offsets": [
+        0.0,
+        -0.010798215866088867,
+        0.010780811309814453,
+        -0.03135418891906738,
+        0.03128695487976074,
+        0.049948930740356445
+      ],
+      "camera_scales": [
+        1.0,
+        0.5404126644134521,
+        0.5659501552581787,
+        0.5587086081504822,
+        0.5566287636756897,
+        0.6361140012741089
+      ],
+      "overlap_edges": [
+        {
+          "a": 0,
+          "b": 1,
+          "samples": 1036
+        },
+        {
+          "a": 0,
+          "b": 2,
+          "samples": 985
+        },
+        {
+          "a": 1,
+          "b": 3,
+          "samples": 2163
+        },
+        {
+          "a": 2,
+          "b": 4,
+          "samples": 2193
+        },
+        {
+          "a": 3,
+          "b": 5,
+          "samples": 225
+        }
+      ],
+      "single": {
+        "whole": 0.3162434697151184,
+        "lower_band": 0.3872374892234802
+      },
+      "two_timestamp": {
+        "whole": 0.2047891616821289,
+        "lower_band": 0.2706625461578369
+      },
+      "newly_filled_fraction": 0.11145427078008652,
+      "live_covered_max_rgb_deviation": 0.0,
+      "preprocess_ms": 0.3192319869995117,
+      "depth_ms": 58.996734619140625,
+      "alignment_ms": 7.910399913787842,
+      "gpu_resident_total_ms": 72.05059051513672,
+      "gpu_resident_wall_ms": 72.08049902692437,
+      "project_current_ms": 2.4076480865478516,
+      "project_past_ms": 2.334496021270752,
+      "composite_ms": 0.0727040022611618
+    },
+    {
+      "index": 57,
+      "past_index": 52,
+      "lag_seconds": 0.4999508857727051,
+      "past_depth_cache_hit": true,
+      "camera_load_ms": 153.9729300129693,
+      "input_upload_ms": 0.6962899933569133,
+      "frame_wall_with_file_io_ms": 226.9621629966423,
+      "camera_timestamp_offsets": [
+        0.0,
+        -0.010795831680297852,
+        0.010782003402709961,
+        -0.031352996826171875,
+        0.031286001205444336,
+        0.04994702339172363
+      ],
+      "camera_scales": [
+        1.0,
+        0.5414459705352783,
+        0.5866937041282654,
+        0.5310875773429871,
+        0.5635213851928711,
+        0.6466730833053589
+      ],
+      "overlap_edges": [
+        {
+          "a": 0,
+          "b": 1,
+          "samples": 1029
+        },
+        {
+          "a": 0,
+          "b": 2,
+          "samples": 980
+        },
+        {
+          "a": 1,
+          "b": 3,
+          "samples": 2165
+        },
+        {
+          "a": 2,
+          "b": 4,
+          "samples": 2191
+        },
+        {
+          "a": 3,
+          "b": 5,
+          "samples": 223
+        }
+      ],
+      "single": {
+        "whole": 0.31382644176483154,
+        "lower_band": 0.3849624991416931
+      },
+      "two_timestamp": {
+        "whole": 0.20744627714157104,
+        "lower_band": 0.27492499351501465
+      },
+      "newly_filled_fraction": 0.10638021677732468,
+      "live_covered_max_rgb_deviation": 0.0,
+      "preprocess_ms": 0.3164159953594208,
+      "depth_ms": 59.13190460205078,
+      "alignment_ms": 7.929855823516846,
+      "gpu_resident_total_ms": 72.21488189697266,
+      "gpu_resident_wall_ms": 72.24510400556028,
+      "project_current_ms": 2.40230393409729,
+      "project_past_ms": 2.352128028869629,
+      "composite_ms": 0.07372800260782242
+    },
+    {
+      "index": 58,
+      "past_index": 53,
+      "lag_seconds": 0.4999220371246338,
+      "past_depth_cache_hit": true,
+      "camera_load_ms": 154.04669599956833,
+      "input_upload_ms": 0.6927409849595279,
+      "frame_wall_with_file_io_ms": 227.0203880034387,
+      "camera_timestamp_offsets": [
+        0.0,
+        -0.010796070098876953,
+        0.010779857635498047,
+        -0.03135108947753906,
+        0.031282901763916016,
+        0.049942970275878906
+      ],
+      "camera_scales": [
+        1.0,
+        0.5260146260261536,
+        0.5810961127281189,
+        0.5049132108688354,
+        0.5765783190727234,
+        0.6553677916526794
+      ],
+      "overlap_edges": [
+        {
+          "a": 0,
+          "b": 1,
+          "samples": 1022
+        },
+        {
+          "a": 0,
+          "b": 2,
+          "samples": 975
+        },
+        {
+          "a": 1,
+          "b": 3,
+          "samples": 2164
+        },
+        {
+          "a": 2,
+          "b": 4,
+          "samples": 2190
+        },
+        {
+          "a": 3,
+          "b": 5,
+          "samples": 210
+        }
+      ],
+      "single": {
+        "whole": 0.3132893443107605,
+        "lower_band": 0.3801500201225281
+      },
+      "two_timestamp": {
+        "whole": 0.2107706069946289,
+        "lower_band": 0.2797812819480896
+      },
+      "newly_filled_fraction": 0.1025187224149704,
+      "live_covered_max_rgb_deviation": 0.0,
+      "preprocess_ms": 0.3184640109539032,
+      "depth_ms": 59.096065521240234,
+      "alignment_ms": 7.954432010650635,
+      "gpu_resident_total_ms": 72.20146942138672,
+      "gpu_resident_wall_ms": 72.23223301116377,
+      "project_current_ms": 2.4064319133758545,
+      "project_past_ms": 2.3439040184020996,
+      "composite_ms": 0.0727040022611618
+    },
+    {
+      "index": 59,
+      "past_index": 54,
+      "lag_seconds": 0.499891996383667,
+      "past_depth_cache_hit": true,
+      "camera_load_ms": 153.89147901441902,
+      "input_upload_ms": 0.6998169992584735,
+      "frame_wall_with_file_io_ms": 226.82491500745527,
+      "camera_timestamp_offsets": [
+        0.0,
+        -0.01079702377319336,
+        0.010782003402709961,
+        -0.031352996826171875,
+        0.03128790855407715,
+        0.04995298385620117
+      ],
+      "camera_scales": [
+        1.0,
+        0.5158895254135132,
+        0.5725389719009399,
+        0.4865289330482483,
+        0.5673158168792725,
+        0.6658406853675842
+      ],
+      "overlap_edges": [
+        {
+          "a": 0,
+          "b": 1,
+          "samples": 1020
+        },
+        {
+          "a": 0,
+          "b": 2,
+          "samples": 972
+        },
+        {
+          "a": 1,
+          "b": 3,
+          "samples": 2164
+        },
+        {
+          "a": 2,
+          "b": 4,
+          "samples": 2198
+        },
+        {
+          "a": 3,
+          "b": 5,
+          "samples": 205
+        }
+      ],
+      "single": {
+        "whole": 0.3126179575920105,
+        "lower_band": 0.3773750066757202
+      },
+      "two_timestamp": {
+        "whole": 0.2096150517463684,
+        "lower_band": 0.276843786239624
+      },
+      "newly_filled_fraction": 0.10300293564796448,
+      "live_covered_max_rgb_deviation": 0.0,
+      "preprocess_ms": 0.317440003156662,
+      "depth_ms": 59.065345764160156,
+      "alignment_ms": 7.955455780029297,
+      "gpu_resident_total_ms": 72.15615844726562,
+      "gpu_resident_wall_ms": 72.18637102050707,
+      "project_current_ms": 2.40230393409729,
+      "project_past_ms": 2.3347198963165283,
+      "composite_ms": 0.07097599655389786
+    },
+    {
+      "index": 60,
+      "past_index": 55,
+      "lag_seconds": 0.4999220371246338,
+      "past_depth_cache_hit": true,
+      "camera_load_ms": 154.77073099464178,
+      "input_upload_ms": 0.6944350025150925,
+      "frame_wall_with_file_io_ms": 227.82491700490937,
+      "camera_timestamp_offsets": [
+        0.0,
+        -0.01080012321472168,
+        0.010783910751342773,
+        -0.03136110305786133,
+        0.03129386901855469,
+        0.04996204376220703
+      ],
+      "camera_scales": [
+        1.0,
+        0.5208666324615479,
+        0.564235508441925,
+        0.4949454963207245,
+        0.551321268081665,
+        0.6840415596961975
+      ],
+      "overlap_edges": [
+        {
+          "a": 0,
+          "b": 1,
+          "samples": 1020
+        },
+        {
+          "a": 0,
+          "b": 2,
+          "samples": 971
+        },
+        {
+          "a": 1,
+          "b": 3,
+          "samples": 2162
+        },
+        {
+          "a": 2,
+          "b": 4,
+          "samples": 2196
+        },
+        {
+          "a": 3,
+          "b": 5,
+          "samples": 229
+        }
+      ],
+      "single": {
+        "whole": 0.3118041753768921,
+        "lower_band": 0.3774375319480896
+      },
+      "two_timestamp": {
+        "whole": 0.19801020622253418,
+        "lower_band": 0.2607312798500061
+      },
+      "newly_filled_fraction": 0.11379395425319672,
+      "live_covered_max_rgb_deviation": 0.0,
+      "preprocess_ms": 0.3184320032596588,
+      "depth_ms": 59.11449432373047,
+      "alignment_ms": 8.016960144042969,
+      "gpu_resident_total_ms": 72.27916717529297,
+      "gpu_resident_wall_ms": 72.31133701861836,
+      "project_current_ms": 2.404576063156128,
+      "project_past_ms": 2.3426239490509033,
+      "composite_ms": 0.07283200323581696
+    },
+    {
+      "index": 61,
+      "past_index": 56,
+      "lag_seconds": 0.499957799911499,
+      "past_depth_cache_hit": true,
+      "camera_load_ms": 156.18472200003453,
+      "input_upload_ms": 0.7501789950765669,
+      "frame_wall_with_file_io_ms": 229.7076529939659,
+      "camera_timestamp_offsets": [
+        0.0,
+        -0.010799884796142578,
+        0.010785102844238281,
+        -0.03136181831359863,
+        0.031295061111450195,
+        0.04996204376220703
+      ],
+      "camera_scales": [
+        1.0,
+        0.5071614384651184,
+        0.5657548308372498,
+        0.49880167841911316,
+        0.556799590587616,
+        0.6558550000190735
+      ],
+      "overlap_edges": [
+        {
+          "a": 0,
+          "b": 1,
+          "samples": 1021
+        },
+        {
+          "a": 0,
+          "b": 2,
+          "samples": 972
+        },
+        {
+          "a": 1,
+          "b": 3,
+          "samples": 2163
+        },
+        {
+          "a": 2,
+          "b": 4,
+          "samples": 2196
+        },
+        {
+          "a": 3,
+          "b": 5,
+          "samples": 224
+        }
+      ],
+      "single": {
+        "whole": 0.31208086013793945,
+        "lower_band": 0.3778250217437744
+      },
+      "two_timestamp": {
+        "whole": 0.1774006485939026,
+        "lower_band": 0.2301124930381775
+      },
+      "newly_filled_fraction": 0.13468018174171448,
+      "live_covered_max_rgb_deviation": 0.0,
+      "preprocess_ms": 0.317440003156662,
+      "depth_ms": 59.109375,
+      "alignment_ms": 8.384511947631836,
+      "gpu_resident_total_ms": 72.69273376464844,
+      "gpu_resident_wall_ms": 72.72472602198832,
+      "project_current_ms": 2.4145920276641846,
+      "project_past_ms": 2.3808000087738037,
+      "composite_ms": 0.07577600330114365
+    },
+    {
+      "index": 62,
+      "past_index": 57,
+      "lag_seconds": 0.4999840259552002,
+      "past_depth_cache_hit": true,
+      "camera_load_ms": 156.31572500569746,
+      "input_upload_ms": 0.698839983670041,
+      "frame_wall_with_file_io_ms": 229.26927701337263,
+      "camera_timestamp_offsets": [
+        0.0,
+        -0.010797977447509766,
+        0.010782957077026367,
+        -0.03135991096496582,
+        0.03128814697265625,
+        0.04995012283325195
+      ],
+      "camera_scales": [
+        1.0,
+        0.49286431074142456,
+        0.571087121963501,
+        0.47384631633758545,
+        0.5668016672134399,
+        0.6112169623374939
+      ],
+      "overlap_edges": [
+        {
+          "a": 0,
+          "b": 1,
+          "samples": 1012
+        },
+        {
+          "a": 0,
+          "b": 2,
+          "samples": 972
+        },
+        {
+          "a": 1,
+          "b": 3,
+          "samples": 2164
+        },
+        {
+          "a": 2,
+          "b": 4,
+          "samples": 2196
+        },
+        {
+          "a": 3,
+          "b": 5,
+          "samples": 220
+        }
+      ],
+      "single": {
+        "whole": 0.31371253728866577,
+        "lower_band": 0.37623125314712524
+      },
+      "two_timestamp": {
+        "whole": 0.16185295581817627,
+        "lower_band": 0.20455002784729004
+      },
+      "newly_filled_fraction": 0.15185955166816711,
+      "live_covered_max_rgb_deviation": 0.0,
+      "preprocess_ms": 0.3164159953594208,
+      "depth_ms": 59.12166213989258,
+      "alignment_ms": 7.903232097625732,
+      "gpu_resident_total_ms": 72.17584228515625,
+      "gpu_resident_wall_ms": 72.2062450076919,
+      "project_current_ms": 2.4186880588531494,
+      "project_past_ms": 2.3347198963165283,
+      "composite_ms": 0.07168000191450119
+    },
+    {
+      "index": 63,
+      "past_index": 58,
+      "lag_seconds": 0.49998998641967773,
+      "past_depth_cache_hit": true,
+      "camera_load_ms": 155.49150499282405,
+      "input_upload_ms": 0.7063320081215352,
+      "frame_wall_with_file_io_ms": 228.35920899524353,
+      "camera_timestamp_offsets": [
+        0.0,
+        -0.010796070098876953,
+        0.010781049728393555,
+        -0.03135204315185547,
+        0.0312809944152832,
+        0.04993796348571777
+      ],
+      "camera_scales": [
+        1.0,
+        0.5020295977592468,
+        0.595978319644928,
+        0.48053255677223206,
+        0.5933059453964233,
+        0.597604513168335
+      ],
+      "overlap_edges": [
+        {
+          "a": 0,
+          "b": 1,
+          "samples": 1015
+        },
+        {
+          "a": 0,
+          "b": 2,
+          "samples": 971
+        },
+        {
+          "a": 1,
+          "b": 3,
+          "samples": 2162
+        },
+        {
+          "a": 2,
+          "b": 4,
+          "samples": 2195
+        },
+        {
+          "a": 3,
+          "b": 5,
+          "samples": 237
+        }
+      ],
+      "single": {
+        "whole": 0.3132120370864868,
+        "lower_band": 0.3764687776565552
+      },
+      "two_timestamp": {
+        "whole": 0.14883214235305786,
+        "lower_band": 0.18553751707077026
+      },
+      "newly_filled_fraction": 0.16437989473342896,
+      "live_covered_max_rgb_deviation": 0.0,
+      "preprocess_ms": 0.3174079954624176,
+      "depth_ms": 59.056129455566406,
+      "alignment_ms": 7.896063804626465,
+      "gpu_resident_total_ms": 72.08348846435547,
+      "gpu_resident_wall_ms": 72.11317401379347,
+      "project_current_ms": 2.392416000366211,
+      "project_past_ms": 2.339711904525757,
+      "composite_ms": 0.07251200079917908
+    },
+    {
+      "index": 64,
+      "past_index": 59,
+      "lag_seconds": 0.499971866607666,
+      "past_depth_cache_hit": true,
+      "camera_load_ms": 157.3387229873333,
+      "input_upload_ms": 0.6960919999983162,
+      "frame_wall_with_file_io_ms": 230.39288498694077,
+      "camera_timestamp_offsets": [
+        0.0,
+        -0.010793924331665039,
+        0.010779142379760742,
+        -0.031343936920166016,
+        0.03127622604370117,
+        0.04993104934692383
+      ],
+      "camera_scales": [
+        1.0,
+        0.48313403129577637,
+        0.5995938181877136,
+        0.4704115688800812,
+        0.5919619202613831,
+        0.5478458404541016
+      ],
+      "overlap_edges": [
+        {
+          "a": 0,
+          "b": 1,
+          "samples": 1017
+        },
+        {
+          "a": 0,
+          "b": 2,
+          "samples": 970
+        },
+        {
+          "a": 1,
+          "b": 3,
+          "samples": 2162
+        },
+        {
+          "a": 2,
+          "b": 4,
+          "samples": 2195
+        },
+        {
+          "a": 3,
+          "b": 5,
+          "samples": 245
+        }
+      ],
+      "single": {
+        "whole": 0.3134276866912842,
+        "lower_band": 0.37561875581741333
+      },
+      "two_timestamp": {
+        "whole": 0.1474975347518921,
+        "lower_band": 0.18243128061294556
+      },
+      "newly_filled_fraction": 0.16593018174171448,
+      "live_covered_max_rgb_deviation": 0.0,
+      "preprocess_ms": 0.3184640109539032,
+      "depth_ms": 59.146240234375,
+      "alignment_ms": 7.99129581451416,
+      "gpu_resident_total_ms": 72.27699279785156,
+      "gpu_resident_wall_ms": 72.30914800311439,
+      "project_current_ms": 2.3941121101379395,
+      "project_past_ms": 2.3449599742889404,
+      "composite_ms": 0.0727040022611618
+    },
+    {
+      "index": 65,
+      "past_index": 60,
+      "lag_seconds": 0.4999208450317383,
+      "past_depth_cache_hit": true,
+      "camera_load_ms": 154.40268299425952,
+      "input_upload_ms": 0.6862719892524183,
+      "frame_wall_with_file_io_ms": 227.2847180138342,
+      "camera_timestamp_offsets": [
+        0.0,
+        -0.010792970657348633,
+        0.010778188705444336,
+        -0.03134298324584961,
+        0.031275033950805664,
+        0.04993009567260742
+      ],
+      "camera_scales": [
+        1.0,
+        0.4859217405319214,
+        0.5866246819496155,
+        0.46767258644104004,
+        0.5798208713531494,
+        0.5655924677848816
+      ],
+      "overlap_edges": [
+        {
+          "a": 0,
+          "b": 1,
+          "samples": 1023
+        },
+        {
+          "a": 0,
+          "b": 2,
+          "samples": 971
+        },
+        {
+          "a": 1,
+          "b": 3,
+          "samples": 2162
+        },
+        {
+          "a": 2,
+          "b": 4,
+          "samples": 2195
+        },
+        {
+          "a": 3,
+          "b": 5,
+          "samples": 242
+        }
+      ],
+      "single": {
+        "whole": 0.3134927749633789,
+        "lower_band": 0.37560003995895386
+      },
+      "two_timestamp": {
+        "whole": 0.15094399452209473,
+        "lower_band": 0.18780624866485596
+      },
+      "newly_filled_fraction": 0.16254884004592896,
+      "live_covered_max_rgb_deviation": 0.0,
+      "preprocess_ms": 0.31436800956726074,
+      "depth_ms": 59.11449432373047,
+      "alignment_ms": 7.8837761878967285,
+      "gpu_resident_total_ms": 72.11724853515625,
+      "gpu_resident_wall_ms": 72.1469080017414,
+      "project_current_ms": 2.379807949066162,
+      "project_past_ms": 2.341856002807617,
+      "composite_ms": 0.07280000299215317
+    },
+    {
+      "index": 66,
+      "past_index": 61,
+      "lag_seconds": 0.4998610019683838,
+      "past_depth_cache_hit": true,
+      "camera_load_ms": 153.15109497169033,
+      "input_upload_ms": 0.6899680010974407,
+      "frame_wall_with_file_io_ms": 226.00798297207803,
+      "camera_timestamp_offsets": [
+        0.0,
+        -0.010793924331665039,
+        0.010776996612548828,
+        -0.03134489059448242,
+        0.03127408027648926,
+        0.04992818832397461
+      ],
+      "camera_scales": [
+        1.0,
+        0.5340554714202881,
+        0.5986756682395935,
+        0.5271041989326477,
+        0.595189094543457,
+        0.6197476387023926
+      ],
+      "overlap_edges": [
+        {
+          "a": 0,
+          "b": 1,
+          "samples": 1030
+        },
+        {
+          "a": 0,
+          "b": 2,
+          "samples": 971
+        },
+        {
+          "a": 1,
+          "b": 3,
+          "samples": 2164
+        },
+        {
+          "a": 2,
+          "b": 4,
+          "samples": 2196
+        },
+        {
+          "a": 3,
+          "b": 5,
+          "samples": 240
+        }
+      ],
+      "single": {
+        "whole": 0.31685787439346313,
+        "lower_band": 0.3788437843322754
+      },
+      "two_timestamp": {
+        "whole": 0.15544021129608154,
+        "lower_band": 0.1917625069618225
+      },
+      "newly_filled_fraction": 0.1614176481962204,
+      "live_covered_max_rgb_deviation": 0.0,
+      "preprocess_ms": 0.31539198756217957,
+      "depth_ms": 59.05219268798828,
+      "alignment_ms": 7.901023864746094,
+      "gpu_resident_total_ms": 72.0877456665039,
+      "gpu_resident_wall_ms": 72.11826901766472,
+      "project_current_ms": 2.4005439281463623,
+      "project_past_ms": 2.336479902267456,
+      "composite_ms": 0.07283200323581696
+    },
+    {
+      "index": 67,
+      "past_index": 62,
+      "lag_seconds": 0.4997889995574951,
+      "past_depth_cache_hit": true,
+      "camera_load_ms": 154.3340460048057,
+      "input_upload_ms": 0.7770649972371757,
+      "frame_wall_with_file_io_ms": 227.3996400181204,
+      "camera_timestamp_offsets": [
+        0.0,
+        -0.01079106330871582,
+        0.010776042938232422,
+        -0.03133702278137207,
+        0.031265974044799805,
+        0.04991412162780762
+      ],
+      "camera_scales": [
+        1.0,
+        0.5521650910377502,
+        0.5857825875282288,
+        0.5449109673500061,
+        0.5870068669319153,
+        0.6623892784118652
+      ],
+      "overlap_edges": [
+        {
+          "a": 0,
+          "b": 1,
+          "samples": 1028
+        },
+        {
+          "a": 0,
+          "b": 2,
+          "samples": 969
+        },
+        {
+          "a": 1,
+          "b": 3,
+          "samples": 2164
+        },
+        {
+          "a": 2,
+          "b": 4,
+          "samples": 2196
+        },
+        {
+          "a": 3,
+          "b": 5,
+          "samples": 230
+        }
+      ],
+      "single": {
+        "whole": 0.3124592900276184,
+        "lower_band": 0.37691253423690796
+      },
+      "two_timestamp": {
+        "whole": 0.15300697088241577,
+        "lower_band": 0.18877500295639038
+      },
+      "newly_filled_fraction": 0.15945231914520264,
+      "live_covered_max_rgb_deviation": 0.0,
+      "preprocess_ms": 0.3164159953594208,
+      "depth_ms": 59.12985610961914,
+      "alignment_ms": 7.930880069732666,
+      "gpu_resident_total_ms": 72.21043395996094,
+      "gpu_resident_wall_ms": 72.24068199866451,
+      "project_current_ms": 2.4094719886779785,
+      "project_past_ms": 2.34118390083313,
+      "composite_ms": 0.07340800017118454
+    },
+    {
+      "index": 68,
+      "past_index": 63,
+      "lag_seconds": 0.49971890449523926,
+      "past_depth_cache_hit": true,
+      "camera_load_ms": 153.0673149973154,
+      "input_upload_ms": 0.7074190070852637,
+      "frame_wall_with_file_io_ms": 226.18734298157506,
+      "camera_timestamp_offsets": [
+        0.0,
+        -0.0107879638671875,
+        0.010772943496704102,
+        -0.03133106231689453,
+        0.03126215934753418,
+        0.0499110221862793
+      ],
+      "camera_scales": [
+        1.0,
+        0.5471817255020142,
+        0.6030325293540955,
+        0.5239603519439697,
+        0.6027114987373352,
+        0.6603880524635315
+      ],
+      "overlap_edges": [
+        {
+          "a": 0,
+          "b": 1,
+          "samples": 1024
+        },
+        {
+          "a": 0,
+          "b": 2,
+          "samples": 967
+        },
+        {
+          "a": 1,
+          "b": 3,
+          "samples": 2164
+        },
+        {
+          "a": 2,
+          "b": 4,
+          "samples": 2196
+        },
+        {
+          "a": 3,
+          "b": 5,
+          "samples": 221
+        }
+      ],
+      "single": {
+        "whole": 0.3148355484008789,
+        "lower_band": 0.37587499618530273
+      },
+      "two_timestamp": {
+        "whole": 0.15206295251846313,
+        "lower_band": 0.18596875667572021
+      },
+      "newly_filled_fraction": 0.16277262568473816,
+      "live_covered_max_rgb_deviation": 0.0,
+      "preprocess_ms": 0.3166399896144867,
+      "depth_ms": 59.1163215637207,
+      "alignment_ms": 8.040448188781738,
+      "gpu_resident_total_ms": 72.33331298828125,
+      "gpu_resident_wall_ms": 72.3640620126389,
+      "project_current_ms": 2.3941121101379395,
+      "project_past_ms": 2.383104085922241,
+      "composite_ms": 0.07347200065851212
+    },
+    {
+      "index": 69,
+      "past_index": 64,
+      "lag_seconds": 0.4996800422668457,
+      "past_depth_cache_hit": true,
+      "camera_load_ms": 155.6048100173939,
+      "input_upload_ms": 0.693685986334458,
+      "frame_wall_with_file_io_ms": 228.5363280097954,
+      "camera_timestamp_offsets": [
+        0.0,
+        -0.010792016983032227,
+        0.010776996612548828,
+        -0.03133797645568848,
+        0.03127408027648926,
+        0.04993009567260742
+      ],
+      "camera_scales": [
+        1.0,
+        0.5466092824935913,
+        0.5760711431503296,
+        0.5195063352584839,
+        0.5728719234466553,
+        0.6504217982292175
+      ],
+      "overlap_edges": [
+        {
+          "a": 0,
+          "b": 1,
+          "samples": 1029
+        },
+        {
+          "a": 0,
+          "b": 2,
+          "samples": 958
+        },
+        {
+          "a": 1,
+          "b": 3,
+          "samples": 2163
+        },
+        {
+          "a": 2,
+          "b": 4,
+          "samples": 2196
+        },
+        {
+          "a": 3,
+          "b": 5,
+          "samples": 225
+        }
+      ],
+      "single": {
+        "whole": 0.3146931529045105,
+        "lower_band": 0.37373125553131104
+      },
+      "two_timestamp": {
+        "whole": 0.1493489146232605,
+        "lower_band": 0.18066251277923584
+      },
+      "newly_filled_fraction": 0.1653442531824112,
+      "live_covered_max_rgb_deviation": 0.0,
+      "preprocess_ms": 0.3186880052089691,
+      "depth_ms": 59.0610237121582,
+      "alignment_ms": 7.946239948272705,
+      "gpu_resident_total_ms": 72.1602554321289,
+      "gpu_resident_wall_ms": 72.19111500307918,
+      "project_current_ms": 2.411520004272461,
+      "project_past_ms": 2.338815927505493,
+      "composite_ms": 0.07475200295448303
+    },
+    {
+      "index": 70,
+      "past_index": 65,
+      "lag_seconds": 0.49968814849853516,
+      "past_depth_cache_hit": true,
+      "camera_load_ms": 155.17023799475282,
+      "input_upload_ms": 0.7130219892133027,
+      "frame_wall_with_file_io_ms": 228.15107999485917,
+      "camera_timestamp_offsets": [
+        0.0,
+        -0.010795116424560547,
+        0.01077890396118164,
+        -0.03134918212890625,
+        0.0312809944152832,
+        0.04994082450866699
+      ],
+      "camera_scales": [
+        1.0,
+        0.5407113432884216,
+        0.5429428815841675,
+        0.5179994702339172,
+        0.5491284132003784,
+        0.5929527878761292
+      ],
+      "overlap_edges": [
+        {
+          "a": 0,
+          "b": 1,
+          "samples": 1028
+        },
+        {
+          "a": 0,
+          "b": 2,
+          "samples": 957
+        },
+        {
+          "a": 1,
+          "b": 3,
+          "samples": 2162
+        },
+        {
+          "a": 2,
+          "b": 4,
+          "samples": 2195
+        },
+        {
+          "a": 3,
+          "b": 5,
+          "samples": 230
+        }
+      ],
+      "single": {
+        "whole": 0.31319576501846313,
+        "lower_band": 0.3723375201225281
+      },
+      "two_timestamp": {
+        "whole": 0.1481648087501526,
+        "lower_band": 0.17878127098083496
+      },
+      "newly_filled_fraction": 0.16503092646598816,
+      "live_covered_max_rgb_deviation": 0.0,
+      "preprocess_ms": 0.3164159953594208,
+      "depth_ms": 59.10732650756836,
+      "alignment_ms": 7.942431926727295,
+      "gpu_resident_total_ms": 72.18892669677734,
+      "gpu_resident_wall_ms": 72.21934900735505,
+      "project_current_ms": 2.4040639400482178,
+      "project_past_ms": 2.334912061691284,
+      "composite_ms": 0.0745600014925003
+    },
+    {
+      "index": 71,
+      "past_index": 66,
+      "lag_seconds": 0.4997119903564453,
+      "past_depth_cache_hit": true,
+      "camera_load_ms": 156.07924197684042,
+      "input_upload_ms": 0.688905012793839,
+      "frame_wall_with_file_io_ms": 228.96569498698227,
+      "camera_timestamp_offsets": [
+        0.0,
+        -0.010796785354614258,
+        0.010780096054077148,
+        -0.031352996826171875,
+        0.03127908706665039,
+        0.04993700981140137
+      ],
+      "camera_scales": [
+        1.0,
+        0.5295776128768921,
+        0.5555561780929565,
+        0.5107018351554871,
+        0.5677156448364258,
+        0.5990630388259888
+      ],
+      "overlap_edges": [
+        {
+          "a": 0,
+          "b": 1,
+          "samples": 1025
+        },
+        {
+          "a": 0,
+          "b": 2,
+          "samples": 957
+        },
+        {
+          "a": 1,
+          "b": 3,
+          "samples": 2156
+        },
+        {
+          "a": 2,
+          "b": 4,
+          "samples": 2196
+        },
+        {
+          "a": 3,
+          "b": 5,
+          "samples": 226
+        }
+      ],
+      "single": {
+        "whole": 0.3106892704963684,
+        "lower_band": 0.3685625195503235
+      },
+      "two_timestamp": {
+        "whole": 0.14838862419128418,
+        "lower_band": 0.17669379711151123
+      },
+      "newly_filled_fraction": 0.16230063140392303,
+      "live_covered_max_rgb_deviation": 0.0,
+      "preprocess_ms": 0.31727999448776245,
+      "depth_ms": 59.061248779296875,
+      "alignment_ms": 7.915520191192627,
+      "gpu_resident_total_ms": 72.12051391601562,
+      "gpu_resident_wall_ms": 72.1501329971943,
+      "project_current_ms": 2.4075520038604736,
+      "project_past_ms": 2.335616111755371,
+      "composite_ms": 0.07401599735021591
+    },
+    {
+      "index": 72,
+      "past_index": 67,
+      "lag_seconds": 0.499737024307251,
+      "past_depth_cache_hit": true,
+      "camera_load_ms": 155.43537298799492,
+      "input_upload_ms": 0.6870020006317645,
+      "frame_wall_with_file_io_ms": 228.34702400723472,
+      "camera_timestamp_offsets": [
+        0.0,
+        -0.010794878005981445,
+        0.01077890396118164,
+        -0.03134799003601074,
+        0.0312800407409668,
+        0.04993891716003418
+      ],
+      "camera_scales": [
+        1.0,
+        0.49836698174476624,
+        0.583469033241272,
+        0.46053117513656616,
+        0.5972906351089478,
+        0.520195722579956
+      ],
+      "overlap_edges": [
+        {
+          "a": 0,
+          "b": 1,
+          "samples": 1024
+        },
+        {
+          "a": 0,
+          "b": 2,
+          "samples": 956
+        },
+        {
+          "a": 1,
+          "b": 3,
+          "samples": 2152
+        },
+        {
+          "a": 2,
+          "b": 4,
+          "samples": 2196
+        },
+        {
+          "a": 3,
+          "b": 5,
+          "samples": 230
+        }
+      ],
+      "single": {
+        "whole": 0.3082274794578552,
+        "lower_band": 0.36553752422332764
+      },
+      "two_timestamp": {
+        "whole": 0.1445515751838684,
+        "lower_band": 0.17120003700256348
+      },
+      "newly_filled_fraction": 0.1636759489774704,
+      "live_covered_max_rgb_deviation": 0.0,
+      "preprocess_ms": 0.3164159953594208,
+      "depth_ms": 59.09913635253906,
+      "alignment_ms": 7.899136066436768,
+      "gpu_resident_total_ms": 72.14694213867188,
+      "gpu_resident_wall_ms": 72.17705299262889,
+      "project_current_ms": 2.412735939025879,
+      "project_past_ms": 2.337599992752075,
+      "composite_ms": 0.0719359964132309
+    },
+    {
+      "index": 73,
+      "past_index": 68,
+      "lag_seconds": 0.49979305267333984,
+      "past_depth_cache_hit": true,
+      "camera_load_ms": 153.0614249932114,
+      "input_upload_ms": 0.6881699955556542,
+      "frame_wall_with_file_io_ms": 226.04589301045053,
+      "camera_timestamp_offsets": [
+        0.0,
+        -0.010796070098876953,
+        0.010782003402709961,
+        -0.03135108947753906,
+        0.03128504753112793,
+        0.04994606971740723
+      ],
+      "camera_scales": [
+        1.0,
+        0.49654966592788696,
+        0.5635123252868652,
+        0.46091127395629883,
+        0.5802921652793884,
+        0.4871939420700073
+      ],
+      "overlap_edges": [
+        {
+          "a": 0,
+          "b": 1,
+          "samples": 1021
+        },
+        {
+          "a": 0,
+          "b": 2,
+          "samples": 956
+        },
+        {
+          "a": 1,
+          "b": 3,
+          "samples": 2146
+        },
+        {
+          "a": 2,
+          "b": 4,
+          "samples": 2196
+        },
+        {
+          "a": 3,
+          "b": 5,
+          "samples": 233
+        }
+      ],
+      "single": {
+        "whole": 0.3074381351470947,
+        "lower_band": 0.3633500337600708
+      },
+      "two_timestamp": {
+        "whole": 0.1436319351196289,
+        "lower_band": 0.16533124446868896
+      },
+      "newly_filled_fraction": 0.16380615532398224,
+      "live_covered_max_rgb_deviation": 0.0,
+      "preprocess_ms": 0.31539198756217957,
+      "depth_ms": 59.13497543334961,
+      "alignment_ms": 7.934048175811768,
+      "gpu_resident_total_ms": 72.21759796142578,
+      "gpu_resident_wall_ms": 72.24848997429945,
+      "project_current_ms": 2.411423921585083,
+      "project_past_ms": 2.338848114013672,
+      "composite_ms": 0.07369600236415863
+    },
+    {
+      "index": 74,
+      "past_index": 69,
+      "lag_seconds": 0.49985408782958984,
+      "past_depth_cache_hit": true,
+      "camera_load_ms": 153.2730829785578,
+      "input_upload_ms": 0.7138499931897968,
+      "frame_wall_with_file_io_ms": 226.26705598668195,
+      "camera_timestamp_offsets": [
+        0.0,
+        -0.010796070098876953,
+        0.010782003402709961,
+        -0.03135204315185547,
+        0.031282901763916016,
+        0.049941062927246094
+      ],
+      "camera_scales": [
+        1.0,
+        0.49556756019592285,
+        0.5661919713020325,
+        0.45261821150779724,
+        0.5888468027114868,
+        0.458578497171402
+      ],
+      "overlap_edges": [
+        {
+          "a": 0,
+          "b": 1,
+          "samples": 1020
+        },
+        {
+          "a": 0,
+          "b": 2,
+          "samples": 956
+        },
+        {
+          "a": 1,
+          "b": 3,
+          "samples": 2138
+        },
+        {
+          "a": 2,
+          "b": 4,
+          "samples": 2196
+        },
+        {
+          "a": 3,
+          "b": 5,
+          "samples": 232
+        }
+      ],
+      "single": {
+        "whole": 0.30086666345596313,
+        "lower_band": 0.36450624465942383
+      },
+      "two_timestamp": {
+        "whole": 0.1389363408088684,
+        "lower_band": 0.1626875400543213
+      },
+      "newly_filled_fraction": 0.16193035244941711,
+      "live_covered_max_rgb_deviation": 0.0,
+      "preprocess_ms": 0.317440003156662,
+      "depth_ms": 59.12575912475586,
+      "alignment_ms": 7.906303882598877,
+      "gpu_resident_total_ms": 72.2001953125,
+      "gpu_resident_wall_ms": 72.23123998846859,
+      "project_current_ms": 2.43123197555542,
+      "project_past_ms": 2.3365120887756348,
+      "composite_ms": 0.07302399724721909
+    },
+    {
+      "index": 75,
+      "past_index": 70,
+      "lag_seconds": 0.4998610019683838,
+      "past_depth_cache_hit": true,
+      "camera_load_ms": 155.86703800363466,
+      "input_upload_ms": 0.6830250204075128,
+      "frame_wall_with_file_io_ms": 229.04251900035888,
+      "camera_timestamp_offsets": [
+        0.0,
+        -0.01079416275024414,
+        0.01077890396118164,
+        -0.03134512901306152,
+        0.03127884864807129,
+        0.04993796348571777
+      ],
+      "camera_scales": [
+        1.0,
+        0.4847044348716736,
+        0.5639255046844482,
+        0.43036821484565735,
+        0.5992191433906555,
+        0.42642760276794434
+      ],
+      "overlap_edges": [
+        {
+          "a": 0,
+          "b": 1,
+          "samples": 1020
+        },
+        {
+          "a": 0,
+          "b": 2,
+          "samples": 954
+        },
+        {
+          "a": 1,
+          "b": 3,
+          "samples": 2146
+        },
+        {
+          "a": 2,
+          "b": 4,
+          "samples": 2196
+        },
+        {
+          "a": 3,
+          "b": 5,
+          "samples": 232
+        }
+      ],
+      "single": {
+        "whole": 0.2954223155975342,
+        "lower_band": 0.3588562607765198
+      },
+      "two_timestamp": {
+        "whole": 0.13177895545959473,
+        "lower_band": 0.1548812985420227
+      },
+      "newly_filled_fraction": 0.16364340484142303,
+      "live_covered_max_rgb_deviation": 0.0,
+      "preprocess_ms": 0.317440003156662,
+      "depth_ms": 59.1011848449707,
+      "alignment_ms": 8.112128257751465,
+      "gpu_resident_total_ms": 72.4142074584961,
+      "gpu_resident_wall_ms": 72.44398197508417,
+      "project_current_ms": 2.431999921798706,
+      "project_past_ms": 2.3677120208740234,
+      "composite_ms": 0.07379200309515
+    },
+    {
+      "index": 76,
+      "past_index": 71,
+      "lag_seconds": 0.4998621940612793,
+      "past_depth_cache_hit": true,
+      "camera_load_ms": 153.56011799303815,
+      "input_upload_ms": 0.6981260085012764,
+      "frame_wall_with_file_io_ms": 226.867460005451,
+      "camera_timestamp_offsets": [
+        0.0,
+        -0.010797977447509766,
+        0.010782957077026367,
+        -0.031356096267700195,
+        0.03128695487976074,
+        0.04995083808898926
+      ],
+      "camera_scales": [
+        1.0,
+        0.45611974596977234,
+        0.5525022149085999,
+        0.4142337739467621,
+        0.5851447582244873,
+        0.3933981657028198
+      ],
+      "overlap_edges": [
+        {
+          "a": 0,
+          "b": 1,
+          "samples": 1021
+        },
+        {
+          "a": 0,
+          "b": 2,
+          "samples": 946
+        },
+        {
+          "a": 1,
+          "b": 3,
+          "samples": 2150
+        },
+        {
+          "a": 2,
+          "b": 4,
+          "samples": 2184
+        },
+        {
+          "a": 3,
+          "b": 5,
+          "samples": 231
+        }
+      ],
+      "single": {
+        "whole": 0.28919267654418945,
+        "lower_band": 0.35145628452301025
+      },
+      "two_timestamp": {
+        "whole": 0.1283894181251526,
+        "lower_band": 0.15165627002716064
+      },
+      "newly_filled_fraction": 0.16080322861671448,
+      "live_covered_max_rgb_deviation": 0.0,
+      "preprocess_ms": 0.3166719973087311,
+      "depth_ms": 59.131649017333984,
+      "alignment_ms": 8.160256385803223,
+      "gpu_resident_total_ms": 72.52889251708984,
+      "gpu_resident_wall_ms": 72.56044901441783,
+      "project_current_ms": 2.436095952987671,
+      "project_past_ms": 2.401279926300049,
+      "composite_ms": 0.07372800260782242
+    },
+    {
+      "index": 77,
+      "past_index": 72,
+      "lag_seconds": 0.4998900890350342,
+      "past_depth_cache_hit": true,
+      "camera_load_ms": 155.74808200472035,
+      "input_upload_ms": 0.6944249907974154,
+      "frame_wall_with_file_io_ms": 228.82572800153866,
+      "camera_timestamp_offsets": [
+        0.0,
+        -0.010797977447509766,
+        0.010782957077026367,
+        -0.0313570499420166,
+        0.031288862228393555,
+        0.04995298385620117
+      ],
+      "camera_scales": [
+        1.0,
+        0.4814684987068176,
+        0.5462613105773926,
+        0.4264952540397644,
+        0.586479127407074,
+        0.40342819690704346
+      ],
+      "overlap_edges": [
+        {
+          "a": 0,
+          "b": 1,
+          "samples": 1024
+        },
+        {
+          "a": 0,
+          "b": 2,
+          "samples": 946
+        },
+        {
+          "a": 1,
+          "b": 3,
+          "samples": 2151
+        },
+        {
+          "a": 2,
+          "b": 4,
+          "samples": 2197
+        },
+        {
+          "a": 3,
+          "b": 5,
+          "samples": 234
+        }
+      ],
+      "single": {
+        "whole": 0.28614091873168945,
+        "lower_band": 0.35504376888275146
+      },
+      "two_timestamp": {
+        "whole": 0.12770992517471313,
+        "lower_band": 0.15416252613067627
+      },
+      "newly_filled_fraction": 0.15843099355697632,
+      "live_covered_max_rgb_deviation": 0.0,
+      "preprocess_ms": 0.33347201347351074,
+      "depth_ms": 59.072513580322266,
+      "alignment_ms": 8.050687789916992,
+      "gpu_resident_total_ms": 72.30335998535156,
+      "gpu_resident_wall_ms": 72.33430998167023,
+      "project_current_ms": 2.409791946411133,
+      "project_past_ms": 2.353856086730957,
+      "composite_ms": 0.07372800260782242
+    },
+    {
+      "index": 78,
+      "past_index": 73,
+      "lag_seconds": 0.4999120235443115,
+      "past_depth_cache_hit": true,
+      "camera_load_ms": 154.7445830074139,
+      "input_upload_ms": 0.6987919914536178,
+      "frame_wall_with_file_io_ms": 228.02036700886674,
+      "camera_timestamp_offsets": [
+        0.0,
+        -0.01079702377319336,
+        0.010782957077026367,
+        -0.031356096267700195,
+        0.031288862228393555,
+        0.049952030181884766
+      ],
+      "camera_scales": [
+        1.0,
+        0.4933658540248871,
+        0.5438883304595947,
+        0.42062145471572876,
+        0.5742485523223877,
+        0.4062080681324005
+      ],
+      "overlap_edges": [
+        {
+          "a": 0,
+          "b": 1,
+          "samples": 1024
+        },
+        {
+          "a": 0,
+          "b": 2,
+          "samples": 944
+        },
+        {
+          "a": 1,
+          "b": 3,
+          "samples": 2147
+        },
+        {
+          "a": 2,
+          "b": 4,
+          "samples": 2197
+        },
+        {
+          "a": 3,
+          "b": 5,
+          "samples": 236
+        }
+      ],
+      "single": {
+        "whole": 0.28612464666366577,
+        "lower_band": 0.3575562834739685
+      },
+      "two_timestamp": {
+        "whole": 0.12866204977035522,
+        "lower_band": 0.15671879053115845
+      },
+      "newly_filled_fraction": 0.15746256709098816,
+      "live_covered_max_rgb_deviation": 0.0,
+      "preprocess_ms": 0.3164159953594208,
+      "depth_ms": 59.17593765258789,
+      "alignment_ms": 8.120479583740234,
+      "gpu_resident_total_ms": 72.4817886352539,
+      "gpu_resident_wall_ms": 72.51470899791457,
+      "project_current_ms": 2.4236481189727783,
+      "project_past_ms": 2.3633921146392822,
+      "composite_ms": 0.0727040022611618
+    },
+    {
+      "index": 79,
+      "past_index": 74,
+      "lag_seconds": 0.4999260902404785,
+      "past_depth_cache_hit": true,
+      "camera_load_ms": 155.20563800237142,
+      "input_upload_ms": 0.7013519934844226,
+      "frame_wall_with_file_io_ms": 228.09453099034727,
+      "camera_timestamp_offsets": [
+        0.0,
+        -0.010798215866088867,
+        0.010780811309814453,
+        -0.0313570499420166,
+        0.031286001205444336,
+        -0.05004405975341797
+      ],
+      "camera_scales": [
+        1.0,
+        0.48286840319633484,
+        0.5334703922271729,
+        0.4254436790943146,
+        0.5836314558982849,
+        0.40353095531463623
+      ],
+      "overlap_edges": [
+        {
+          "a": 0,
+          "b": 1,
+          "samples": 1026
+        },
+        {
+          "a": 0,
+          "b": 2,
+          "samples": 941
+        },
+        {
+          "a": 1,
+          "b": 3,
+          "samples": 2148
+        },
+        {
+          "a": 2,
+          "b": 4,
+          "samples": 2197
+        },
+        {
+          "a": 3,
+          "b": 5,
+          "samples": 180
+        }
+      ],
+      "single": {
+        "whole": 0.29004716873168945,
+        "lower_band": 0.36313754320144653
+      },
+      "two_timestamp": {
+        "whole": 0.12926429510116577,
+        "lower_band": 0.1599687933921814
+      },
+      "newly_filled_fraction": 0.16078288853168488,
+      "live_covered_max_rgb_deviation": 0.0,
+      "preprocess_ms": 0.317440003156662,
+      "depth_ms": 59.01414489746094,
+      "alignment_ms": 7.923007965087891,
+      "gpu_resident_total_ms": 72.10726165771484,
+      "gpu_resident_wall_ms": 72.13951801531948,
+      "project_current_ms": 2.433727979660034,
+      "project_past_ms": 2.3357439041137695,
+      "composite_ms": 0.07372800260782242
+    }
+  ],
+  "preroll": [
+    {
+      "index": 7,
+      "preprocess_ms": 0.32051199674606323,
+      "depth_ms": 79.74400329589844,
+      "alignment_ms": 8.053759574890137,
+      "gpu_resident_total_ms": 88.1295394897461,
+      "gpu_resident_wall_ms": 88.16243198816665
+    },
+    {
+      "index": 8,
+      "preprocess_ms": 0.3164159953594208,
+      "depth_ms": 59.13497543334961,
+      "alignment_ms": 7.996416091918945,
+      "gpu_resident_total_ms": 67.45906829833984,
+      "gpu_resident_wall_ms": 67.48951901681721
+    },
+    {
+      "index": 9,
+      "preprocess_ms": 0.320576012134552,
+      "depth_ms": 59.120574951171875,
+      "alignment_ms": 8.085503578186035,
+      "gpu_resident_total_ms": 67.53794860839844,
+      "gpu_resident_wall_ms": 67.56883300840855
+    },
+    {
+      "index": 10,
+      "preprocess_ms": 0.319487988948822,
+      "depth_ms": 59.07455825805664,
+      "alignment_ms": 8.045568466186523,
+      "gpu_resident_total_ms": 67.45097351074219,
+      "gpu_resident_wall_ms": 67.48235298437066
+    },
+    {
+      "index": 11,
+      "preprocess_ms": 0.317440003156662,
+      "depth_ms": 59.14419174194336,
+      "alignment_ms": 8.232959747314453,
+      "gpu_resident_total_ms": 67.70591735839844,
+      "gpu_resident_wall_ms": 67.73784299730323
+    }
+  ],
+  "teacher": {
+    "source_run": "vast-20261127T205342Z-66546-5c4ffe",
+    "source_report": "docs/results/chase-3dgs-040-v2-diagnostic/",
+    "source_inference_size": [
+      640,
+      384
+    ],
+    "preview_size": [
+      320,
+      192
+    ],
+    "pose": {
+      "back": 5.5,
+      "height_m": 3.0,
+      "pitch": 17.0
+    },
+    "frames": [
+      {
+        "index": 12,
+        "path": "00012.png",
+        "sha256": "9812addd2c9f00cb4e8c963d0da228fc5f9325fa392488c9df588ecab492c9e8"
+      },
+      {
+        "index": 25,
+        "path": "00025.png",
+        "sha256": "d8400806e30d6c35c70b6422f51d87d56391cd4efb7cae988b2e5410aa6caf63"
+      },
+      {
+        "index": 40,
+        "path": "00040.png",
+        "sha256": "5671e84dd3a1cbc70622c30b81d0b6bdbd0a33548c42f2faeb01b66869fdedf6"
+      },
+      {
+        "index": 55,
+        "path": "00055.png",
+        "sha256": "512fbd6c825219c8ff9c9b2ab519c143b94bb4660ca71953fc75fda44952393f"
+      },
+      {
+        "index": 70,
+        "path": "00070.png",
+        "sha256": "4d6c8db8bbda44182da4b854f140b6cf619ebf88df91b447e04b0ccd90537c60"
+      }
+    ]
+  },
+  "depth_model": {
+    "source": {
+      "url": "https://github.com/DepthAnything/Depth-Anything-V2.git",
+      "commit": "a561b849ebae10a6f5ef49e26c83cbbcd36c71bf"
+    },
+    "model": {
+      "repo": "depth-anything/Depth-Anything-V2-Metric-VKITTI-Small",
+      "revision": "c725b8589bdf6ab04072cab74c0467830db80d6d",
+      "filename": "depth_anything_v2_metric_vkitti_vits.pth",
+      "sha256": "9203e538d35255c90dda4b7fedb47ff33fe725497bcca3b1e53b3a65ee63f0cb"
+    },
+    "encoder": "vits",
+    "max_depth": 80,
+    "input_size": 518
+  }
+}

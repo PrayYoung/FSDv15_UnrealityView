@@ -1,0 +1,23 @@
+{
+  "method": "Separate claim-versus-evidence reviewer pass",
+  "supported": [
+    "Engineering completion,checksums and destruction",
+    "Paired within-variant hole reduction",
+    "Exact identity of currently covered projection pixels",
+    "Direct measured GPU-resident and I/O-inclusive timings"
+  ],
+  "not_supported": [
+    "Zero moving-object ghosting",
+    "8\u201312percent whole-frame holes achieved",
+    "25\u201340ms depth target achieved",
+    "20\u201330fps complete deployment pipeline",
+    "Novel-view geometric accuracy against groundtruth"
+  ],
+  "confounders": [
+    "Historical FP32 baseline used another rental and different CPU preprocessing",
+    "Whole-frame and image-band holes include near-ego occlusions and are not semantic-road metrics",
+    "Current projection may already have depth/seam artifacts",
+    "Full temporal visual inspection pending"
+  ],
+  "decision": "Keep downstream stages gated;negative targets are valid research outcomes,not an engineering retry trigger"
+}

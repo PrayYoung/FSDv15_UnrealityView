@@ -1,0 +1,264 @@
+{
+  "status": "completed",
+  "variants": {
+    "518": {
+      "single_holes": {
+        "whole": {
+          "mean": 0.304690635379623,
+          "median": 0.30902910232543945,
+          "p95": 0.3237096816301346
+        },
+        "lower_band": {
+          "mean": 0.3702199564260595,
+          "median": 0.36906251311302185,
+          "p95": 0.3970097154378891
+        }
+      },
+      "two_timestamp_holes": {
+        "whole": {
+          "mean": 0.14670561341678395,
+          "median": 0.1423807144165039,
+          "p95": 0.18660580217838288
+        },
+        "lower_band": {
+          "mean": 0.18175222768503077,
+          "median": 0.17612814903259277,
+          "p95": 0.23984097242355346
+        }
+      },
+      "gpu_resident_total_ms": {
+        "mean": 128.2573211894316,
+        "median": 127.87396621704102,
+        "p95": 128.69323120117187
+      },
+      "gpu_resident_fps_from_median": 7.820200073427736,
+      "frame_wall_with_file_io_ms": {
+        "mean": 286.0820478971993,
+        "median": 283.45119550067466,
+        "p95": 292.1054864054895
+      },
+      "wall_fps_with_file_io_from_median": 3.527944195944024,
+      "stage_ms": {
+        "preprocess_ms": {
+          "mean": 0.42240141200668674,
+          "median": 0.4195840060710907,
+          "p95": 0.4350879997014999
+        },
+        "depth_ms": {
+          "mean": 114.39418242959415,
+          "median": 114.43194961547852,
+          "p95": 114.84415397644042
+        },
+        "alignment_ms": {
+          "mean": 8.272764304104973,
+          "median": 8.121792316436768,
+          "p95": 8.673603343963624
+        },
+        "project_current_ms": {
+          "mean": 2.719443300191094,
+          "median": 2.4084479808807373,
+          "p95": 2.45989910364151
+        },
+        "project_past_ms": {
+          "mean": 2.3496174181208893,
+          "median": 2.3367679119110107,
+          "p95": 2.3979055762290953
+        },
+        "composite_ms": {
+          "mean": 0.08917647107120823,
+          "median": 0.07475200295448303,
+          "p95": 0.10744159929454326
+        },
+        "camera_load_ms": {
+          "mean": 157.0344086169772,
+          "median": 154.8600730020553,
+          "p95": 161.46506649820367
+        },
+        "input_upload_ms": {
+          "mean": 0.7084252326475347,
+          "median": 0.6976195145398378,
+          "p95": 0.7697413078858517
+        }
+      },
+      "live_priority_verified": true,
+      "preroll_frames": 5,
+      "cache_policy": "Steady state one6-camera depth inference per frame;reuse t-5 cached realcamera depth,not previous generatedlatent",
+      "ghosting_guarantee": "Current-covered pixels unchanged only;historical content in current holes may be stale"
+    },
+    "392": {
+      "single_holes": {
+        "whole": {
+          "mean": 0.3027178864268696,
+          "median": 0.3063618540763855,
+          "p95": 0.3241161912679672
+        },
+        "lower_band": {
+          "mean": 0.37531739035073447,
+          "median": 0.376053124666214,
+          "p95": 0.39659878313541413
+        }
+      },
+      "two_timestamp_holes": {
+        "whole": {
+          "mean": 0.15279243798816905,
+          "median": 0.14641517400741577,
+          "p95": 0.20241652727127074
+        },
+        "lower_band": {
+          "mean": 0.19507640074281132,
+          "median": 0.18797501921653748,
+          "p95": 0.2671866029500961
+        }
+      },
+      "gpu_resident_total_ms": {
+        "mean": 72.34156586142147,
+        "median": 72.27807998657227,
+        "p95": 72.66513900756836
+      },
+      "gpu_resident_fps_from_median": 13.835453296293688,
+      "frame_wall_with_file_io_ms": {
+        "mean": 227.84792135216242,
+        "median": 227.43592051847372,
+        "p95": 231.0881871773745
+      },
+      "wall_fps_with_file_io_from_median": 4.39684284575784,
+      "stage_ms": {
+        "preprocess_ms": {
+          "mean": 0.31862258735825033,
+          "median": 0.317440003156662,
+          "p95": 0.32163519561290743
+        },
+        "depth_ms": {
+          "mean": 59.103358156540814,
+          "median": 59.10988807678223,
+          "p95": 59.17004890441895
+        },
+        "alignment_ms": {
+          "mean": 8.056516668375801,
+          "median": 8.00820779800415,
+          "p95": 8.344729661941528
+        },
+        "project_current_ms": {
+          "mean": 2.4233595343197094,
+          "median": 2.416767954826355,
+          "p95": 2.4649375915527343
+        },
+        "project_past_ms": {
+          "mean": 2.3553294083651375,
+          "median": 2.343984007835388,
+          "p95": 2.412339210510254
+        },
+        "composite_ms": {
+          "mean": 0.0746663539286922,
+          "median": 0.07371200248599052,
+          "p95": 0.07729440033435821
+        },
+        "camera_load_ms": {
+          "mean": 154.71684634950876,
+          "median": 154.46278800664004,
+          "p95": 157.85340144648217
+        },
+        "input_upload_ms": {
+          "mean": 0.7091364677762613,
+          "median": 0.7046749960863963,
+          "p95": 0.7497796497773379
+        }
+      },
+      "live_priority_verified": true,
+      "preroll_frames": 5,
+      "cache_policy": "Steady state one6-camera depth inference per frame;reuse t-5 cached realcamera depth,not previous generatedlatent",
+      "ghosting_guarantee": "Current-covered pixels unchanged only;historical content in current holes may be stale"
+    }
+  },
+  "output_size": [
+    640,
+    384
+  ],
+  "frames": [
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    37,
+    38,
+    39,
+    40,
+    41,
+    42,
+    43,
+    44,
+    45,
+    46,
+    47,
+    48,
+    49,
+    50,
+    51,
+    52,
+    53,
+    54,
+    55,
+    56,
+    57,
+    58,
+    59,
+    60,
+    61,
+    62,
+    63,
+    64,
+    65,
+    66,
+    67,
+    68,
+    69,
+    70,
+    71,
+    72,
+    73,
+    74,
+    75,
+    76,
+    77,
+    78,
+    79
+  ],
+  "lidar_used": false,
+  "z_prev_used": false,
+  "difix_used": false,
+  "precision": "autocast_cuda_float16_for_depth;float32geometry",
+  "gpu_timing": "Device-resident preprocessing+depth+alignment+two projections+composite;includes host launch/solver gaps;excludes file I/O,host upload,model load,preroll and diagnostic export",
+  "lower_band_rows_at384": [
+    134,
+    384
+  ],
+  "equivalent_lower_band_rows_at192": [
+    67,
+    192
+  ],
+  "gif_variant": 518,
+  "visual_approval": false,
+  "step2_launched": false,
+  "step3_launched": false
+}

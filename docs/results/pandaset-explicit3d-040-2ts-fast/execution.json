@@ -1,0 +1,27 @@
+{
+  "run_id": "vast-20261128T021353Z-80423-c8a5a7",
+  "source_commit": "f5537484700602bb886ea6f80905fa750be484d2",
+  "classification": "SUCCESS",
+  "completed_frames_per_variant": 68,
+  "input_sizes": [
+    518,
+    392
+  ],
+  "target_size": [
+    640,
+    384
+  ],
+  "approximate_rental_cost_usd": 0.052,
+  "reported_cost_is_provider_invoice": false,
+  "budget_usd": 0.25,
+  "instance_destroyed_at": "2026-11-28T02:27:20Z",
+  "live_absence_verified": true,
+  "artifact_manifest_verified": true,
+  "downloaded_result_bytes": 21719348,
+  "provisioning_seconds": 36.0,
+  "setup_seconds": 60.0,
+  "workload_seconds": 668.0,
+  "datasets_or_model_weights_downloaded_locally": false,
+  "step2_launched": false,
+  "step3_launched": false
+}
