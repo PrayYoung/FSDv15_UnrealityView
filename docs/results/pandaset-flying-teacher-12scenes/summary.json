@@ -1,0 +1,195 @@
+{
+  "schema": "unrealityview.flying.export.report.v1",
+  "source_commit": "99ad78f55dbfee6a196e059a198b96dd8444a875",
+  "recipe_hash": "ae9b69e03f0a38e5e7bfa674124dc7c481fe461c80954cc282b82a715a9de339",
+  "planned_scenes": 12,
+  "completed_scenes": 4,
+  "planned_train_val": [
+    10,
+    2
+  ],
+  "scenes": [
+    {
+      "sequence": "040",
+      "split": "train",
+      "tags": [
+        "day",
+        "hill",
+        "parked_cars"
+      ],
+      "complete": true,
+      "chunk": 1,
+      "quality": {
+        "passed": true,
+        "heldout_psnr_db": 26.43839402558306,
+        "heldout_samples": 42,
+        "ground_alpha_min": 0.9942,
+        "psnr_threshold": 22.0,
+        "ground_alpha_threshold": 0.85,
+        "flag_psnr_below24": false,
+        "visual_approval": false
+      },
+      "cache_bytes": 45088871,
+      "holes_mean": {
+        "single": {
+          "whole": 0.3027178864268696,
+          "lower_band": 0.37531739035073447
+        },
+        "two_timestamp": {
+          "whole": 0.15279243798816905,
+          "lower_band": 0.19507640074281132
+        },
+        "three_timestamp": {
+          "whole": 0.09633892073350794,
+          "lower_band": 0.1270853158305673
+        },
+        "pinhole_closed": {
+          "whole": 0.038152964676127714,
+          "lower_band": 0.05718320608139038
+        }
+      },
+      "all_live_identity_checks_passed": true
+    },
+    {
+      "sequence": "006",
+      "split": "train",
+      "tags": [
+        "day",
+        "downtown_intersection"
+      ],
+      "complete": true,
+      "chunk": 1,
+      "quality": {
+        "passed": true,
+        "heldout_psnr_db": 24.84446177105661,
+        "heldout_samples": 42,
+        "ground_alpha_min": 0.998,
+        "psnr_threshold": 22.0,
+        "ground_alpha_threshold": 0.85,
+        "flag_psnr_below24": false,
+        "visual_approval": false
+      },
+      "cache_bytes": 46305585,
+      "holes_mean": {
+        "single": {
+          "whole": 0.30756473365951986,
+          "lower_band": 0.3666946879204582
+        },
+        "two_timestamp": {
+          "whole": 0.13820330009740942,
+          "lower_band": 0.1629505727220984
+        },
+        "three_timestamp": {
+          "whole": 0.074778973179705,
+          "lower_band": 0.08901408840628232
+        },
+        "pinhole_closed": {
+          "whole": 0.018361119663014132,
+          "lower_band": 0.0247364201966454
+        }
+      },
+      "all_live_identity_checks_passed": true
+    },
+    {
+      "sequence": "067",
+      "split": "train",
+      "tags": [
+        "night",
+        "avenue"
+      ],
+      "complete": true,
+      "chunk": 1,
+      "quality": {
+        "passed": true,
+        "heldout_psnr_db": 30.123894870585268,
+        "heldout_samples": 42,
+        "ground_alpha_min": 0.993575,
+        "psnr_threshold": 22.0,
+        "ground_alpha_threshold": 0.85,
+        "flag_psnr_below24": false,
+        "visual_approval": false
+      },
+      "cache_bytes": 40680134,
+      "holes_mean": {
+        "single": {
+          "whole": 0.27653835100286145,
+          "lower_band": 0.35084155903143044
+        },
+        "two_timestamp": {
+          "whole": 0.11862183756688062,
+          "lower_band": 0.15109744755660787
+        },
+        "three_timestamp": {
+          "whole": 0.06849306471207563,
+          "lower_band": 0.09124607023070841
+        },
+        "pinhole_closed": {
+          "whole": 0.028364600504145902,
+          "lower_band": 0.04235453114790075
+        }
+      },
+      "all_live_identity_checks_passed": true
+    },
+    {
+      "sequence": "047",
+      "split": "val",
+      "tags": [
+        "day",
+        "downtown_intersection"
+      ],
+      "complete": true,
+      "chunk": 1,
+      "quality": {
+        "passed": true,
+        "heldout_psnr_db": 25.584060294327326,
+        "heldout_samples": 42,
+        "ground_alpha_min": 0.998075,
+        "psnr_threshold": 22.0,
+        "ground_alpha_threshold": 0.85,
+        "flag_psnr_below24": false,
+        "visual_approval": false
+      },
+      "cache_bytes": 47882976,
+      "holes_mean": {
+        "single": {
+          "whole": 0.34788330249926624,
+          "lower_band": 0.4264814524966128
+        },
+        "two_timestamp": {
+          "whole": 0.17424563362317927,
+          "lower_band": 0.2177918395575355
+        },
+        "three_timestamp": {
+          "whole": 0.09571504680549398,
+          "lower_band": 0.11965057516799253
+        },
+        "pinhole_closed": {
+          "whole": 0.01686893228222342,
+          "lower_band": 0.021928702207172617
+        }
+      },
+      "all_live_identity_checks_passed": true
+    }
+  ],
+  "chunks": [
+    {
+      "chunk": 1,
+      "state": "complete",
+      "attempts": [
+        {
+          "run_id": "vast-20261128T033517Z-84745-c0abad",
+          "classification": "SUCCESS",
+          "approx_cost_usd": 0.9196,
+          "destroyed_verified": true,
+          "source_commit": "99ad78f55dbfee6a196e059a198b96dd8444a875"
+        }
+      ]
+    }
+  ],
+  "total_estimated_rental_cost_usd": 0.9196,
+  "maximum_total_budget_usd": 6,
+  "reported_cost_is_provider_invoice": false,
+  "visual_approval": false,
+  "training_launched": false,
+  "dataset_cache_in_git": false
+}

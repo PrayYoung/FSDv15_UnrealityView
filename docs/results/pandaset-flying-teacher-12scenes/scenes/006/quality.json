@@ -1,0 +1,10 @@
+{
+  "passed": true,
+  "heldout_psnr_db": 24.84446177105661,
+  "heldout_samples": 42,
+  "ground_alpha_min": 0.998,
+  "psnr_threshold": 22.0,
+  "ground_alpha_threshold": 0.85,
+  "flag_psnr_below24": false,
+  "visual_approval": false
+}

@@ -1,0 +1,25 @@
+{
+  "holes": {
+    "single": {
+      "whole": 0.34788330249926624,
+      "lower_band": 0.4264814524966128
+    },
+    "two_timestamp": {
+      "whole": 0.17424563362317927,
+      "lower_band": 0.2177918395575355
+    },
+    "three_timestamp": {
+      "whole": 0.09571504680549398,
+      "lower_band": 0.11965057516799253
+    },
+    "pinhole_closed": {
+      "whole": 0.01686893228222342,
+      "lower_band": 0.021928702207172617
+    }
+  },
+  "live_identity_verified": true,
+  "depth_forward_calls": 78,
+  "target_frames": 68,
+  "preroll_frames": 10,
+  "depth_input_size": 392
+}

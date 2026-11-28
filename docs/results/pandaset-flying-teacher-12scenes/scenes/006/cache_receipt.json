@@ -1,0 +1,27 @@
+{
+  "schema": "unrealityview.flying.v1",
+  "recipe_hash": "ae9b69e03f0a38e5e7bfa674124dc7c481fe461c80954cc282b82a715a9de339",
+  "sequence": "006",
+  "split": "train",
+  "frames": 68,
+  "raw_safetensors_bytes": 47589962,
+  "raw_safetensors_sha256": "7e79e3e2f2d0a8246ba503db719654639e2fbd2c0957f9ef6ea9dd18cb81d395",
+  "files": {
+    "cache.safetensors.gz": {
+      "bytes": 43979224,
+      "sha256": "860e4dbb6ad9ba944ab747531846803328909b3c61cc811b1500d90f617aa8cb"
+    },
+    "metadata.json": {
+      "bytes": 25184,
+      "sha256": "d34684df775e4d7e691eb1ace7441e9c08f67425e6f0bc4d49dac4c0e985db5c"
+    },
+    "quality.json": {
+      "bytes": 233,
+      "sha256": "8f415ef468c5de3f4215667c3835a123524c4d611950b90b582174c2f72fcc0f"
+    },
+    "inspection.png": {
+      "bytes": 1344370,
+      "sha256": "a9c2f8ec756f841ba874ddf5d9b809065b86e1aad31f86cfc629f4331a17b9c8"
+    }
+  }
+}
