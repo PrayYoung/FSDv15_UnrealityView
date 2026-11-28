@@ -174,7 +174,7 @@
   "chunks": [
     {
       "chunk": 1,
-      "state": "complete",
+      "state": "published",
       "attempts": [
         {
           "run_id": "vast-20261128T033517Z-84745-c0abad",
@@ -184,9 +184,22 @@
           "source_commit": "99ad78f55dbfee6a196e059a198b96dd8444a875"
         }
       ]
+    },
+    {
+      "chunk": 2,
+      "state": "failed",
+      "attempts": [
+        {
+          "run_id": "vast-20261128T073200Z-96195-f6e634",
+          "classification": "INFRASTRUCTURE_FAILED",
+          "approx_cost_usd": 0.0492,
+          "destroyed_verified": true,
+          "source_commit": "99ad78f55dbfee6a196e059a198b96dd8444a875"
+        }
+      ]
     }
   ],
-  "total_estimated_rental_cost_usd": 0.9196,
+  "total_estimated_rental_cost_usd": 0.9688,
   "maximum_total_budget_usd": 6,
   "reported_cost_is_provider_invoice": false,
   "visual_approval": false,

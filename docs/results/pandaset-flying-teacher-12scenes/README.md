@@ -17,7 +17,7 @@ Each cache contains both target/rough resolutions512x320and320x192,FP16TAESD lat
 
 Only this report,compact receipts and inspection strips are in Git. Compact gzip/safetensors dataset caches stay in local runner returns;native archive,fit checkpoints,models and environments are not downloaded or published. Lossless RGB may make the return larger than the original150–300MB estimate;no lossy compression is used to force that estimate.
 
-Estimated rental cost recorded so far: **$0.9196** of the$6aggregate ceiling,$2maximum per chunk. These are estimates,not provider invoices. Each completed chunk must return verified cache manifests and a verified destroyed instance before another starts.
+Estimated rental cost recorded so far: **$0.9688** of the$6aggregate ceiling,$2maximum per chunk. These are estimates,not provider invoices. Each completed chunk must return verified cache manifests and a verified destroyed instance before another starts.
 
 [Frozen protocol](../../FLYING_EXPORT_STEP2.md) · [Full summary](summary.json) · [Selection](selection.json)
 
