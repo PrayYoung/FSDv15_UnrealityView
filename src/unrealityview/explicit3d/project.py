@@ -46,6 +46,21 @@ def project(rgb, depth, intrinsics, camera_to_world, target_pose, target_k, size
     return rasterize(points,rgb,target_pose,target_k,size,valid)
 
 
+def composite_live_first(current, current_mask, past, past_mask):
+    """Fill current holes only; never replace a covered live pixel with history.
+
+    This does not establish that historical content in current holes is still
+    valid. Disoccluded moving objects can leave stale content there.
+    """
+    if current.shape!=past.shape or current.shape!=(*current_mask.shape,3) or past_mask.shape!=current_mask.shape:
+        raise ValueError('RGB/mask dimensions must match')
+    if current_mask.dtype!=torch.bool or past_mask.dtype!=torch.bool:
+        raise ValueError('Coverage masks must be boolean')
+    valid=current_mask|past_mask
+    rgb=torch.where(current_mask[...,None],current,past)
+    return torch.where(valid[...,None],rgb,torch.zeros_like(rgb)),valid
+
+
 def lidar_anchor(depth, sparse_depth, minimum=30):
     """Per-camera robust scale from visible nearest LiDAR samples; no GT novel view."""
     scales=[];counts=[]

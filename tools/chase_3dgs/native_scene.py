@@ -8,13 +8,13 @@ from tools.chase_3dgs.extract_pandaset_scene import CAMERAS
 
 
 class NativeScene:
-    def __init__(self,root):
+    def __init__(self,root,use_lidar=True):
         self.root=Path(root)/'040';self.metadata=[]
         for name in CAMERAS:
             p=self.root/'camera'/name;k=json.loads((p/'intrinsics.json').read_text())
             self.metadata.append((p,np.array([[k['fx'],0,k['cx']],[0,k['fy'],k['cy']],[0,0,1.]],dtype=np.float32),json.loads((p/'poses.json').read_text()),np.array(json.loads((p/'timestamps.json').read_text()))))
         self.timestamps=self.metadata[0][3]
-        self.lidar_times=np.array(json.loads((self.root/'lidar/timestamps.json').read_text()))
+        self.lidar_times=np.array(json.loads((self.root/'lidar/timestamps.json').read_text())) if use_lidar else None
         if len(self.timestamps)!=80 or not (np.diff(self.timestamps)>0).all():raise ValueError('Expected80 ordered native frames')
 
     def cameras(self,index,size=(640,384)):
@@ -37,6 +37,7 @@ class NativeScene:
     def lidar_world(self,index):
         # Pickle tables are consumed only here, in an isolated pinned native-data
         # environment after the complete source archive SHA256 was verified.
+        if self.lidar_times is None:raise RuntimeError('LiDAR is disabled for this camera-only reader')
         import pandas as pd
         i=int(np.abs(self.lidar_times-self.timestamps[index]).argmin())
         if abs(self.lidar_times[i]-self.timestamps[index])>.06:raise ValueError('LiDAR timestamp mismatch')

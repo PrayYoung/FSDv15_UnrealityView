@@ -47,6 +47,12 @@ whole-frame projection holes,including near-ego gaps. Six-camera depth took abou
 157ms and Difix577ms/image in this configuration,so20–30fps is not established.
 Both rentals are verified destroyed;Prompt3 remains on hold.
 
+The approved [next diagnostic and gated dataset/training plan](docs/TWO_TIMESTAMP_HYBRID_PLAN.md)
+tests strict live-priority t/t−5 projection and GPU FP16 depth on scene040 before
+any12-scene export or Hybrid P2.5 training. Hole reduction,speed and moving-object
+quality remain experimental questions;current-covered pixel identity alone is
+not a general ghosting guarantee.
+
 The independent [stateless PixArt-LCM pilot](docs/PROMPT_D_PROTOCOL.md) uses six
 raw cameras from frame t-1 to predict the observed **native front camera** at t,
 with1200tokens, LoRA, calibrated rays and no previous latent input. Its completed v2 GPU result is reported above; the

@@ -1,0 +1,5 @@
+numpy==1.26.4
+pillow==11.1.0
+opencv-python-headless==4.11.0.86
+huggingface-hub==0.25.1
+safetensors==0.5.3
