@@ -51,8 +51,12 @@ The [two-timestamp FP16 diagnostic](docs/results/pandaset-explicit3d-040-2ts-fas
 completed both sizes:whole-frame holes fell to **14.67–15.28%**,with exact live-
 covered pixel preservation. The faster392variant measured **13.84fps** on GPU-
 resident inputs (4.40fps including JPEG I/O),below the proposed20–30fps target.
-Residual holes/seams and stale-content risk need review;the
-[12-scene dataset and Hybrid P2.5 plan](docs/TWO_TIMESTAMP_HYBRID_PLAN.md) remains gated.
+Residual holes/seams and stale-content risk remain documented. The user approved
+[updated Step2](docs/FLYING_EXPORT_STEP2.md):392depth,causal t>t−5>t−10fill and one-pass
+pinhole closing for a10train/2val paired export in three budgeted chunks.
+[Export progress and scene strips](docs/results/pandaset-flying-teacher-12scenes/README.md)
+will update after each verified chunk. Hybrid P2.5 training remains gated by visual
+approval of all exported scenes.
 
 The independent [stateless PixArt-LCM pilot](docs/PROMPT_D_PROTOCOL.md) uses six
 raw cameras from frame t-1 to predict the observed **native front camera** at t,

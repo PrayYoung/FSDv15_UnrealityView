@@ -1,5 +1,6 @@
 """OpenCV camera-z depth, world-from-camera poses and deterministic z buffering."""
 import torch
+import torch.nn.functional as F
 
 
 def unproject(depth, intrinsics, camera_to_world):
@@ -59,6 +60,25 @@ def composite_live_first(current, current_mask, past, past_mask):
     valid=current_mask|past_mask
     rgb=torch.where(current_mask[...,None],current,past)
     return torch.where(valid[...,None],rgb,torch.zeros_like(rgb)),valid
+
+
+def pinhole_close_once(rgb,mask,minimum_neighbors=4):
+    """One snapshot-based3x3 pass; preserve all original covered pixels exactly.
+
+    Returned mask includes averaged small-hole pixels. Keep the original mask
+    separately to distinguish observation from interpolation. Large-hole interiors
+    remain empty; eligible concave boundary pixels can be filled by one pixel.
+    """
+    if rgb.shape!=(*mask.shape,3) or mask.dtype!=torch.bool:raise ValueError('Expected H,W,3 RGB and boolean coverage')
+    if not 1<=minimum_neighbors<=8:raise ValueError('Expected1..8neighbors')
+    kernel=rgb.new_ones(1,1,3,3);kernel[0,0,1,1]=0
+    count=F.conv2d(mask.to(rgb.dtype)[None,None],kernel,padding=1)[0,0]
+    valid_rgb=torch.where(mask[...,None],rgb,torch.zeros_like(rgb))
+    sums=F.conv2d(valid_rgb.permute(2,0,1)[None],kernel.expand(3,1,3,3),padding=1,groups=3)[0].permute(1,2,0)
+    filled=(~mask)&(count>=minimum_neighbors)
+    closed=mask|filled
+    result=torch.where(filled[...,None],sums/count.clamp_min(1)[...,None],valid_rgb)
+    return result,closed,filled
 
 
 def lidar_anchor(depth, sparse_depth, minimum=30):

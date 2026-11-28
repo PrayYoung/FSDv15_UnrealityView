@@ -123,3 +123,11 @@ paired panels and one68-frame val GIF,plus a separate crisp ego-car overlay
 preview. Do not claim teacher-relative accuracy as real novel-view ground truth,
 or assume20+fps before measurement. Publish to
 `docs/results/pandaset-hybrid-p25-flying-4000/`,stop after reporting.
+
+## Updated Step2 authorization
+
+After reviewing the partial Step1 result,the user approved IMG0328's
+[updated export protocol](FLYING_EXPORT_STEP2.md). It locks392,extends causal
+priority tot/t−5/t−10 and adds one-pass neighbor filling. This later request
+authorizes the three$2chunks despite the earlier wait-before-export decision.
+Step3 still requires all-scene visual approval and is not launched.

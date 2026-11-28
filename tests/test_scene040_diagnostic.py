@@ -39,6 +39,11 @@ def test_native_reader_uses_exact_pose_timestamps_and_scaled_intrinsics(tmp_path
     assert camera_only.cameras(12,size=(4,3))[0].shape==(6,3,4,3)
     import pytest
     with pytest.raises(RuntimeError,match='disabled'):camera_only.lidar_world(12)
+    (tmp_path/'040').rename(tmp_path/'006')
+    another=NativeScene(tmp_path,use_lidar=False,sequence='006')
+    multi,poses,offsets=another.cameras_multires(12,((4,3),(8,6)))
+    assert multi[(4,3)][0].shape==(6,3,4,3) and multi[(8,6)][0].shape==(6,6,8,3)
+    np.testing.assert_allclose(multi[(8,6)][1][0,:2],multi[(4,3)][1][0,:2]*2)
 
 
 def test_previews_do_not_stretch_and_exact_frame_range_is_recorded(tmp_path):

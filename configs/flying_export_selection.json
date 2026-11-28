@@ -1,0 +1,25 @@
+{
+  "version": 1,
+  "seed": 42,
+  "selection_basis": "Frozen before export from existing train/val metadata and frame40 previews;no reserved test directory or scene was inspected or listed",
+  "chunks": [
+    {"id": 1, "scenes": [
+      {"sequence": "040", "split": "train", "tags": ["day", "hill", "parked_cars"]},
+      {"sequence": "006", "split": "train", "tags": ["day", "downtown_intersection"]},
+      {"sequence": "067", "split": "train", "tags": ["night", "avenue"]},
+      {"sequence": "047", "split": "val", "tags": ["day", "downtown_intersection"]}
+    ]},
+    {"id": 2, "scenes": [
+      {"sequence": "034", "split": "train", "tags": ["dusk", "hill", "downtown"]},
+      {"sequence": "011", "split": "train", "tags": ["day", "waterfront", "multi_lane"]},
+      {"sequence": "084", "split": "train", "tags": ["day", "multi_lane_avenue"]},
+      {"sequence": "073", "split": "train", "tags": ["night", "intersection"]}
+    ]},
+    {"id": 3, "scenes": [
+      {"sequence": "027", "split": "train", "tags": ["day", "hill", "downtown"]},
+      {"sequence": "024", "split": "train", "tags": ["dusk", "sun_glare", "avenue"]},
+      {"sequence": "099", "split": "train", "tags": ["day", "multi_lane_avenue"]},
+      {"sequence": "074", "split": "val", "tags": ["night", "intersection"]}
+    ]}
+  ]
+}
